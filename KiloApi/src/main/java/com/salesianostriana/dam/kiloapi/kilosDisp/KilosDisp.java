@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.kiloapi.kilosDisp;
 
+import com.salesianostriana.dam.kiloapi.model.TipoAlimento;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,11 +1,13 @@
 package com.salesianostriana.dam.kiloapi.caja;
 
 import com.salesianostriana.dam.kiloapi.destinatario.Destinatario;
+import com.salesianostriana.dam.kiloapi.tiene.Tiene;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -29,9 +31,22 @@ public class Caja {
             foreignKey = @ForeignKey(name="DESTINATARIO_ID_FK"))
     private Destinatario destinatario;
 
+
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToMany(mappedBy = "caja", fetch = FetchType.EAGER)
     private List<Tiene> tieneList = new ArrayList<>();
+
+
+    public void addToDestinatario(Destinatario d) {
+        this.destinatario = d;
+        d.getListaCajas().add(this);
+    }
+
+
+    public void removeFromDestinatario(Destinatario d) {
+        this.destinatario = null;
+        d.getListaCajas().remove(this);
+    }
 
 }
