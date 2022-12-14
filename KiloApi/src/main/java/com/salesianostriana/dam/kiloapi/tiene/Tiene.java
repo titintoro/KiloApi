@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Entity
+@Builder
 public class Tiene {
 
     @ManyToOne
