@@ -1,7 +1,7 @@
 package com.salesianostriana.dam.kiloapi.tipoAlimento;
 
 
-import com.salesianostriana.dam.kiloapi.model.Tiene;
+import com.salesianostriana.dam.kiloapi.tiene.Tiene;
 import lombok.*;
 
 import javax.persistence.*;
