@@ -1,15 +1,14 @@
-package com.salesianostriana.dam.kiloapi.model;
+package com.salesianostriana.dam.kiloapi.tiene;
 
+import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimento;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
+import javax.persistence.*;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Entity
+@Builder
 public class Tiene {
 
     @ManyToOne
