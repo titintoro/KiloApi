@@ -1,11 +1,13 @@
 package com.salesianostriana.dam.kiloapi.caja;
 
 import com.salesianostriana.dam.kiloapi.destinatario.Destinatario;
+import com.salesianostriana.dam.kiloapi.tiene.Tiene;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
