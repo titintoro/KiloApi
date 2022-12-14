@@ -15,7 +15,7 @@ Se ha trabajado sobre la siguiente **documentación:**
 - [Hibernate](https://hibernate.org/orm/documentation/6.1/)
 - 
 
-También se ha prácticado el manejo de **PostMan** y de metodologías ágiles como **SCRUM** para el reparto de tareas a través de **Panel Notion adjuntado en el proyecto como imágenes**.
+También se ha prácticado el manejo de **PostMan**
 
 Se pueden realizar las siguientes funcionalidades:
 
