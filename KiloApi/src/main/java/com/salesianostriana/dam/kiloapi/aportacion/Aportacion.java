@@ -23,7 +23,7 @@ public class Aportacion {
     private LocalDate fecha;
 
 
-    @OneToMany(mappedBy = "DetalleAportacion" , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "aportacion" , fetch = FetchType.EAGER)
     @Builder.Default
     private List<DetalleAportacion> detalleAportacion = new ArrayList<>();
 
