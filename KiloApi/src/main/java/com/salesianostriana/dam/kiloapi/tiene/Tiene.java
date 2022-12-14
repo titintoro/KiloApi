@@ -13,11 +13,15 @@ import javax.persistence.*;
 public class Tiene {
 
     @ManyToOne
+    @Builder.Default
+    @Id
     @MapsId("tipoAlimento_id")
     @JoinColumn(name = "tipoAlimento_id")
     private TipoAlimento tipoAlimento;
 
     @ManyToOne
+    @Builder.Default
+    @Id
     @MapsId("caja_id")
     @JoinColumn(name = "caja_id")
     private Caja caja;
