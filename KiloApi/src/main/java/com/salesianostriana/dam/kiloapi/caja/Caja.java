@@ -31,9 +31,22 @@ public class Caja {
             foreignKey = @ForeignKey(name="DESTINATARIO_ID_FK"))
     private Destinatario destinatario;
 
+
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToMany(mappedBy = "caja", fetch = FetchType.EAGER)
     private List<Tiene> tieneList = new ArrayList<>();
+
+
+    public void addToDestinatario(Destinatario d) {
+        this.destinatario = d;
+        d.getListaCajas().add(this);
+    }
+
+
+    public void removeFromDestinatario(Destinatario d) {
+        this.destinatario = null;
+        d.getListaCajas().remove(this);
+    }
 
 }
