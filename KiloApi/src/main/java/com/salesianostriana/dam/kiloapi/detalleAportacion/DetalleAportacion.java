@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.kiloapi.detalleAportacion;
 
 import com.salesianostriana.dam.kiloapi.aportacion.Aportacion;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimento;
 import lombok.*;
 
 import javax.persistence.*;

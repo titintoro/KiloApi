@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.kiloapi.tiene;
 
+import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimento;
 import lombok.*;
 
