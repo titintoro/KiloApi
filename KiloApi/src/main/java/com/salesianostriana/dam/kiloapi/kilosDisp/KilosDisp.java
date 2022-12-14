@@ -8,7 +8,7 @@ import javax.persistence.*;
 @NoArgsConstructor @AllArgsConstructor
 @Builder
 @Getter  @Setter
-public class kilosDisp {
+public class KilosDisp {
 
     @ManyToOne(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.EAGER)
     @JoinColumn(name = "tipoAlimento_id" , foreignKey = @ForeignKey(name = "FK_KILOSDISP_TIPOALIMENT"))
