@@ -40,6 +40,7 @@ public class ClaseControlador {
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok().body(data);
     }
+
     @Operation(summary = "Muestra la información de una clase buscada por id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
@@ -56,7 +57,7 @@ public class ClaseControlador {
         return ResponseEntity.of(claseService.findById(id));
     }
 
-    @Operation(summary = "Crea una clase con los atributos proporcionados anteriormente")
+    @Operation(summary = "Crea una clase con los atributos proporcionados en el cuerpo de la petición")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
                     description = "Se ha creado una nueva clase",
@@ -68,13 +69,49 @@ public class ClaseControlador {
 
     })
     @PostMapping("/")
-    public ResponseEntity<Clase> addOneClase(@RequestBody Clase clase){
+    public ResponseEntity<Clase> addOneClase(@RequestBody Clase clase) {
         claseService.add(clase);
         return ResponseEntity.status(HttpStatus.CREATED).body(clase);
     }
 
+    @Operation(summary = "Actualiza una clase con los atributos proporcionados por el cuerpo de la petición")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha actualizado con éxito la clase",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Clase.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "No se ha encontrado la clase",
+                    content = @Content)
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<Clase> updateClase(@PathVariable Long id, @RequestBody Clase clase) {
 
+        if (clase == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        Clase c = claseService.findById(id).get();
+        c.setNombre(clase.getNombre());
+        c.setTutor(clase.getTutor());
+        c.setListaAportaciones(clase.getListaAportaciones());
 
+        return ResponseEntity.ok().body(c);
+    }
+
+    @Operation(summary = "Borra una clase buscada por el id, pasado por un query param")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "Clase borrada con exito",
+                    content = @Content)
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteClase(@PathVariable Long id) {
+        Clase c = claseService.findById(id).orElse(null);
+        if(c  == null)
+            return ResponseEntity.notFound().build();
+        claseService.delete(c);
+        return ResponseEntity.noContent().build();
+    }
 
 
 }
