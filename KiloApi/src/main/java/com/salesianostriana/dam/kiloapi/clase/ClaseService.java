@@ -3,6 +3,8 @@ package com.salesianostriana.dam.kiloapi.clase;
 import com.salesianostriana.dam.kiloapi.aportacion.Aportacion;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,19 +40,12 @@ public class ClaseService {
         repo.deleteById(id);
     }
 
-    public double calcularKilosTotales(Clase c) {
 
-        double total = 0;
+    public double calcularKg(Clase c){
+       return repo.calcularKilosTotales(c.getIdClase());
+    }
 
-        c.getListaAportaciones().forEach(aportacion -> {
-            aportacion.getDetalleAportacion();
-        });
-
-
-
-
-
-  /*      List<Double> cantidad = c.getListaAportaciones().forEach(l -> {
+    /*      List<Double> cantidad = c.getListaAportaciones().forEach(l -> {
             l.getDetalleAportacion().forEach(detalleAportacion -> {
                         detalleAportacion.getCantidad()
                     }
@@ -62,8 +57,7 @@ public class ClaseService {
         }
 
         return total;
- */ return total;
-    }
+ */
 
 
 }
