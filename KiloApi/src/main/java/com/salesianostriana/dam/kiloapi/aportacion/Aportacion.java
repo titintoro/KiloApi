@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.kiloapi.aportacion;
 
+import com.salesianostriana.dam.kiloapi.clase.Clase;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
 import lombok.*;
 
@@ -29,7 +30,6 @@ public class Aportacion {
 
     @ManyToOne
     @JoinColumn(name = "listaAportacion", foreignKey = @ForeignKey(name = "FK_APORTACION_CLASE"))
-    @Builder.Default
     private Clase clase;
 
     private void addToClase(Clase c){
