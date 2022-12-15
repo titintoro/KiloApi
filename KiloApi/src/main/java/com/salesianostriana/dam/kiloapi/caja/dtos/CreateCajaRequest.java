@@ -2,6 +2,9 @@ package com.salesianostriana.dam.kiloapi.caja.dtos;
 
 
 import com.salesianostriana.dam.kiloapi.caja.Caja;
+import com.salesianostriana.dam.kiloapi.caja.CajaServicio;
+import com.salesianostriana.dam.kiloapi.destinatario.Destinatario;
+import com.salesianostriana.dam.kiloapi.tiene.Tiene;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,8 +17,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Builder
 @Getter @Setter
 public class CreateCajaRequest {
@@ -24,12 +30,15 @@ public class CreateCajaRequest {
     private String qr;
 
 
-    public Caja creacteCajaRequestToCaja(CreateCajaRequest createCajaRequest) {
+
+    public Caja createCajaRequestToCaja(CreateCajaRequest createCajaRequest, List<Tiene> tieneList) {
         Caja cajaResponse = new Caja();
 
         cajaResponse.setQr(createCajaRequest.getQr());
         cajaResponse.setNumCaja(createCajaRequest.getNumCaja());
         cajaResponse.setKilosTotales(0);
+        cajaResponse.setDestinatario(null);
+        cajaResponse.setTieneList(null);
 
         return cajaResponse;
     }

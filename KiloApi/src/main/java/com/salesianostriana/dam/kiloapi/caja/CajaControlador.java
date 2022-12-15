@@ -100,9 +100,14 @@ public class CajaControlador {
     })
     @PostMapping("/caja/")
     public ResponseEntity<Caja> create(@RequestBody CreateCajaRequest createCajaRequest) {
+
+
+
+        Caja cajaResponse = createCajaRequest.createCajaRequestToCaja(createCajaRequest, cajaServicio.findListaTiene());
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(cajaServicio.add(nuevaCaja));
+                .body(cajaServicio.add(cajaResponse));
     }
 
 

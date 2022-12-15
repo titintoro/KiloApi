@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.kiloapi.caja;
 
+import com.salesianostriana.dam.kiloapi.tiene.Tiene;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,6 @@ public class CajaServicio {
         repo.deleteById(id);
     }
 
-
+    public List<Tiene> findListaTiene() { return repo.findListOFTiene();}
     public boolean existsById(Long id) { return repo.existsById(id);}
 }
