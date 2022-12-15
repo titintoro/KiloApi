@@ -1,5 +1,7 @@
 package com.salesianostriana.dam.kiloapi.clase;
 
+import com.salesianostriana.dam.kiloapi.aportacion.Aportacion;
+import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ public class ClaseService {
 
     private final ClaseRepository repo;
 
-    public Clase add(Clase clase){
+    public Clase add(Clase clase) {
         return repo.save(clase);
     }
 
@@ -35,5 +37,33 @@ public class ClaseService {
     public void deleteById(Long id) {
         repo.deleteById(id);
     }
+
+    public double calcularKilosTotales(Clase c) {
+
+        double total = 0;
+
+        c.getListaAportaciones().forEach(aportacion -> {
+            aportacion.getDetalleAportacion();
+        });
+
+
+
+
+
+  /*      List<Double> cantidad = c.getListaAportaciones().forEach(l -> {
+            l.getDetalleAportacion().forEach(detalleAportacion -> {
+                        detalleAportacion.getCantidad()
+                    }
+            );
+        });
+
+        for (Double kg : cantidad) {
+            total +=kg ;
+        }
+
+        return total;
+ */ return total;
+    }
+
 
 }
