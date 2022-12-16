@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.kiloapi.caja;
 
+import com.salesianostriana.dam.kiloapi.caja.dtos.CajaDtoConverter;
 import com.salesianostriana.dam.kiloapi.tiene.Tiene;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ public class CajaServicio {
 
     private final CajaRepositorio cajaRepo;
     private final TipoAlimentoRepository tipoAlimentoRepo;
+    private final CajaDtoConverter cajaDtoConverter;
     public Caja add(Caja caja) { return cajaRepo.save(caja);}
 
 
@@ -43,7 +45,7 @@ public class CajaServicio {
 
     public boolean existsById(Long id) { return cajaRepo.existsById(id);}
 
-    public Caja updateKgsOfTipoAlimentoFromCaja(Long idCaja, Long idTipoAlim, int cantidadKgs) {
+    public Caja updateKgsOfTipoAlimentoFromCaja(Long idCaja, Long idTipoAlim, double cantidadKgs) {
 
         Optional<Caja> caja = findById(idCaja);
 
@@ -79,5 +81,17 @@ public class CajaServicio {
                 }
             }
         }
+    }
+
+    public Optional<Caja> addAlimToCaja(Long id, Long idTipoAlim, double cantidad){
+
+        Optional<Caja> caja = cajaRepo.findById(id);
+
+        if(caja.isEmpty())
+            return caja;
+
+        
+
+
     }
 }

@@ -2,6 +2,7 @@ package com.salesianostriana.dam.kiloapi.caja;
 
 import com.salesianostriana.dam.kiloapi.caja.dtos.CajaDtoConverter;
 import com.salesianostriana.dam.kiloapi.caja.dtos.CreateCajaRequest;
+import com.salesianostriana.dam.kiloapi.caja.dtos.GetCajaResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,7 @@ public class CajaControlador {
 
     private final CajaServicio cajaServicio;
     private final CajaDtoConverter cajaDtoConverter;
-    
+
     @Operation(summary = "Get a list of Cajas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -74,9 +76,9 @@ public class CajaControlador {
                     content = @Content),
     })
     @GetMapping("/caja/{id}")
-    public ResponseEntity<Caja> getCaja(@PathVariable Long id) {
+    public ResponseEntity<GetCajaResponse> getCaja(@PathVariable Long id) {
 
-        return(cajaServicio.findById(id).isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(cajaServicio.findById(id).get()));
+        return(cajaServicio.findById(id).isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(cajaDtoConverter.toGetCajaResponse(cajaServicio.findById(id).get(),cajaServicio.findById(id).get().getDestinatario())));
     }
 
 
@@ -109,6 +111,11 @@ public class CajaControlador {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(cajaServicio.add(cajaResponse));
+    }
+
+    @PostMapping("/caja/{id}/tipo/{idTipoAlim}/kg/{cantidad}")
+    public ResponseEntity<Caja> addTipoAlimToCaja(@PathVariable Long id, Long idTipoAlim, double cantidad) {
+
     }
 
 
@@ -156,10 +163,33 @@ public class CajaControlador {
     }
 
 
+    @Operation(summary = "Update a Caja")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Caja Created Successfully",
+                    content = {@Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Caja.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            [
+                                                    {
+                                                        "id": 12,
+                                                        "name": "Random",
+                                                        "description": "Una lista muy loca",
+                                                        "songs": 4
+                                                    }
+                                            ]                                          
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "400",
+                    description = "Bad Caja Creation Request",
+                    content = @Content),
+    })
     @PutMapping("/caja/{id}/tipo/{idTipoAlim}/kg/{cantidad}")
     public ResponseEntity<Caja> editKgsOFTipoAlimFromCaja(
             @RequestBody CreateCajaRequest c,
-            @PathVariable Long id, Long idTipoAlim, int cantidad) {
+            @PathVariable Long id, Long idTipoAlim, double cantidad) {
 
         Caja caja = cajaServicio.updateKgsOfTipoAlimentoFromCaja(id,idTipoAlim,cantidad);
 
