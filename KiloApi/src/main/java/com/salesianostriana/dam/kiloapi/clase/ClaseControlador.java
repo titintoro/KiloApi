@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.kiloapi.clase;
 
 
+import com.salesianostriana.dam.kiloapi.clase.dto.ClaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -53,8 +54,16 @@ public class ClaseControlador {
 
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Clase> getOneClaseInfo(@PathVariable Long id) {
-        return ResponseEntity.of(claseService.findById(id));
+    public ResponseEntity<ClaseResponse> getOneClaseInfo(@PathVariable Long id) {
+
+            Clase c = claseService.findById(id).orElse(null);
+
+            if(c == null)
+                return ResponseEntity.notFound().build();
+
+            ClaseResponse result = ClaseResponse.convertClaseToClaseResponse(c);
+
+            return ResponseEntity.ok(result);
     }
 
     @Operation(summary = "Crea una clase con los atributos proporcionados en el cuerpo de la petición")

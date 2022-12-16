@@ -40,10 +40,11 @@ public class ClaseService {
         repo.deleteById(id);
     }
 
-
+/*
     public double calcularKg(Clase c){
        return repo.calcularKilosTotales(c.getIdClase());
     }
+*/
 
     /*      List<Double> cantidad = c.getListaAportaciones().forEach(l -> {
             l.getDetalleAportacion().forEach(detalleAportacion -> {
