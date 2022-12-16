@@ -37,8 +37,6 @@ public class CreateCajaRequest {
         cajaResponse.setQr(createCajaRequest.getQr());
         cajaResponse.setNumCaja(createCajaRequest.getNumCaja());
         cajaResponse.setKilosTotales(0);
-        cajaResponse.setDestinatario(null);
-        cajaResponse.setTieneList(null);
 
         return cajaResponse;
     }

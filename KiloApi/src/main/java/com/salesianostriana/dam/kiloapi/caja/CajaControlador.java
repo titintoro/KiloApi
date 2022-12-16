@@ -101,13 +101,55 @@ public class CajaControlador {
     @PostMapping("/caja/")
     public ResponseEntity<Caja> create(@RequestBody CreateCajaRequest createCajaRequest) {
 
-
-
         Caja cajaResponse = createCajaRequest.createCajaRequestToCaja(createCajaRequest, cajaServicio.findListaTiene());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(cajaServicio.add(cajaResponse));
+    }
+
+
+    @Operation(summary = "Update a Caja")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Caja Created Successfully",
+                    content = {@Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Caja.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            [
+                                                    {
+                                                        "id": 12,
+                                                        "name": "Random",
+                                                        "description": "Una lista muy loca",
+                                                        "songs": 4
+                                                    }
+                                            ]                                          
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "400",
+                    description = "Bad Caja Creation Request",
+                    content = @Content),
+    })
+    @PutMapping("/caja/{id}")
+    public ResponseEntity<Caja> edit(
+            @RequestBody CreateCajaRequest c,
+            @PathVariable Long id) {
+
+        if (cajaServicio.findById(id).isEmpty())
+            return ResponseEntity.notFound().build();
+
+
+        return ResponseEntity.of(
+                cajaServicio.findById(id).map(m -> {
+
+                    m.setQr(c.getQr());
+                    m.setNumCaja(c.getNumCaja());
+
+                    return c.createCajaRequestToCaja(c, cajaServicio.findListaTiene());
+                }));
+
     }
 
 
@@ -129,4 +171,23 @@ public class CajaControlador {
 
 
     }
+
+    @Operation(summary = "Delete an Caja")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "Caja Deleted Successfully",
+                    content = {@Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Caja.class))
+                    )}),
+    })
+    @DeleteMapping("/caja/{id}/tipo/{idTipoAlim}")
+    public ResponseEntity<?> deleteAlimFromCaja(@PathVariable Long id, Long idTipoAlim) {
+
+        
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+
+    }
+
 }

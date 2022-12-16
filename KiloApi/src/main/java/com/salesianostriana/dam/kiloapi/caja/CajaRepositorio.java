@@ -18,4 +18,5 @@ public interface CajaRepositorio extends JpaRepository<Caja, Long> {
 
     @Query("select t from Tiene t where t.firstname = :firstname")
     List<Tiene> findByFirstname(String firstname);
+
 }
