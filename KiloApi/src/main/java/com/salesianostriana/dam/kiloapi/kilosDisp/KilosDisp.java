@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter  @Setter
 public class KilosDisp {
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "kiloDisp",orphanRemoval = false)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
     @MapsId
     private TipoAlimento tipoAlimento;
 
