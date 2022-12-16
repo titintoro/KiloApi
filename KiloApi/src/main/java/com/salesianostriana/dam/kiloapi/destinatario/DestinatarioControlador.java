@@ -2,6 +2,7 @@ package com.salesianostriana.dam.kiloapi.destinatario;
 
 import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.caja.CajaServicio;
+import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.GetDestinatarioDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -45,8 +46,8 @@ public class DestinatarioControlador {
                     content = @Content),
     })
     @GetMapping("/destinatario/")
-    public ResponseEntity<List<Destinatario>> findAllDestinatarios(){
-        return ResponseEntity.ok(servicio.findAll());
+    public ResponseEntity<List<GetDestinatarioDto>> findAllDestinatarios(Long id){
+        return ResponseEntity.ok(servicio.findAll(id));
     }
 
     @Operation(summary = "Este método devuelve una lista de destinatarios por su id")
