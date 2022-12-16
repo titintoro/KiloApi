@@ -61,7 +61,7 @@ public class ClaseControlador {
             if(c == null)
                 return ResponseEntity.notFound().build();
 
-            ClaseResponse result = ClaseResponse.convertClaseToClaseResponse(c);
+            ClaseResponse result = getOneClaseInfo(id).getBody();
 
             return ResponseEntity.ok(result);
     }

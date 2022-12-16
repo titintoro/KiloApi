@@ -15,16 +15,7 @@ private int numAportacion;
 
 private double kilosAportados;
 
-public static ClaseResponse convertClaseToClaseResponse(Clase c){
 
-            ClaseResponse result = ClaseResponse.builder()
-                                        .clase(c)
-                                        .numAportacion(c.getListaAportaciones().size())
-                                        //.kilosAportados()
-                                        .build();
-
-            return result;
-}
 
 
 
