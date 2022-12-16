@@ -16,6 +16,7 @@ public class GetAportacionDto {
     private String nombreClase;
     private double numKilos;
 
+
     public static GetAportacionDto of (Aportacion aportacion){
         return GetAportacionDto
                 .builder()
@@ -25,5 +26,7 @@ public class GetAportacionDto {
                 .build();
 
     }
+
+
 
 }

@@ -28,4 +28,6 @@ public class DetalleAportacion {
     @JoinColumn(name = "tipoAlimento_id", foreignKey = @ForeignKey(name = "FK_DETALLEAPORTACION_TIPOALIMENTO"))
     private TipoAlimento tipoAlimento;
 
+
+
 }
