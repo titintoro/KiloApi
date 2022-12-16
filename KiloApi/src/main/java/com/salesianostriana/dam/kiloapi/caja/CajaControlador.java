@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -79,7 +78,7 @@ public class CajaControlador {
         return(cajaServicio.findById(id).isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(cajaServicio.findById(id).get()));
     }
 
-
+    /*
     @Operation(summary = "Create a new Caja")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
@@ -154,7 +153,7 @@ public class CajaControlador {
                 }));
 
     }
-
+    */
 
     @PutMapping("/caja/{id}/tipo/{idTipoAlim}/kg/{cantidad}")
     public ResponseEntity<Caja> editKgsOFTipoAlimFromCaja(
@@ -197,8 +196,7 @@ public class CajaControlador {
     @DeleteMapping("/caja/{id}/tipo/{idTipoAlim}")
     public ResponseEntity<?> deleteAlimFromCaja(@PathVariable Long id, Long idTipoAlim) {
 
-        
-
+        cajaServicio.deleteAlimFromCaja(id,idTipoAlim);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
 

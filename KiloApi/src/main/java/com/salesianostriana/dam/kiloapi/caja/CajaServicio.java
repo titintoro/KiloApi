@@ -41,7 +41,6 @@ public class CajaServicio {
         cajaRepo.deleteById(id);
     }
 
-    public List<Tiene> findListaTiene() { return cajaRepo.findListOFTiene();}
     public boolean existsById(Long id) { return cajaRepo.existsById(id);}
 
     public Caja updateKgsOfTipoAlimentoFromCaja(Long idCaja, Long idTipoAlim, int cantidadKgs) {
@@ -64,5 +63,21 @@ public class CajaServicio {
                 }
             }
         } return null;
+    }
+
+    public void deleteAlimFromCaja(Long id, Long idCaja){
+        
+        Optional<Caja> caja = findById(id);
+
+        if (caja.isPresent()){
+            for (Tiene t:caja.get().getTieneList()){
+
+                if (t.getTipoAlimento().getId().equals(idCaja)) {
+
+                    caja.get().getTieneList().remove(t);
+                    cajaRepo.save(caja.get());
+                }
+            }
+        }
     }
 }
