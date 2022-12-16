@@ -2,6 +2,7 @@ package com.salesianostriana.dam.kiloapi.destinatario;
 
 import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.caja.CajaServicio;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Artist",description = "Este es el controlador de los artistas")
 public class DestinatarioControlador {
 
     private DestinatarioServicio servicio;
