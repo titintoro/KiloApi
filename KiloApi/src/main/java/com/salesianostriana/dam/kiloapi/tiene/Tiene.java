@@ -15,13 +15,11 @@ public class Tiene {
     private TienePK id = new TienePK();
 
     @ManyToOne
-    @Id
     @MapsId("tipoAlimento_id")
     @JoinColumn(name = "tipoAlimento_id")
     private TipoAlimento tipoAlimento;
 
     @ManyToOne
-    @Id
     @MapsId("caja_id")
     @JoinColumn(name = "caja_id")
     private Caja caja;
