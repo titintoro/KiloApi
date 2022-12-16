@@ -9,7 +9,7 @@ import java.util.List;
 @Component
 public class CajaDtoConverter {
 
-    public Caja createCajaRequestToCaja(CreateCajaRequest createCajaRequest, List<Tiene> tieneList) {
+    public Caja createCajaRequestToCaja(CreateCajaRequest createCajaRequest) {
         Caja cajaResponse = new Caja();
 
         cajaResponse.setQr(createCajaRequest.getQr());

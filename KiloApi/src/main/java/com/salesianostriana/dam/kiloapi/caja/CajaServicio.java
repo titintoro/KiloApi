@@ -66,7 +66,7 @@ public class CajaServicio {
     }
 
     public void deleteAlimFromCaja(Long id, Long idCaja){
-        
+
         Optional<Caja> caja = findById(id);
 
         if (caja.isPresent()){

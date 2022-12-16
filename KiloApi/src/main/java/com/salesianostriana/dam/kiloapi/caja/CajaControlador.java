@@ -24,6 +24,7 @@ public class CajaControlador {
 
     private final CajaServicio cajaServicio;
     private final CajaDtoConverter cajaDtoConverter;
+    
     @Operation(summary = "Get a list of Cajas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
@@ -78,7 +79,7 @@ public class CajaControlador {
         return(cajaServicio.findById(id).isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(cajaServicio.findById(id).get()));
     }
 
-    /*
+
     @Operation(summary = "Create a new Caja")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
@@ -103,7 +104,7 @@ public class CajaControlador {
     @PostMapping("/caja/")
     public ResponseEntity<Caja> create(@RequestBody CreateCajaRequest createCajaRequest) {
 
-        Caja cajaResponse = cajaDtoConverter.createCajaRequestToCaja(createCajaRequest, cajaServicio.findListaTiene());
+        Caja cajaResponse = cajaDtoConverter.createCajaRequestToCaja(createCajaRequest);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -149,11 +150,11 @@ public class CajaControlador {
                     m.setQr(c.getQr());
                     m.setNumCaja(c.getNumCaja());
 
-                    return cajaDtoConverter.createCajaRequestToCaja(c, cajaServicio.findListaTiene());
+                    return cajaDtoConverter.createCajaRequestToCaja(c);
                 }));
 
     }
-    */
+
 
     @PutMapping("/caja/{id}/tipo/{idTipoAlim}/kg/{cantidad}")
     public ResponseEntity<Caja> editKgsOFTipoAlimFromCaja(
@@ -165,6 +166,7 @@ public class CajaControlador {
         return (caja == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(caja) );
 
     }
+
 
     @Operation(summary = "Delete an Caja")
     @ApiResponses(value = {
@@ -185,6 +187,7 @@ public class CajaControlador {
 
     }
 
+
     @Operation(summary = "Delete an Caja")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
@@ -198,7 +201,6 @@ public class CajaControlador {
 
         cajaServicio.deleteAlimFromCaja(id,idTipoAlim);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-
 
     }
 
