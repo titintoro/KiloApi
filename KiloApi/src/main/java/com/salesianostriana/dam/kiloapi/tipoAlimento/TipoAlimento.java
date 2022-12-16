@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.kiloapi.tipoAlimento;
 
 
+import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDisp;
 import com.salesianostriana.dam.kiloapi.tiene.Tiene;
 import lombok.*;
 
@@ -22,4 +23,7 @@ public class TipoAlimento {
     @Builder.Default
     @OneToMany(mappedBy = "tipoAlimento", fetch = FetchType.EAGER)
     private List<Tiene> tieneList = new ArrayList<>();
+
+    @OneToOne(mappedBy = "tipoAlimento",fetch = FetchType.EAGER)
+    private KilosDisp kilosDisp;
 }
