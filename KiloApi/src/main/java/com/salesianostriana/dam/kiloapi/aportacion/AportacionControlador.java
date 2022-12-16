@@ -11,7 +11,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +29,7 @@ public class AportacionControlador {
 
 
     private final AportacionServicio aportacionServicio;
+    private final AportacionRepositorio aportacionRepo;
 
     @Operation(summary = "Petición que devuelve los datos de todas las Aportaciones")
     @ApiResponses(value = {
@@ -76,6 +79,23 @@ public class AportacionControlador {
     @GetMapping("/aportacion/{id}")
     public ResponseEntity<Aportacion> findAportacionById(@PathVariable Long id){
         return ResponseEntity.of(aportacionServicio.findById(id));
+    }
+
+    @Operation(summary = "Petición que borra una Aportación proporcionada por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "Se ha borrado la Aportación",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Aportacion.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se ha encontrado la Aportación específica",
+                    content = @Content),
+    })
+    @DeleteMapping("/aportacion/{id}")
+    public ResponseEntity<?> deleteAportacion (@PathVariable Long id){
+        if (aportacionRepo.existsById(id))
+            aportacionRepo.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
