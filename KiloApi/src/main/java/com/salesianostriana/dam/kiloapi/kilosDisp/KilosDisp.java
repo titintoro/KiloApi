@@ -11,8 +11,7 @@ import javax.persistence.*;
 @Getter  @Setter
 public class KilosDisp {
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "tipoAlimento_id" , foreignKey = @ForeignKey(name = "FK_KILOSDISP_TIPOALIMENT"))
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
     @MapsId
     private TipoAlimento tipoAlimento;
 
