@@ -49,7 +49,9 @@ public class CajaServicio {
         cajaRepo.deleteById(id);
     }
 
+
     public boolean existsById(Long id) { return cajaRepo.existsById(id);}
+
 
     public Optional<Caja> updateKgsOfTipoAlimentoFromCaja(Long idCaja, Long idTipoAlim, double cantidadKgs) {
 
@@ -74,6 +76,7 @@ public class CajaServicio {
         return caja;
     }
 
+
     public void deleteAlimFromCaja(Long id, Long idCaja){
 
         Optional<Caja> caja = findById(id);
@@ -89,6 +92,7 @@ public class CajaServicio {
             }
         }
     }
+
 
     public Optional<Caja> addAlimToCaja(Long id, Long idTipoAlim, double cantidad){
 
