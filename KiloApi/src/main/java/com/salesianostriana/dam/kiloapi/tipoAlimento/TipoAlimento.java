@@ -19,6 +19,7 @@ public class TipoAlimento {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @Builder.Default
     @OneToMany(mappedBy = "tipoAlimento", fetch = FetchType.EAGER)
     private List<Tiene> tieneList = new ArrayList<>();
 }
