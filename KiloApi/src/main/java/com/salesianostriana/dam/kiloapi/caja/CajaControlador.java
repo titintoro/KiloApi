@@ -3,6 +3,7 @@ package com.salesianostriana.dam.kiloapi.caja;
 import com.salesianostriana.dam.kiloapi.caja.dtos.CajaDtoConverter;
 import com.salesianostriana.dam.kiloapi.caja.dtos.CreateCajaRequest;
 import com.salesianostriana.dam.kiloapi.caja.dtos.GetCajaResponse;
+import com.salesianostriana.dam.kiloapi.caja.dtos.PostCajaAlimentoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -114,8 +116,12 @@ public class CajaControlador {
     }
 
     @PostMapping("/caja/{id}/tipo/{idTipoAlim}/kg/{cantidad}")
-    public ResponseEntity<Caja> addTipoAlimToCaja(@PathVariable Long id, Long idTipoAlim, double cantidad) {
+    public ResponseEntity<PostCajaAlimentoResponse> addTipoAlimToCaja(
+            @PathVariable Long id, Long idTipoAlim, double cantidad) {
 
+        Optional<Caja> c = cajaServicio.addAlimToCaja(id,idTipoAlim,cantidad);
+
+        return (c.isPresent() ? ResponseEntity.status(HttpStatus.CREATED).body(cajaDtoConverter.toPostCajaAlimentoResponse(c.get())) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
 
@@ -187,13 +193,13 @@ public class CajaControlador {
                     content = @Content),
     })
     @PutMapping("/caja/{id}/tipo/{idTipoAlim}/kg/{cantidad}")
-    public ResponseEntity<Caja> editKgsOFTipoAlimFromCaja(
+    public ResponseEntity<Optional<Caja>> editKgsOFTipoAlimFromCaja(
             @RequestBody CreateCajaRequest c,
             @PathVariable Long id, Long idTipoAlim, double cantidad) {
 
-        Caja caja = cajaServicio.updateKgsOfTipoAlimentoFromCaja(id,idTipoAlim,cantidad);
+        Optional<Caja> caja = cajaServicio.updateKgsOfTipoAlimentoFromCaja(id,idTipoAlim,cantidad);
 
-        return (caja == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(caja) );
+        return (caja.isPresent() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(caja) );
 
     }
 
