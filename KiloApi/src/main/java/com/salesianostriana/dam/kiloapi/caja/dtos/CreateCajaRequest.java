@@ -21,26 +21,11 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 @Builder
 @Getter @Setter
 public class CreateCajaRequest {
 
     private int numCaja;
     private String qr;
-
-
-
-    public Caja createCajaRequestToCaja(CreateCajaRequest createCajaRequest, List<Tiene> tieneList) {
-        Caja cajaResponse = new Caja();
-
-        cajaResponse.setQr(createCajaRequest.getQr());
-        cajaResponse.setNumCaja(createCajaRequest.getNumCaja());
-        cajaResponse.setKilosTotales(0);
-
-        return cajaResponse;
-    }
-
-
 
 }

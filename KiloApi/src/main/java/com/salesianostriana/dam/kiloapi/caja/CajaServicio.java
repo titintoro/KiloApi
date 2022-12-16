@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.kiloapi.caja;
 
 import com.salesianostriana.dam.kiloapi.tiene.Tiene;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.Optional;
 public class CajaServicio {
 
     private final CajaRepositorio cajaRepo;
+    private final TipoAlimentoRepository tipoAlimentoRepo;
     public Caja add(Caja caja) { return cajaRepo.save(caja);}
 
 
@@ -49,14 +51,14 @@ public class CajaServicio {
         if (caja.isPresent()){
             for (Tiene t:caja.get().getTieneList()){
 
-                if(t.getTipoAlimento().getKilosDisponibles().getCantidad()>=cantidadKgs){
+                if(t.getTipoAlimento().getKilosDisp().getCantidadDisponible()>=cantidadKgs){
 
                     if (t.getTipoAlimento().getId().equals(idTipoAlim)  ) {
-                        t.setCantidadKgs(cantidadKgs + t.getTipoAlimento().getKilosDisponibles().getCantidad());
-                        t.getTipoAlimento().getKilosDisponibles().setCantidad(t.getTipoAlimento().getKilosDisponibles()-cantidadKgs);
+                        t.setCantidadKgs(cantidadKgs + t.getTipoAlimento().getKilosDisp().getCantidadDisponible());
+                        t.getTipoAlimento().getKilosDisp().setCantidadDisponible(t.getTipoAlimento().getKilosDisp().getCantidadDisponible()-cantidadKgs);
 
                         cajaRepo.save(caja.get());
-
+                        tipoAlimentoRepo.save(t.getTipoAlimento());
                         return caja.get();
                     }
                 }
