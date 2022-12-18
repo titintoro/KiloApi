@@ -70,8 +70,8 @@ public class DestinatarioControlador {
                     content = @Content),
     })
     @GetMapping("/destinatario/{id}")
-    public ResponseEntity<Destinatario> findByIdDestinatarios(@PathVariable Long id){
-        return ResponseEntity.of(servicio.findById(id));
+    public ResponseEntity<GetDestinatarioDto> findByIdDestinatarios(@PathVariable Long id){
+        return ResponseEntity.of(servicio.findByGetDestinatariosId(id));
     }
 
     @Operation(summary = "Este método devuelve los detalles una lista de destinatarios por su id")
@@ -93,8 +93,8 @@ public class DestinatarioControlador {
                     content = @Content),
     })
     @GetMapping("destinatario/{id}/detalle")
-    public ResponseEntity<Destinatario> findByIdDestinatarioDetalle(@PathVariable Long id){
-        return ResponseEntity.of(servicio.findById(id));
+    public ResponseEntity<GetDestinatarioDto> findByIdDestinatarioDetalle(@PathVariable Long id){
+        return ResponseEntity.of(servicio.findByGetDestinatariosId(id));
     }
 
     @Operation(summary = "Este método agrega un destinatario a una lista de destinatarios")
@@ -140,13 +140,12 @@ public class DestinatarioControlador {
     })
     @PutMapping("/destinatario/{id}")
     public ResponseEntity<Destinatario> editDestinatario(@RequestBody Destinatario destinatario, @PathVariable Long id){
-        return ResponseEntity.of(servicio.findById(id)
+        return ResponseEntity.of(servicio.findByDestinatariosId(id)
                 .map(old -> {
                     old.setNombre(destinatario.getNombre());
                     old.setDireccion(destinatario.getDireccion());
                     old.setTelefono(destinatario.getTelefono());
                     old.setPersonaContacto(destinatario.getPersonaContacto());
-                    old.setListaCajas(destinatario.getListaCajas());
                     return Optional.of(servicio.edit(old));
                 })
                 .orElse(Optional.empty())
