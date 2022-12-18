@@ -46,11 +46,9 @@ public class DestinatarioControlador {
                     content = @Content),
     })
     @GetMapping("/destinatario/")
-    public ResponseEntity<List<GetDestinatarioDto>> findAllDestinatarios(Long id){
-        if (){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(servicio.findAll(id));
+    public ResponseEntity<List<GetDestinatarioDto>> findAllDestinatarios(){
+
+        return ResponseEntity.ok(servicio.findAll());
     }
 
     @Operation(summary = "Este método devuelve una lista de destinatarios por su id")
