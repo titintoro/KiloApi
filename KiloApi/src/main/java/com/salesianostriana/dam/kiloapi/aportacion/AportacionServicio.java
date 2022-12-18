@@ -33,4 +33,13 @@ public class AportacionServicio {
     public void deleteById(Long id) {
         repositorio.deleteById(id);
     }
+
+    public boolean aportacionCorrecta(Aportacion a){
+        boolean res = false;
+        if(a.getKilos()*100> 1 && a.getFecha().getYear() > 2021 && !a.getDetalleAportacionList().isEmpty()){
+            res = true;
+        }
+        return res;
+
+    }
 }

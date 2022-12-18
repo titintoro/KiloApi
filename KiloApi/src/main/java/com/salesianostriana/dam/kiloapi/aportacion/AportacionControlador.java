@@ -1,6 +1,12 @@
 package com.salesianostriana.dam.kiloapi.aportacion;
 
+import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.AportacionDtoConverter;
+import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.CreateAportacionDto;
 import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.GetAportacionDto;
+import com.salesianostriana.dam.kiloapi.clase.Clase;
+import com.salesianostriana.dam.kiloapi.clase.ClaseService;
+
+import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,12 +19,10 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +34,12 @@ public class AportacionControlador {
 
     private final AportacionServicio aportacionServicio;
     private final AportacionRepositorio aportacionRepo;
+    private final ClaseService claseService;
+
+
+
+
+    private final AportacionDtoConverter dtoConverter;
 
     @Operation(summary = "Petición que devuelve los datos de todas las Aportaciones")
     @ApiResponses(value = {
@@ -96,6 +106,83 @@ public class AportacionControlador {
         if (aportacionRepo.existsById(id))
             aportacionRepo.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    //Preguntar como distinguir /aportacion/id de /aportacion/idClase en metodos similares
+
+    @GetMapping("/aportacion/{idClase}")
+    public ResponseEntity<String> detallesAportacionPorClase(@PathVariable Long idClase,ClaseService claseService){
+        String res="";
+        Clase claseSeleccionada =claseService.findById(idClase).get();
+
+        List<Aportacion>ListaAportaciones=claseSeleccionada.getListaAportaciones();
+
+        for(Aportacion aportacion:ListaAportaciones){
+            int i=0;
+            LocalDate fecha=aportacion.getFecha();
+            List<DetalleAportacion>ListaDetallesAportacion=aportacion.getDetalleAportacionList();
+
+            res=res+"Aportacion"+i+": fecha="+((LocalDate) fecha).toString()+",Aportaciones=[";
+            for(DetalleAportacion detalles:ListaDetallesAportacion){
+                String nombre=detalles.getTipoAlimento().getNombre();
+                Double kilos=detalles.getCantidadKilos();
+                res=res+"["+nombre+","+kilos+"],";
+            }
+            res=res+"]";
+            i++;
+        }
+        //Aportacion 1: fecha=2022-2-12 , Aportaciones= [ [patata,22] , [zanahoria,11] ] 1 vuelta
+        //Aportacion 1: fecha=2022-2-12 , Aportaciones= [ [patata,22] , [zanahoria,11] ] Aportacion 2: fecha=2022-2-12 , Aportaciones= [ [patata,22] , [zanahoria,11] ]
+
+
+        if(res!=""){
+            return ResponseEntity.ok().body(res);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+
+
+    }
+
+    //Preguntar por qué tiene solamente un 200 OK y no un 204 No content
+    @DeleteMapping("/aportacion/{id}/linea/{num}")
+    public ResponseEntity<Aportacion> deleteAportacion (@PathVariable Long id,@PathVariable Long num,AportacionServicio aportacionServicio){
+        /**Integer sizeAntes=null;
+        Integer sizeDespues=null;**/
+
+        Aportacion aportacionAeditar=aportacionServicio.findById(id).get();
+        List<DetalleAportacion>listaAportaciones=aportacionAeditar.getDetalleAportacionList();
+        //sizeAntes=listaAportaciones.size();
+
+        listaAportaciones.remove(num);
+        aportacionAeditar.setDetalleAportacionList(listaAportaciones);
+        aportacionRepo.save(aportacionAeditar);
+
+        //sizeDespues=aportacionServicio.findById(id).get().getDetalleAportacionList().size();
+        return ResponseEntity.ok().body(aportacionAeditar);
+
+        /**if(sizeAntes!=sizeDespues) {
+            return ResponseEntity.ok().body(aportacionAeditar);
+        }else{
+            return ResponseEntity.notFound().build();
+         }**/
+
+    }
+
+    // Revisar, no funciona bien
+    @PostMapping("/aportacion/")
+    public ResponseEntity<CreateAportacionDto> createAportacion(@RequestBody CreateAportacionDto dto){
+        Aportacion newAportacion = dtoConverter.createAportacionDtotoAportacion(dto);
+        if (aportacionServicio.aportacionCorrecta(newAportacion)) {
+            aportacionRepo.save(newAportacion);
+
+            CreateAportacionDto dtoCreateAportacion = new CreateAportacionDto(newAportacion.getId(), newAportacion.getFecha(), newAportacion.getDetalleAportacionList());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(dtoCreateAportacion);
+        }
+        else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
+
+
     }
 
 }

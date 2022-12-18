@@ -23,7 +23,6 @@ public class Aportacion {
 
     private LocalDate fecha;
 
-
     @OneToMany(orphanRemoval = true, mappedBy = "aportacion" , fetch = FetchType.EAGER)
     @Builder.Default
     private List<DetalleAportacion> detalleAportacionList = new ArrayList<>();
@@ -50,6 +49,13 @@ public class Aportacion {
         return CantidadKilos;
 
     }
+
+    public Aportacion(LocalDate fecha,List<DetalleAportacion> detalleAportacionList ){
+        this.fecha=fecha;
+        this.detalleAportacionList=detalleAportacionList;
+    }
+
+
 
 
 }

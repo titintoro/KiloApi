@@ -18,12 +18,12 @@ public class GetAportacionDto {
 
 
     public static GetAportacionDto of (Aportacion aportacion){
-        return GetAportacionDto
-                .builder()
-                .fecha(aportacion.getFecha())
-                .nombreClase(aportacion.getClase().getNombre())
-                .numKilos(aportacion.getKilos())
-                .build();
+        return new GetAportacionDto(
+
+                aportacion.getFecha(),
+                aportacion.getClase().getNombre(),
+                aportacion.getKilos()
+        );
 
     }
 
