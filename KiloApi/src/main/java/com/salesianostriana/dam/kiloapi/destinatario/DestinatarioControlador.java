@@ -47,6 +47,9 @@ public class DestinatarioControlador {
     })
     @GetMapping("/destinatario/")
     public ResponseEntity<List<GetDestinatarioDto>> findAllDestinatarios(Long id){
+        if (){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         return ResponseEntity.ok(servicio.findAll(id));
     }
 

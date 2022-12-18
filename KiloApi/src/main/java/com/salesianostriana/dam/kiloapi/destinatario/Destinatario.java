@@ -25,4 +25,11 @@ public class Destinatario {
     @OneToMany(mappedBy = "destinatario", fetch = FetchType.EAGER)
     @Builder.Default
     private List<Caja> listaCajas = new ArrayList<>();
+
+    public Destinatario(String direccion, String nombre, String telefono, String personaContacto) {
+        this.direccion = direccion;
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.personaContacto = personaContacto;
+    }
 }
