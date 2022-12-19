@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.kiloapi;
 
 import com.salesianostriana.dam.kiloapi.aportacion.AportacionServicio;
+import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.caja.CajaServicio;
 import com.salesianostriana.dam.kiloapi.clase.Clase;
 import com.salesianostriana.dam.kiloapi.clase.ClaseRepository;
@@ -85,6 +86,7 @@ public class MainDeMentira{
         tipoAlimentoServicio.add(tp1);
         tipoAlimentoServicio.add(tp2);
         tipoAlimentoServicio.add(tp3);
+
 
     }
 
