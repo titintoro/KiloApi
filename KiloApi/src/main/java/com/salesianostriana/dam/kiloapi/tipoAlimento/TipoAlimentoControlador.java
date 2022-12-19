@@ -77,15 +77,14 @@ public class TipoAlimentoControlador {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTipoAlimento(@PathVariable Long id) {
         Optional<TipoAlimento> aux = tipoAlimentoServicio.findById(id);
+        TipoAlimento t = aux.get();
 
-        if (tipoAlimentoServicio.checkCantidad(aux).getTieneList().isEmpty()) {
+        if (tipoAlimentoServicio.checkCantidad(id).getTieneList().isEmpty()) {
             tipoAlimentoServicio.delete(aux.get());
 
         } else {
-            tipoAlimentoServicio.checkCantidad(aux).getTieneList()
-                                                                .stream()
-                                                                 .filter(tn -> tn.getTipoAlimento().equals(aux.get()))
-                                                                     .findFirst().get().setTipoAlimento(null);
+            tipoAlimentoServicio.checkCantidad(id).getTieneList()
+                                                                .stream().forEach(tiene -> tiene.setTipoAlimento(null));
             tipoAlimentoServicio.delete(aux.get());
         }
         return ResponseEntity.noContent().build();

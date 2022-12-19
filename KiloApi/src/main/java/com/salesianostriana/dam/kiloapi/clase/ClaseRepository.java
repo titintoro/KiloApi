@@ -4,19 +4,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
 public interface ClaseRepository  extends JpaRepository<Clase,Long> {
 
-/*
+
     @Query("""
-            SELECT new com.salesianostriana.dam.kiloapi.clase.dto.ClaseResponse(c1.nombre,c1.tutor,(SELECT SUM(dt.cantidad)
-                                                                                                    FROM Clase c JOIN c.listaAportaciones a
-                                                                                                         JOIN a.detalleAportacion dt
-                                                                                                    WHERE c.id = c1))
-            FROM Clase c1
-            WHERE c1.id= :idClase
-            
+            SELECT SUM(dt.cantidad)
+            FROM Clase c JOIN Aportacion a ON a.clase = c
+                    JOIN DetalleAportacion dt ON a.id = dt.aportacion.id
+            WHERE c.id=?1
              """)
-    double calcularKilosTotales(@Param("idClase") Long id);
-*/
+    double calcularKilosTotales(Long id);
 
 }
