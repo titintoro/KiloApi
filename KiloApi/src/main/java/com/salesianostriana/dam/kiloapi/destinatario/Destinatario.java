@@ -26,10 +26,16 @@ public class Destinatario {
     @Builder.Default
     private List<Caja> listaCajas = new ArrayList<>();
 
+<<<<<<< HEAD
     public Destinatario(String direccion, String nombre, String telefono, String personaContacto) {
         this.direccion = direccion;
         this.nombre = nombre;
         this.telefono = telefono;
         this.personaContacto = personaContacto;
+=======
+    @PreRemove
+    public void setNullAlumnos() {
+       listaCajas.forEach((caja -> caja.setDestinatario(null)));
+>>>>>>> main
     }
 }
