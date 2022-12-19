@@ -181,7 +181,7 @@ public class AportacionControlador {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(dtoCreateAportacion);
         }
-        else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(dto);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
 
     }
