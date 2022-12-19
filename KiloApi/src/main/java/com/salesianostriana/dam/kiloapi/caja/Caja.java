@@ -49,4 +49,6 @@ public class Caja {
         d.getListaCajas().remove(this);
     }
 
+
+
 }
