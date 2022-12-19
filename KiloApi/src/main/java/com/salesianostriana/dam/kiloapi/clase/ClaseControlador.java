@@ -59,7 +59,7 @@ public class ClaseControlador {
 
         Optional<Clase> c = claseService.findById(id);
 
-            if(c.isPresent())
+            if(!c.isPresent())
                 return ResponseEntity.notFound().build();
 
             ClaseResponse result = ClaseResponse.convertClaseToClaseResponse(c.get());
