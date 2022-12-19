@@ -12,11 +12,11 @@ import java.util.Optional;
 @Repository
 public interface DestinatarioRepositorio extends JpaRepository<Destinatario, Long> {
 
-    @Query("select dt.nombre,dt.direccion,dt.personaContacto,dt.telefono,(select SUM(c2.kilosTotales) from Caja c2),(select COUNT(c3.numCaja) from Caja c3)" +
-            "from Destinatario dt JOIN Caja c ON  (dt.id = c.destinatario) where dt.id = :idDestinatario ")
+    @Query("select dt.nombre,dt.direccion,dt.persona_contacto,dt.telefono, SUM(c.kilos_totales), COUNT(c.num_caja) from Destinatario dt JOIN Caja c ON" +
+            "(dt.id = c.destinatario_id ) WHERE dt.id : = idDestinatario GROUP BY dt.nombre,dt.direccion,dt.persona_contacto,dt.telefono;")
     public Optional<GetDestinatarioDto> getDestinatarioById(@Param("idDestinatario") Long id);
 
-    @Query("select dt.nombre,dt.direccion,dt.personaContacto,dt.telefono,(select SUM(c2.kilosTotales) from Caja c2),(select COUNT(c3.numCaja) from Caja c3)" +
-            " from Destinatario dt JOIN Caja c ON  (dt.id = c.destinatario)")
+    @Query("select dt.nombre,dt.direccion,dt.persona_contacto,dt.telefono, SUM(c.kilos_totales), COUNT(c.num_caja) from Destinatario dt JOIN Caja c ON " +
+            "(dt.id = c.destinatario_id ) GROUP BY dt.nombre,dt.direccion,dt.persona_contacto,dt.telefono;")
     public List<GetDestinatarioDto> getDestinatarios();
 }
