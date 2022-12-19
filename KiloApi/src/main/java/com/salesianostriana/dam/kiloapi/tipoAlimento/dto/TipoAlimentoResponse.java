@@ -13,6 +13,4 @@ public class TipoAlimentoResponse {
 private String nombre;
 private Long id;
 
-
-
 }

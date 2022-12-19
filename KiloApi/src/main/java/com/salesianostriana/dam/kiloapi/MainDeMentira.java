@@ -81,6 +81,13 @@ public class MainDeMentira{
                 .nombre("Lentejas")
                 .build();
 
+        tipoAlimentoServicio.add(tp);
+        tipoAlimentoServicio.add(tp1);
+        tipoAlimentoServicio.add(tp2);
+        tipoAlimentoServicio.add(tp3);
+
     }
+
+
 
 }

@@ -21,9 +21,9 @@ public class TipoAlimento {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @Builder.Default
-    @OneToMany(mappedBy = "tipoAlimento", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "tipoAlimento", fetch = FetchType.EAGER,orphanRemoval = false)
     private List<Tiene> tieneList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "tipoAlimento",fetch = FetchType.EAGER, orphanRemoval = false, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "tipoAlimento",fetch = FetchType.EAGER, orphanRemoval = false)
     private KilosDisp kilosDisp;
 }

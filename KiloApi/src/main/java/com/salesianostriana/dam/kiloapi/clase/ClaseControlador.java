@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,12 +57,12 @@ public class ClaseControlador {
     @GetMapping("/{id}")
     public ResponseEntity<ClaseResponse> getOneClaseInfo(@PathVariable Long id) {
 
-            Clase c = claseService.findById(id).orElse(null);
+        Optional<Clase> c = claseService.findById(id);
 
-            if(c == null)
+            if(c.isPresent())
                 return ResponseEntity.notFound().build();
 
-            ClaseResponse result = getOneClaseInfo(id).getBody();
+            ClaseResponse result = ClaseResponse.convertClaseToClaseResponse(c.get());
 
             return ResponseEntity.ok(result);
     }
@@ -96,15 +97,20 @@ public class ClaseControlador {
     @PutMapping("/{id}")
     public ResponseEntity<Clase> updateClase(@PathVariable Long id, @RequestBody Clase clase) {
 
-        if (clase == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        Clase c = claseService.findById(id).get();
-        c.setNombre(clase.getNombre());
-        c.setTutor(clase.getTutor());
-        c.setListaAportaciones(clase.getListaAportaciones());
 
-        return ResponseEntity.ok().body(c);
+
+        Optional<Clase> c = claseService.findById(id);
+
+        if (!c.isPresent() || clase == null)
+            return ResponseEntity.badRequest().build();
+
+        c.get().setNombre(clase.getNombre());
+        c.get().setTutor(clase.getTutor());
+        c.get().setListaAportaciones(clase.getListaAportaciones());
+
+        claseService.edit(c.get());
+
+        return ResponseEntity.ok().body(c.get());
     }
 
     @Operation(summary = "Borra una clase buscada por el id, pasado por un query param")
