@@ -19,7 +19,6 @@ public class GetAportacionDto {
 
     public static GetAportacionDto of (Aportacion aportacion){
         return new GetAportacionDto(
-
                 aportacion.getFecha(),
                 aportacion.getClase().getNombre(),
                 aportacion.getKilos()

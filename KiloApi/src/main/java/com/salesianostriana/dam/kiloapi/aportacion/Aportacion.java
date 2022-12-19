@@ -3,6 +3,7 @@ package com.salesianostriana.dam.kiloapi.aportacion;
 import com.salesianostriana.dam.kiloapi.clase.Clase;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ public class Aportacion {
     @GeneratedValue
     private Long id;
 
+    @CreationTimestamp
     private LocalDate fecha;
 
     @OneToMany(orphanRemoval = true, mappedBy = "aportacion" , fetch = FetchType.EAGER)

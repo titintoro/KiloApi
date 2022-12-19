@@ -108,10 +108,10 @@ public class AportacionControlador {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    //Preguntar como distinguir /aportacion/id de /aportacion/idClase en metodos similares
 
-    @GetMapping("/aportacion/{idClase}")
-    public ResponseEntity<String> detallesAportacionPorClase(@PathVariable Long idClase,ClaseService claseService){
+
+    @GetMapping("/aportacion/clase/{idClase}")
+    public ResponseEntity<String> detallesAportacionPorClase(@PathVariable Long idClase){
         String res="";
         Clase claseSeleccionada =claseService.findById(idClase).get();
 
@@ -153,7 +153,6 @@ public class AportacionControlador {
         Aportacion aportacionAeditar=aportacionServicio.findById(id).get();
         List<DetalleAportacion>listaAportaciones=aportacionAeditar.getDetalleAportacionList();
         //sizeAntes=listaAportaciones.size();
-
         listaAportaciones.remove(num);
         aportacionAeditar.setDetalleAportacionList(listaAportaciones);
         aportacionRepo.save(aportacionAeditar);
@@ -173,10 +172,12 @@ public class AportacionControlador {
     @PostMapping("/aportacion/")
     public ResponseEntity<CreateAportacionDto> createAportacion(@RequestBody CreateAportacionDto dto){
         Aportacion newAportacion = dtoConverter.createAportacionDtotoAportacion(dto);
-        if (aportacionServicio.aportacionCorrecta(newAportacion)) {
-            aportacionRepo.save(newAportacion);
+        if (dto.getIdClase()!= null) {
 
-            CreateAportacionDto dtoCreateAportacion = new CreateAportacionDto(newAportacion.getId(), newAportacion.getFecha(), newAportacion.getDetalleAportacionList());
+            CreateAportacionDto dtoCreateAportacion = new CreateAportacionDto();
+            dtoCreateAportacion.builder().id(dto.getId()).fecha(dto.getFecha()).detalleAportacionList(dto.getDetalleAportacionList()).idClase(dto.getIdClase());
+
+            aportacionRepo.save(newAportacion);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(dtoCreateAportacion);
         }
