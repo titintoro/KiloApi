@@ -124,7 +124,7 @@ public class CajaControlador {
 
         Optional<Caja> c = cajaServicio.addAlimToCaja(id,idTipoAlim,cantidad);
 
-        return (c.isPresent() ? ResponseEntity.status(HttpStatus.CREATED).body(cajaDtoConverter.toPostCajaAlimentoResponse(c.get())) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+        return (c.map(caja -> ResponseEntity.status(HttpStatus.CREATED).body(cajaDtoConverter.toPostCajaAlimentoResponse(caja))).orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build()));
     }
 
 
@@ -174,22 +174,25 @@ public class CajaControlador {
 
     @PostMapping("/caja/{idCaja}/destinatario/{idDestinatario}")
     public ResponseEntity<PostCajaAlimentoResponse> addDestinatarioToCaja(
-            @PathVariable Long idCaja, Long idDestinatario) {
+            @PathVariable Long idCaja, @PathVariable Long idDestinatario) {
 
-        Optional<Caja> c = cajaServicio.findById(idCaja);
-        Optional<Destinatario> d = destinatarioServicio.findById(idDestinatario);
+        if (idCaja!=null&&idDestinatario!=null) {
+            Optional<Caja> c = cajaServicio.findById(idCaja);
+            Optional<Destinatario> d = destinatarioServicio.findById(idDestinatario);
 
-        if(c.isPresent() && d.isPresent()) {
+            if (c.isPresent() && d.isPresent()) {
 
-            c.get().addToDestinatario(d.get());
-            cajaServicio.edit(c.get());
+                c.get().addToDestinatario(d.get());
+                cajaServicio.edit(c.get());
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(cajaDtoConverter.toPostCajaAlimentoResponse(c.get()));
+                return ResponseEntity.status(HttpStatus.CREATED).body(cajaDtoConverter.toPostCajaAlimentoResponse(c.get()));
+            }
         }
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
         }
+
+
 
 
     @Operation(summary = "Update a Caja")
