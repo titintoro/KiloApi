@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CajaDtoConverter {
@@ -49,8 +50,12 @@ public class CajaDtoConverter {
         getCajaResponse.setNumCaja(c.getNumCaja());
         getCajaResponse.setQr(c.getQr());
         getCajaResponse.setKilosTotales(c.getKilosTotales());
-        getCajaResponse.setDestinatarioGetCajaResponse(DestinatarioGetCajaResponse.builder().id(d.getId()).nombre(d.getNombre()).build());
-        getCajaResponse.setAlimentoGetCajaResponseList(alimentoGetCajaResponseList);
+        getCajaResponse.setListaAlimentos(alimentoGetCajaResponseList);
+
+        if(d==null)
+            getCajaResponse.setDestinatario(null);
+        if(d!=null)
+            getCajaResponse.setDestinatario(DestinatarioGetCajaResponse.builder().id(d.getId()).nombre(d.getNombre()).build());
 
         return getCajaResponse;
     }
@@ -69,7 +74,7 @@ public class CajaDtoConverter {
         postCajaAlimentoResponse.setQr(c.getQr());
         postCajaAlimentoResponse.setKilosTotales(c.getKilosTotales());
         postCajaAlimentoResponse.setDestinatario(c.getDestinatario());
-        postCajaAlimentoResponse.setAlimentoGetCajaResponseList(alimentoGetCajaResponseList);
+        postCajaAlimentoResponse.setListaAlimentos(alimentoGetCajaResponseList);
 
         return postCajaAlimentoResponse;
 

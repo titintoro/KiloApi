@@ -15,7 +15,7 @@ public class PostCajaAlimentoResponse {
 
     private int numCaja;
     private String qr;
-    private List<AlimentoGetCajaResponse> alimentoGetCajaResponseList;
+    private List<AlimentoGetCajaResponse> listaAlimentos;
     private Destinatario destinatario;
     private double kilosTotales;
 }

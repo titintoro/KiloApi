@@ -77,14 +77,14 @@ public class CajaServicio {
     }
 
 
-    public void deleteAlimFromCaja(Long id, Long idCaja){
+    public void deleteAlimFromCaja(Long id, Long idAlim){
 
         Optional<Caja> caja = findById(id);
 
         if (caja.isPresent()){
             for (Tiene t:caja.get().getTieneList()){
 
-                if (t.getTipoAlimento().getId().equals(idCaja)) {
+                if (t.getTipoAlimento().getId().equals(idAlim)) {
 
                     caja.get().getTieneList().remove(t);
                     cajaRepo.save(caja.get());

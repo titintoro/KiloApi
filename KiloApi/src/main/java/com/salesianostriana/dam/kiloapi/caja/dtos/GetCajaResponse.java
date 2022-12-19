@@ -18,8 +18,8 @@ public class GetCajaResponse {
 
     private int numCaja;
     private String qr;
-    private List<AlimentoGetCajaResponse> alimentoGetCajaResponseList;
-    private DestinatarioGetCajaResponse destinatarioGetCajaResponse;
+    private List<AlimentoGetCajaResponse> listaAlimentos;
+    private DestinatarioGetCajaResponse destinatario;
     private double kilosTotales;
 
 }
