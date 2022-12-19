@@ -12,5 +12,10 @@ import java.util.List;
 @Repository
 public interface CajaRepositorio extends JpaRepository<Caja, Long> {
 
-
+    @Query("""
+            SELECT c
+                FROM Caja c JOIN Destinatario d ON c.destinatario.id = d.id
+                WHERE d.id = ?1
+            """)
+    List<Caja> getCajasByIdDestinatario(Long id);
 }
