@@ -49,4 +49,9 @@ public class Caja {
         d.getListaCajas().remove(this);
     }
 
+    @PreRemove
+    public void setNullDestinatario() {
+        destinatario.getListaCajas().removeIf(caja -> caja.equals(this));
+    }
+
 }
