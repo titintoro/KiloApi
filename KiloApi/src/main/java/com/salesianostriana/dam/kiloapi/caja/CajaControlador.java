@@ -4,6 +4,8 @@ import com.salesianostriana.dam.kiloapi.caja.dtos.CajaDtoConverter;
 import com.salesianostriana.dam.kiloapi.caja.dtos.CreateCajaRequest;
 import com.salesianostriana.dam.kiloapi.caja.dtos.GetCajaResponse;
 import com.salesianostriana.dam.kiloapi.caja.dtos.PostCajaAlimentoResponse;
+import com.salesianostriana.dam.kiloapi.destinatario.Destinatario;
+import com.salesianostriana.dam.kiloapi.destinatario.DestinatarioServicio;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,6 +30,7 @@ public class CajaControlador {
 
     private final CajaServicio cajaServicio;
     private final CajaDtoConverter cajaDtoConverter;
+    private final DestinatarioServicio destinatarioServicio;
 
     @Operation(summary = "Get a list of Cajas")
     @ApiResponses(value = {
@@ -167,6 +170,26 @@ public class CajaControlador {
                 }));
 
     }
+
+
+    @PostMapping("/caja/{idCaja}/destinatario/{idDestinatario}")
+    public ResponseEntity<PostCajaAlimentoResponse> addDestinatarioToCaja(
+            @PathVariable Long idCaja, Long idDestinatario) {
+
+        Optional<Caja> c = cajaServicio.findById(idCaja);
+        Optional<Destinatario> d = destinatarioServicio.findById(idDestinatario);
+
+        if(c.isPresent() && d.isPresent()) {
+
+            c.get().addToDestinatario(d.get());
+            cajaServicio.edit(c.get());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(cajaDtoConverter.toPostCajaAlimentoResponse(c.get()));
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+        }
 
 
     @Operation(summary = "Update a Caja")
