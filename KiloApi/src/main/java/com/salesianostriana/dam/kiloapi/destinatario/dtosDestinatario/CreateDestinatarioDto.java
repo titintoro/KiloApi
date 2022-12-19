@@ -10,8 +10,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-public class CreateDestinatario {
+public class CreateDestinatarioDto {
 
     private String nombre, direccion, personaContacto, telefono;
+
+
+
+
 
 }

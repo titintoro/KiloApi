@@ -16,17 +16,14 @@ public class DestinatarioServicio {
     public Destinatario add(Destinatario destinatario) { return repo.save(destinatario);}
 
 
-    public Optional<GetDestinatarioDto> findByGetDestinatariosId(Long id) {
-        return repo.getDestinatarioById(id);
-    }
 
-    public Optional<Destinatario> findByDestinatariosId(Long id) {
+    public Optional<Destinatario> findById(Long id) {
         return repo.findById(id);
     }
 
 
-    public List<GetDestinatarioDto> findAll() {
-        return repo.getDestinatarios();
+    public List<Destinatario> findAll() {
+        return repo.findAll();
     }
 
 

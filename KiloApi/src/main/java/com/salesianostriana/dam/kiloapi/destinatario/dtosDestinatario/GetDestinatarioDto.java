@@ -14,6 +14,8 @@ import java.util.List;
 @Builder
 public class GetDestinatarioDto {
 
+    private Long id;
+
     private String nombre, direccion, personaContacto, telefono;
 
     private double kilosTotales;

@@ -2,6 +2,8 @@ package com.salesianostriana.dam.kiloapi.destinatario;
 
 import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.caja.CajaServicio;
+import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.CreateDestinatarioDto;
+import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.DestinatarioConverter;
 import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.GetDestinatarioDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +27,10 @@ import java.util.Optional;
 @Tag(name = "Artist",description = "Este es el controlador de los artistas")
 public class DestinatarioControlador {
 
-    private DestinatarioServicio servicio;
-    private CajaServicio servicioCaja;
+    private final DestinatarioServicio servicio;
+
+    private final DestinatarioConverter dtoConverter;
+    private final CajaServicio servicioCaja;
 
     @Operation(summary = "Este método devuelve una lista de destinatarios")
     @ApiResponses(value = {
@@ -47,8 +52,11 @@ public class DestinatarioControlador {
     })
     @GetMapping("/destinatario/")
     public ResponseEntity<List<GetDestinatarioDto>> findAllDestinatarios(){
-
-        return ResponseEntity.ok(servicio.findAll());
+        List<GetDestinatarioDto> result = new ArrayList<>();
+        for (Destinatario destinatario : servicio.findAll()){
+            result.add(dtoConverter.destinatarioToGetDestinatarioDto(destinatario));
+        }
+        return ResponseEntity.ok(result);
     }
 
     @Operation(summary = "Este método devuelve una lista de destinatarios por su id")
@@ -70,8 +78,8 @@ public class DestinatarioControlador {
                     content = @Content),
     })
     @GetMapping("/destinatario/{id}")
-    public ResponseEntity<GetDestinatarioDto> findByIdDestinatarios(@PathVariable Long id){
-        return ResponseEntity.of(servicio.findByGetDestinatariosId(id));
+    public ResponseEntity<Destinatario> findByIdDestinatarios(@PathVariable Long id){
+        return ResponseEntity.of(servicio.findById(id));
     }
 
     @Operation(summary = "Este método devuelve los detalles una lista de destinatarios por su id")
@@ -93,8 +101,8 @@ public class DestinatarioControlador {
                     content = @Content),
     })
     @GetMapping("destinatario/{id}/detalle")
-    public ResponseEntity<GetDestinatarioDto> findByIdDestinatarioDetalle(@PathVariable Long id){
-        return ResponseEntity.of(servicio.findByGetDestinatariosId(id));
+    public ResponseEntity<Destinatario> findByIdDestinatarioDetalle(@PathVariable Long id){
+        return ResponseEntity.of(servicio.findById(id));
     }
 
     @Operation(summary = "Este método agrega un destinatario a una lista de destinatarios")
@@ -116,8 +124,12 @@ public class DestinatarioControlador {
                     content = @Content),
     })
     @PostMapping("/destinatario/")
-    public ResponseEntity<Destinatario> createDestinatario(@RequestBody Destinatario destinatario){
-        return ResponseEntity.status(HttpStatus.CREATED).body(servicio.add(destinatario));
+    public ResponseEntity<CreateDestinatarioDto> createDestinatario(@RequestBody CreateDestinatarioDto cd){
+
+
+        Destinatario d = dtoConverter.createDestinatarioToDestinatario(cd);
+        servicio.add(d);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cd);
     }
 
     @Operation(summary = "Este método modifica de una lista de destinatarios un destinatario por su id")
@@ -140,7 +152,7 @@ public class DestinatarioControlador {
     })
     @PutMapping("/destinatario/{id}")
     public ResponseEntity<Destinatario> editDestinatario(@RequestBody Destinatario destinatario, @PathVariable Long id){
-        return ResponseEntity.of(servicio.findByDestinatariosId(id)
+        return ResponseEntity.of(servicio.findById(id)
                 .map(old -> {
                     old.setNombre(destinatario.getNombre());
                     old.setDireccion(destinatario.getDireccion());

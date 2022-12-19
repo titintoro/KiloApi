@@ -7,23 +7,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class DestinatarioConverter {
 
-    public Destinatario createDestinatarioToDestinatario(CreateDestinatario c){
+    public Destinatario createDestinatarioToDestinatario(CreateDestinatarioDto c){
         return new Destinatario(
                 c.getDireccion(),
                 c.getNombre(),
-                c.getDireccion(),
+                c.getTelefono(),
                 c.getPersonaContacto()
         );
     }
 
-    public GetDestinatarioDto destinatarioToGetDestinatarioDto(Destinatario d, Caja c){
+    public GetDestinatarioDto destinatarioToGetDestinatarioDto(Destinatario d){
         return GetDestinatarioDto
                 .builder()
+                .id(d.getId())
                 .direccion(d.getDireccion())
                 .nombre(d.getNombre())
                 .personaContacto(d.getPersonaContacto())
                 .telefono(d.getTelefono())
-                .kilosTotales(c.getKilosTotales())
                 .numCajasAsiganadas(d.getListaCajas().size())
                 .build();
     }
