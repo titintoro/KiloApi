@@ -2,6 +2,7 @@ package com.salesianostriana.dam.kiloapi.caja;
 
 import com.salesianostriana.dam.kiloapi.caja.dtos.CajaDtoConverter;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDisp;
+import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDispRepository;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDispService;
 import com.salesianostriana.dam.kiloapi.tiene.Tiene;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimento;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class CajaServicio {
 
     private final CajaRepositorio cajaRepo;
+    private final KilosDispRepository kilosDispRepo;
     private final TipoAlimentoServicio tipoAlimentoServicio;
     private final CajaDtoConverter cajaDtoConverter;
     private final KilosDispService kilosDispService;
@@ -56,15 +58,15 @@ public class CajaServicio {
     public Optional<Caja> updateKgsOfTipoAlimentoFromCaja(Long idCaja, Long idTipoAlim, double cantidadKgs) {
 
         Optional<Caja> caja = findById(idCaja);
-
+        double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idTipoAlim);
         if (caja.isPresent()){
             for (Tiene t:caja.get().getTieneList()){
 
-                if(t.getTipoAlimento().getKilosDisp().getCantidadDisponible()>=cantidadKgs){
+                if(kilosDisponibles>=cantidadKgs){
 
                     if (t.getTipoAlimento().getId().equals(idTipoAlim)  ) {
-                        t.setCantidadKgs(cantidadKgs + t.getTipoAlimento().getKilosDisp().getCantidadDisponible());
-                        t.getTipoAlimento().getKilosDisp().setCantidadDisponible(t.getTipoAlimento().getKilosDisp().getCantidadDisponible()-cantidadKgs);
+                        t.setCantidadKgs(cantidadKgs + kilosDisponibles);
+                        t.getTipoAlimento().getKilosDisp().setCantidadDisponible(kilosDisponibles-cantidadKgs);
 
                         cajaRepo.save(caja.get());
                         tipoAlimentoServicio.add(t.getTipoAlimento());
@@ -98,6 +100,7 @@ public class CajaServicio {
 
         Optional<Caja> caja = cajaRepo.findById(id);
         Optional<TipoAlimento> tipoAlimento = tipoAlimentoServicio.findById(idTipoAlim);
+        double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idTipoAlim);
 
         if (caja.isPresent() && tipoAlimento.isPresent()){
 
@@ -106,7 +109,7 @@ public class CajaServicio {
             tiene.setCaja(caja.get());
             tiene.setCantidadKgs(cantidad);
 
-            tipoAlimento.get().getKilosDisp().setCantidadDisponible( tipoAlimento.get().getKilosDisp().getCantidadDisponible()-cantidad);
+            tipoAlimento.get().getKilosDisp().setCantidadDisponible( kilosDisponibles-cantidad);
 
             caja.get().getTieneList().add(tiene);
 
