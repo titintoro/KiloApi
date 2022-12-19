@@ -24,18 +24,29 @@ public class Destinatario {
     @ToString.Exclude
     @OneToMany(mappedBy = "destinatario", fetch = FetchType.EAGER)
     @Builder.Default
-    private List<Caja> listaCajas = new ArrayList<>();
+    private List<Caja> listaDeCajas = new ArrayList<>();
 
-<<<<<<< HEAD
+
     public Destinatario(String direccion, String nombre, String telefono, String personaContacto) {
         this.direccion = direccion;
         this.nombre = nombre;
         this.telefono = telefono;
         this.personaContacto = personaContacto;
-=======
+    }
+
+    public List<Long> listaIdDeCaja(){
+        List<Caja> cajas = listaDeCajas;
+        List<Long> result = new ArrayList<>();
+        for (Caja caja : cajas){
+            result.add(caja.getId());
+        }
+        return result;
+
+    }
+
     @PreRemove
     public void setNullAlumnos() {
-       listaCajas.forEach((caja -> caja.setDestinatario(null)));
->>>>>>> main
+        listaDeCajas.forEach((caja -> caja.setDestinatario(null)));
     }
 }
+

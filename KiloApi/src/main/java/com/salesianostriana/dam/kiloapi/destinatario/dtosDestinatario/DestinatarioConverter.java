@@ -24,7 +24,7 @@ public class DestinatarioConverter {
                 .nombre(d.getNombre())
                 .personaContacto(d.getPersonaContacto())
                 .telefono(d.getTelefono())
-                .numCajasAsiganadas(d.getListaCajas().size())
+                .cajasAsiganadas(d.listaIdDeCaja())
                 .build();
     }
 }
