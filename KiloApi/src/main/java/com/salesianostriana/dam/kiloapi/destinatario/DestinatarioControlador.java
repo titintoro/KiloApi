@@ -56,7 +56,11 @@ public class DestinatarioControlador {
         for (Destinatario destinatario : servicio.findAll()){
             result.add(dtoConverter.destinatarioToGetDestinatarioDto(destinatario));
         }
-        return ResponseEntity.ok(result);
+        if (result.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }else {
+            return ResponseEntity.ok().body(result);
+        }
     }
 
     @Operation(summary = "Este método devuelve una lista de destinatarios por su id")
