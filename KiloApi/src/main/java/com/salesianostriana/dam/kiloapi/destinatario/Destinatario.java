@@ -44,6 +44,15 @@ public class Destinatario {
 
     }
 
+    public List<Double> listaKilosTotales(){
+        List<Caja> cajas = listaDeCajas;
+        List<Double> result = new ArrayList<>();
+        for (Caja caja : cajas){
+            result.add(caja.getKilosTotales());
+        }
+        return result;
+    }
+
     @PreRemove
     public void setNullAlumnos() {
         listaDeCajas.forEach((caja -> caja.setDestinatario(null)));

@@ -27,4 +27,16 @@ public class DestinatarioConverter {
                 .cajasAsiganadas(d.listaIdDeCaja())
                 .build();
     }
+
+    public GetDestinatarioDto destinadestinatarioToGetDestinatarioDtoById(Destinatario d){
+        return GetDestinatarioDto.builder()
+                .id(d.getId())
+                .direccion(d.getDireccion())
+                .nombre(d.getNombre())
+                .personaContacto(d.getPersonaContacto())
+                .telefono(d.getTelefono())
+                .cajasAsiganadas(d.listaIdDeCaja())
+                .cajasAsiganadas(d.listaIdDeCaja())
+                .build();
+    }
 }

@@ -83,7 +83,13 @@ public class DestinatarioControlador {
     })
     @GetMapping("/destinatario/{id}")
     public ResponseEntity<Destinatario> findByIdDestinatarios(@PathVariable Long id){
-        return ResponseEntity.of(servicio.findById(id));
+        List<Destinatario> d = new ArrayList<>();
+        if (servicio.existsById(id)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }else {
+            return ResponseEntity.of(servicio.findById(id));
+        }
+
     }
 
     @Operation(summary = "Este método devuelve los detalles una lista de destinatarios por su id")
@@ -106,7 +112,11 @@ public class DestinatarioControlador {
     })
     @GetMapping("destinatario/{id}/detalle")
     public ResponseEntity<Destinatario> findByIdDestinatarioDetalle(@PathVariable Long id){
-        return ResponseEntity.of(servicio.findById(id));
+        if (servicio.existsById(id)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }else {
+            return ResponseEntity.of(servicio.findById(id));
+        }
     }
 
     @Operation(summary = "Este método agrega un destinatario a una lista de destinatarios")
@@ -129,10 +139,10 @@ public class DestinatarioControlador {
     })
     @PostMapping("/destinatario/")
     public ResponseEntity<CreateDestinatarioDto> createDestinatario(@RequestBody CreateDestinatarioDto cd){
-
-
         Destinatario d = dtoConverter.createDestinatarioToDestinatario(cd);
         servicio.add(d);
+
+
         return ResponseEntity.status(HttpStatus.CREATED).body(cd);
     }
 
