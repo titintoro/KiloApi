@@ -48,34 +48,24 @@ public class TipoAlimentoControlador {
     }
 
     @PostMapping("/")
-    public ResponseEntity<TipoAlimentoResponse> addOneTipoAlimento(@RequestBody TipoAlimentoRequest tipoAlimentoRequest) {
+    public ResponseEntity<TipoAlimento> addOneTipoAlimento(@RequestBody TipoAlimento tipoAlimento) {
 
-        if (tipoAlimentoRequest == null)
+        if (tipoAlimento.getNombre().isEmpty())
             return ResponseEntity.badRequest().build();
 
-        TipoAlimento result = TipoAlimentoRequest.convertTipoAlimentoRequestToTipoAlimento(tipoAlimentoRequest);
+        tipoAlimentoServicio.add(tipoAlimento);
 
-  //      result.getKilosDisp().setCantidadDisponible(0.0);
-
-        tipoAlimentoServicio.add(result);
-
-        TipoAlimentoResponse r = TipoAlimentoResponse.builder()
-                .nombre(result.getNombre())
-                    .build();
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(r);
+        return ResponseEntity.status(HttpStatus.CREATED).body(tipoAlimento);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TipoAlimento> updateOneTipoAlimento(@RequestBody TipoAlimentoRequest tipoAlimentoRequest, @PathVariable Long id) {
+    public ResponseEntity<TipoAlimento> updateOneTipoAlimento(@RequestBody TipoAlimento tipoAlimentoPasado, @PathVariable Long id) {
         Optional<TipoAlimento> tipoAlimento = tipoAlimentoServicio.findById(id);
 
         if (tipoAlimento.isEmpty())
             return ResponseEntity.badRequest().build();
 
-        tipoAlimento.get().setNombre(tipoAlimentoRequest.getNombre());
-  //      tipoAlimento.get().getKilosDisp().setCantidadDisponible(tipoAlimentoRequest.getKilosDisp());
-
+        tipoAlimento.get().setNombre(tipoAlimentoPasado.getNombre());
         tipoAlimentoServicio.edit(tipoAlimento.get());
 
 
