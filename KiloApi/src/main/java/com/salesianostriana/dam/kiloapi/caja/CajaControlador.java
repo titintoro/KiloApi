@@ -150,7 +150,7 @@ public class CajaControlador {
                                                 "kilosTotales": 0.0,
                                                 "destinatario": null,
                                                 "tieneList": []
-                                            }                                          
+                                            }                                        \s
                                             """
                             )}
                     )}),
