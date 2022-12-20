@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario;
 
+import com.salesianostriana.dam.kiloapi.caja.Caja;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,5 @@ public class GetDestinatarioDtoById {
 
     private double kilosTotales;
 
-    private List<Long> cajasAsiganadas;
+    private List<Caja> cajasAsiganadas;
 }

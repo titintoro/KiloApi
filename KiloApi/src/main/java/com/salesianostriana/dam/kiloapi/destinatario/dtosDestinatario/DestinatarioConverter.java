@@ -28,15 +28,14 @@ public class DestinatarioConverter {
                 .build();
     }
 
-    public GetDestinatarioDto destinadestinatarioToGetDestinatarioDtoById(Destinatario d){
-        return GetDestinatarioDto.builder()
+    public GetDestinatarioDtoById destinadestinatarioToGetDestinatarioDtoById(Destinatario d){
+        return GetDestinatarioDtoById.builder()
                 .id(d.getId())
                 .direccion(d.getDireccion())
                 .nombre(d.getNombre())
                 .personaContacto(d.getPersonaContacto())
                 .telefono(d.getTelefono())
-                .cajasAsiganadas(d.listaIdDeCaja())
-                .cajasAsiganadas(d.listaIdDeCaja())
+                .cajasAsiganadas(d.getListaDeCajas())
                 .build();
     }
 }
