@@ -8,6 +8,7 @@ import com.salesianostriana.dam.kiloapi.clase.ClaseRepository;
 import com.salesianostriana.dam.kiloapi.clase.ClaseService;
 import com.salesianostriana.dam.kiloapi.destinatario.DestinatarioServicio;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacionServicio;
+import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDisp;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDispService;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimento;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoServicio;
@@ -69,18 +70,32 @@ public class MainDeMentira{
         claseService.add(c4);
         claseService.add(c5);
 
+
         TipoAlimento tp = TipoAlimento.builder()
                 .nombre("Macarrones")
+                .kilosDisp(KilosDisp.builder()
+                        .cantidadDisponible(5.5)
+                        .build())
                 .build();
         TipoAlimento tp1 = TipoAlimento.builder()
                 .nombre("Garbanzos")
+                .kilosDisp(KilosDisp.builder()
+                        .cantidadDisponible(85.5)
+                        .build())
                 .build();
         TipoAlimento tp2 = TipoAlimento.builder()
                 .nombre("Patatas")
+                .kilosDisp(KilosDisp.builder()
+                        .cantidadDisponible(35.5)
+                        .build())
                 .build();
         TipoAlimento tp3 = TipoAlimento.builder()
                 .nombre("Lentejas")
+                .kilosDisp(KilosDisp.builder()
+                        .cantidadDisponible(8)
+                        .build())
                 .build();
+
 
         tipoAlimentoServicio.add(tp);
         tipoAlimentoServicio.add(tp1);
