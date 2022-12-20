@@ -3,10 +3,12 @@ package com.salesianostriana.dam.kiloapi.aportacion;
 import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.AportacionDtoConverter;
 import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.CreateAportacionDto;
 import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.GetAportacionDto;
+import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.GetNuevaAportacionDto;
 import com.salesianostriana.dam.kiloapi.clase.Clase;
 import com.salesianostriana.dam.kiloapi.clase.ClaseService;
 
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
+import com.salesianostriana.dam.kiloapi.detalleAportacion.dtoDetalleAportacion.DetalleAportacionResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,6 +37,8 @@ public class AportacionControlador {
     private final AportacionServicio aportacionServicio;
     private final AportacionRepositorio aportacionRepo;
     private final ClaseService claseService;
+
+    private final AportacionDtoConverter aportacionDtoConverter;
 
 
 
@@ -170,18 +174,12 @@ public class AportacionControlador {
 
     // Revisar, no funciona bien
     @PostMapping("/aportacion/")
-    public ResponseEntity<CreateAportacionDto> createAportacion(@RequestBody CreateAportacionDto dto){
-        Aportacion newAportacion = dtoConverter.createAportacionDtotoAportacion(dto);
-        if (dto.getIdClase()!= null) {
+    public ResponseEntity<GetNuevaAportacionDto> createAportacion(@RequestBody DetalleAportacionResponseDto dto){
+        if (dto.getTipoAlimento() == null || dto.getIdClase() == null)
+            return ResponseEntity.badRequest().build();
 
-            CreateAportacionDto dtoCreateAportacion = new CreateAportacionDto();
-            dtoCreateAportacion.builder().id(dto.getId()).fecha(dto.getFecha()).detalleAportacionList(dto.getDetalleAportacionList()).idClase(dto.getIdClase());
-
-            aportacionRepo.save(newAportacion);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(dtoCreateAportacion);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        Aportacion nuevaAportacion = aportacionServicio.createAportacion(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(aportacionDtoConverter.nuevaAportacionDto(nuevaAportacion));
 
 
     }

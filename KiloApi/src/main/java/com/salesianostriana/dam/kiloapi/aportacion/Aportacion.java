@@ -33,12 +33,16 @@ public class Aportacion {
     @JoinColumn(name = "listaAportacion", foreignKey = @ForeignKey(name = "FK_APORTACION_CLASE"))
     private Clase clase;
 
-    private void addToClase(Clase c){
+    public void addToClase(Clase c){
         this.clase = c;
         c.getListaAportaciones().add(this);
     }
+    public void addDetalleAportacion(DetalleAportacion d){
+        this.detalleAportacionList = d;
+        d.getAportacion().addDetalleAportacion(d);
+    }
 
-    private void removeFromClase(Clase c){
+    public void removeFromClase(Clase c){
         this.clase = null;
         c.getListaAportaciones().remove(this);
     }

@@ -4,7 +4,11 @@ import com.salesianostriana.dam.kiloapi.aportacion.Aportacion;
 import com.salesianostriana.dam.kiloapi.aportacion.AportacionServicio;
 import com.salesianostriana.dam.kiloapi.clase.Clase;
 import com.salesianostriana.dam.kiloapi.clase.ClaseService;
+import com.salesianostriana.dam.kiloapi.detalleAportacion.dtoDetalleAportacion.GetDetalleAportacionDto;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class AportacionDtoConverter {
@@ -14,10 +18,11 @@ public class AportacionDtoConverter {
     private ClaseService claseService;
 
     public Aportacion createAportacionDtotoAportacion(CreateAportacionDto c) {
-        return new Aportacion(
-                c.getIdClase(),
-                c.getDetalleAportacionList()
-        );
+        return Aportacion
+                .builder()
+                .id(c.getIdClase())
+                .detalleAportacionList(c.getDetalleAportacionList())
+                .build();
     }
 
     public GetAportacionDto aportacionToGetAportacionDto(Aportacion a) {
@@ -31,6 +36,26 @@ public class AportacionDtoConverter {
 
     }
 
+    public GetNuevaAportacionDto nuevaAportacionDto(Aportacion a){
+        List<GetDetalleAportacionDto> dList = new ArrayList<>();
+
+        a.getDetalleAportacionList().forEach(d -> {
+            dList.add(
+                    GetDetalleAportacionDto.builder()
+                            .numLinea(d.getNumLinea())
+                            .nombreTipoAlimento(d.getTipoAlimento().getNombre())
+                            .numeroKilos(d.getCantidadKilos())
+                            .build()
+            );
+        });
+
+        return GetNuevaAportacionDto.builder()
+                .id(a.getId())
+                .nombreClase(a.getClase().getNombre())
+                .fecha(a.getFecha())
+                .listaDetalles(dList)
+                .build();
+    }
 
 }
 
