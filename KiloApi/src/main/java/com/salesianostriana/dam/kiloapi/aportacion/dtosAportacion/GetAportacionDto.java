@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @Setter
 public class GetAportacionDto {
 
+
     private LocalDate fecha;
     private String nombreClase;
     private double numKilos;

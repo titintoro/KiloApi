@@ -37,10 +37,7 @@ public class Aportacion {
         this.clase = c;
         c.getListaAportaciones().add(this);
     }
-    public void addDetalleAportacion(DetalleAportacion d){
-        this.detalleAportacionList = d;
-        d.getAportacion().addDetalleAportacion(d);
-    }
+
 
     public void removeFromClase(Clase c){
         this.clase = null;

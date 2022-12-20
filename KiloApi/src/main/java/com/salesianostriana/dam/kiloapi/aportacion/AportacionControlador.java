@@ -1,13 +1,11 @@
 package com.salesianostriana.dam.kiloapi.aportacion;
 
-import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.AportacionDtoConverter;
-import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.CreateAportacionDto;
-import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.GetAportacionDto;
-import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.GetNuevaAportacionDto;
+import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.*;
 import com.salesianostriana.dam.kiloapi.clase.Clase;
 import com.salesianostriana.dam.kiloapi.clase.ClaseService;
 
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
+import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacionRepositorio;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.dtoDetalleAportacion.DetalleAportacionResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -26,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -39,6 +38,8 @@ public class AportacionControlador {
     private final ClaseService claseService;
 
     private final AportacionDtoConverter aportacionDtoConverter;
+
+    private final DetalleAportacionRepositorio detalleRepo;
 
 
 
@@ -91,8 +92,15 @@ public class AportacionControlador {
                     content = @Content),
     })
     @GetMapping("/aportacion/{id}")
-    public ResponseEntity<Aportacion> findAportacionById(@PathVariable Long id){
-        return ResponseEntity.of(aportacionServicio.findById(id));
+    public ResponseEntity<GetByIdAportacionDto> findAportacionById(@PathVariable Long id){
+        Aportacion aportacion = aportacionServicio.findById(id).orElse(null);
+        //return aportacionOptional.map((aportacion) -> {
+        //        ResponseEntity.of(GetByIdAportacionDto.of(aportacion))});
+
+        if (aportacion != null)
+            return ResponseEntity.of(Optional.of(GetByIdAportacionDto.of(aportacion)));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
     }
 
     @Operation(summary = "Petición que borra una Aportación proporcionada por su ID")
@@ -172,10 +180,10 @@ public class AportacionControlador {
 
     }
 
-    // Revisar, no funciona bien
+
     @PostMapping("/aportacion/")
-    public ResponseEntity<GetNuevaAportacionDto> createAportacion(@RequestBody DetalleAportacionResponseDto dto){
-        if (dto.getTipoAlimento() == null || dto.getIdClase() == null)
+    public ResponseEntity<GetNuevaAportacionDto> createAportacion(@RequestBody AportacionResponseDto dto){
+        if (dto.getFecha() == null || dto.getDetalles() == null || dto.getDetalles().size() == 0 || dto.getIdClase() == null)
             return ResponseEntity.badRequest().build();
 
         Aportacion nuevaAportacion = aportacionServicio.createAportacion(dto);

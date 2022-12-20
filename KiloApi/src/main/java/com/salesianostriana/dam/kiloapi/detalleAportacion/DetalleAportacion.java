@@ -16,6 +16,8 @@ public class DetalleAportacion {
 
     @Id
     @GeneratedValue
+    private Long id;
+
     private Long numLinea;
 
     private double cantidadKilos;

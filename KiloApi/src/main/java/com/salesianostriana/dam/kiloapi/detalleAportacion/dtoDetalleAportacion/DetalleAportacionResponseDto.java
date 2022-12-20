@@ -10,6 +10,8 @@ import java.util.Map;
 @Getter
 @Setter
 public class DetalleAportacionResponseDto {
-    private Long idClase;
-    private Map<Long, Double> tipoAlimento;
+    private Long idTipoAlimento;
+    private double kilosAlimento;
+
+
 }
