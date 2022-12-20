@@ -15,7 +15,7 @@ public class AportacionDtoConverter {
 
     public Aportacion createAportacionDtotoAportacion(CreateAportacionDto c) {
         return new Aportacion(
-                c.getFecha(),
+                c.getIdClase(),
                 c.getDetalleAportacionList()
         );
     }

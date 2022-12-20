@@ -25,7 +25,7 @@ public class Aportacion {
     @CreationTimestamp
     private LocalDate fecha;
 
-    @OneToMany(orphanRemoval = true, mappedBy = "aportacion" , fetch = FetchType.EAGER)
+    @OneToMany(orphanRemoval = true, mappedBy = "aportacion" , fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @Builder.Default
     private List<DetalleAportacion> detalleAportacionList = new ArrayList<>();
 
