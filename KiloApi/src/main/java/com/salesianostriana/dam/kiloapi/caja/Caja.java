@@ -40,13 +40,18 @@ public class Caja {
 
     public void addToDestinatario(Destinatario d) {
         this.destinatario = d;
-        d.getListaCajas().add(this);
+        d.getListaDeCajas().add(this);
     }
 
 
     public void removeFromDestinatario(Destinatario d) {
         this.destinatario = null;
-        d.getListaCajas().remove(this);
+        d.getListaDeCajas().remove(this);
+    }
+
+    @PreRemove
+    public void setNullDestinatario() {
+        destinatario.getListaDeCajas().removeIf(caja -> caja.equals(this));
     }
 
 }

@@ -3,29 +3,31 @@ package com.salesianostriana.dam.kiloapi.clase.dto;
 import com.salesianostriana.dam.kiloapi.clase.Clase;
 import com.salesianostriana.dam.kiloapi.clase.ClaseService;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Data
-@RequiredArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ClaseResponse {
 
-private Clase clase;
+    private String clase;
 
-private int numAportacion;
+    private int numAportacion;
 
-private double kilosAportados;
+    private double kilosAportados;
 
-public static ClaseResponse convertClaseToClaseResponse(Clase c){
+    public static ClaseResponse convertClaseToClaseResponse(Clase clase) {
 
-            ClaseResponse result = ClaseResponse.builder()
-                                        .clase(c)
-                                        .numAportacion(c.getListaAportaciones().size())
-                                        //.kilosAportados()
-                                        .build();
+        ClaseResponse resultado = ClaseResponse.builder()
+                                       .clase(clase.getNombre())
+                                       .numAportacion(clase.getListaAportaciones().size())
+                                       .build();
 
-            return result;
-}
+    return resultado;
 
+    }
 
 
 }

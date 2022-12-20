@@ -2,12 +2,23 @@ package com.salesianostriana.dam.kiloapi.destinatario;
 
 import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.caja.CajaServicio;
+import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.CreateDestinatarioDto;
+import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.DestinatarioConverter;
+import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.GetDestinatarioDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,29 +27,129 @@ import java.util.Optional;
 @Tag(name = "Artist",description = "Este es el controlador de los artistas")
 public class DestinatarioControlador {
 
-    private DestinatarioServicio servicio;
-    private CajaServicio servicioCaja;
+    private final DestinatarioServicio servicio;
 
+    private final DestinatarioConverter dtoConverter;
+    private final CajaServicio servicioCaja;
+
+    @Operation(summary = "Este método devuelve una lista de destinatarios")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha encontrado la lista de destinatarios",
+                    content = { @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Destinatario.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            [
+                                            
+                                            ]                                          
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se ha encontrado ninguna lista de destinatarios",
+                    content = @Content),
+    })
     @GetMapping("/destinatario/")
-    public ResponseEntity<List<Destinatario>> findAllDestinatarios(){
-        return ResponseEntity.ok(servicio.findAll());
+    public ResponseEntity<List<GetDestinatarioDto>> findAllDestinatarios(){
+        List<GetDestinatarioDto> result = new ArrayList<>();
+        for (Destinatario destinatario : servicio.findAll()){
+            result.add(dtoConverter.destinatarioToGetDestinatarioDto(destinatario));
+        }
+        return ResponseEntity.ok(result);
     }
 
+    @Operation(summary = "Este método devuelve una lista de destinatarios por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se han encontrado la lista de destinatarios por su id",
+                    content = { @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Destinatario.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            [
+                                            
+                                            ]                                          
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se ha encontrado ninguna lista de destinatarios por su id",
+                    content = @Content),
+    })
     @GetMapping("/destinatario/{id}")
     public ResponseEntity<Destinatario> findByIdDestinatarios(@PathVariable Long id){
         return ResponseEntity.of(servicio.findById(id));
     }
 
+    @Operation(summary = "Este método devuelve los detalles una lista de destinatarios por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se han encontrado la lista de reproducción por su id",
+                    content = { @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Destinatario.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            [
+                                            
+                                            ]                                          
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se han encontrado los detalles de ninguna lista de destinatarios por su id",
+                    content = @Content),
+    })
     @GetMapping("destinatario/{id}/detalle")
     public ResponseEntity<Destinatario> findByIdDestinatarioDetalle(@PathVariable Long id){
         return ResponseEntity.of(servicio.findById(id));
     }
 
+    @Operation(summary = "Este método agrega un destinatario a una lista de destinatarios")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se han agregado un destinatario a la lista de destinatarios",
+                    content = { @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Destinatario.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            [
+                                            
+                                            ]                                          
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se ha podido agregar un destinatario a la lista de destinatarios",
+                    content = @Content),
+    })
     @PostMapping("/destinatario/")
-    public ResponseEntity<Destinatario> createDestinatario(@RequestBody Destinatario destinatario){
-        return ResponseEntity.status(HttpStatus.CREATED).body(servicio.add(destinatario));
+    public ResponseEntity<CreateDestinatarioDto> createDestinatario(@RequestBody CreateDestinatarioDto cd){
+
+
+        Destinatario d = dtoConverter.createDestinatarioToDestinatario(cd);
+        servicio.add(d);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cd);
     }
 
+    @Operation(summary = "Este método modifica de una lista de destinatarios un destinatario por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha modificado un destinatario por su id",
+                    content = { @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Destinatario.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            [
+                                            
+                                            ]                                          
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se ha modificado ningun destinatario por su id",
+                    content = @Content),
+    })
     @PutMapping("/destinatario/{id}")
     public ResponseEntity<Destinatario> editDestinatario(@RequestBody Destinatario destinatario, @PathVariable Long id){
         return ResponseEntity.of(servicio.findById(id)
@@ -47,13 +158,30 @@ public class DestinatarioControlador {
                     old.setDireccion(destinatario.getDireccion());
                     old.setTelefono(destinatario.getTelefono());
                     old.setPersonaContacto(destinatario.getPersonaContacto());
-                    old.setListaCajas(destinatario.getListaCajas());
                     return Optional.of(servicio.edit(old));
                 })
                 .orElse(Optional.empty())
         );
     }
 
+    @Operation(summary = "Este método elimina un destinario por su id de una lista de destinatario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se han encontrado la lista de reproducción por su id",
+                    content = { @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Destinatario.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            [
+                                            
+                                            ]                                          
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se ha eliminado un destinatario por su id",
+                    content = @Content),
+    })
     @DeleteMapping("/destinatario/{id}")
     public ResponseEntity<Destinatario> deleteDestinatario(@RequestBody Destinatario destinatario, @PathVariable Long id){
         List<Caja> listaCaja = servicioCaja.findAll();
