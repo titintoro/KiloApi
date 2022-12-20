@@ -14,4 +14,14 @@ public class KilosDispConverter {
                 .kilosTotales(kd.getCantidadDisponible())
                 .build();
     }
+
+    public GetKilosDispDtoById kilosDispToGetKilosDispDtoById(KilosDisp kd){
+        return GetKilosDispDtoById.builder()
+                .idTipoAlimento(kd.getTipoAlimento().getId())
+                .kgDisponibles(kd.getCantidadDisponible())
+                .idAportacion(kd.getTipoAlimento().listaIdDeDetalleAportacion())
+                .kgAportacion(kd.getTipoAlimento().listaCantidadKgsDetalleAportacion())
+                .lineaDetalle(kd.getTipoAlimento().listaNumLineaDetalleAportacion())
+                .build();
+    }
 }

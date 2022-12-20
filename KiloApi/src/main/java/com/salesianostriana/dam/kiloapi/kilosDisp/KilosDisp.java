@@ -1,9 +1,12 @@
 package com.salesianostriana.dam.kiloapi.kilosDisp;
 
+import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimento;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor @AllArgsConstructor

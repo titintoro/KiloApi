@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.kiloapi.tipoAlimento;
 
 
+import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDisp;
 import com.salesianostriana.dam.kiloapi.tiene.Tiene;
@@ -30,5 +31,32 @@ public class TipoAlimento {
 
     @OneToMany(mappedBy = "tipoAlimento" , fetch = FetchType.EAGER)
     @Builder.Default
-    private List<DetalleAportacion> detalleAportacion = new ArrayList<>();
+    private List<DetalleAportacion> listaDetalleAportacion = new ArrayList<>();
+
+    public List<Long> listaIdDeDetalleAportacion(){
+        List<DetalleAportacion> detalles = listaDetalleAportacion;
+        List<Long> result = new ArrayList<>();
+        for (DetalleAportacion detalleAportacion : detalles){
+            result.add(detalleAportacion.getAportacion().getId());
+        }
+        return result;
+    }
+
+    public List<Long> listaNumLineaDetalleAportacion(){
+        List<DetalleAportacion> detalles = listaDetalleAportacion;
+        List<Long> result = new ArrayList<>();
+        for (DetalleAportacion detalleAportacion : detalles){
+            result.add(detalleAportacion.getNumLinea());
+        }
+        return result;
+    }
+
+    public List<Double> listaCantidadKgsDetalleAportacion(){
+        List<DetalleAportacion> detalles = listaDetalleAportacion;
+        List<Double> result = new ArrayList<>();
+        for (DetalleAportacion detalleAportacion : detalles){
+            result.add(detalleAportacion.getCantidad());
+        }
+        return result;
+    }
 }
