@@ -40,7 +40,7 @@ public class ClaseService {
         repo.deleteById(id);
     }
 
-/*
+
     public double calcularKg(Clase c){
        return repo.calcularKilosTotales(c.getIdClase());
     }
