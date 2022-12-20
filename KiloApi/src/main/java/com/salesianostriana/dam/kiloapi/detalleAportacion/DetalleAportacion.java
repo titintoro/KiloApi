@@ -25,7 +25,7 @@ public class DetalleAportacion {
     private double cantidad;
 
     @ManyToOne
-    @JoinColumn(name = "tipoAlimento_id", foreignKey = @ForeignKey(name = "FK_TIPOALIMENTO_DETALLEAPORTACION"))
+    @JoinColumn(name = "detalleAportacion", foreignKey = @ForeignKey(name = "FK_TIPOALIMENTO_DETALLEAPORTACION"))
     private TipoAlimento tipoAlimento;
 
 }
