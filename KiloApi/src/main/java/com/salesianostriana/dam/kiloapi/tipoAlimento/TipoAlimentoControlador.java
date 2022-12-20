@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.kiloapi.tipoAlimento;
 
 import com.salesianostriana.dam.kiloapi.caja.CajaServicio;
+import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDisp;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDispService;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.dto.TipoAlimentoRequest;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.dto.TipoAlimentoResponse;
@@ -26,8 +27,8 @@ public class TipoAlimentoControlador {
     private final KilosDispService kilosDispService;
 
     @GetMapping("/")
-    public ResponseEntity<List<TipoAlimento>> listAllTipoAlimento() {
-        List<TipoAlimento> data = tipoAlimentoServicio.findAll();
+    public ResponseEntity<List<TipoAlimentoResponse>> listAllTipoAlimento() {
+        List<TipoAlimentoResponse> data = tipoAlimentoServicio.getAllTipos();
 
         if (data.isEmpty())
             return ResponseEntity.notFound().build();
@@ -35,27 +36,34 @@ public class TipoAlimentoControlador {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TipoAlimento> getOneTipoAlimentoInfo(@PathVariable Long id) {
-        Optional<TipoAlimento> result = tipoAlimentoServicio.findById(id);
+    public ResponseEntity<TipoAlimentoResponse> getOneTipoAlimentoInfo(@PathVariable Long id) {
 
-        if (!result.isPresent())
+        TipoAlimentoResponse result = tipoAlimentoServicio.getOneTipo(id);
+
+        if (result == null)
             return ResponseEntity.notFound().build();
 
-        return ResponseEntity.ok(result.get());
+        return ResponseEntity.ok(result);
 
     }
 
     @PostMapping("/")
-    public ResponseEntity<TipoAlimento> addOneTipoAlimento(@RequestBody String nombre) {
+    public ResponseEntity<TipoAlimentoResponse> addOneTipoAlimento(@RequestBody TipoAlimentoRequest tipoAlimentoRequest) {
 
-        if (nombre.isEmpty())
+        if (tipoAlimentoRequest == null)
             return ResponseEntity.badRequest().build();
 
-        TipoAlimento result = TipoAlimento.builder()
-                .nombre(nombre)
-                .build();
+        TipoAlimento result = TipoAlimentoRequest.convertTipoAlimentoRequestToTipoAlimento(tipoAlimentoRequest);
+
+  //      result.getKilosDisp().setCantidadDisponible(0.0);
+
         tipoAlimentoServicio.add(result);
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+
+        TipoAlimentoResponse r = TipoAlimentoResponse.builder()
+                .nombre(result.getNombre())
+                    .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(r);
     }
 
     @PutMapping("/{id}")
@@ -66,7 +74,7 @@ public class TipoAlimentoControlador {
             return ResponseEntity.badRequest().build();
 
         tipoAlimento.get().setNombre(tipoAlimentoRequest.getNombre());
-        tipoAlimento.get().getKilosDisp().setCantidadDisponible(tipoAlimentoRequest.getKilosDisp());
+  //      tipoAlimento.get().getKilosDisp().setCantidadDisponible(tipoAlimentoRequest.getKilosDisp());
 
         tipoAlimentoServicio.edit(tipoAlimento.get());
 
@@ -83,9 +91,9 @@ public class TipoAlimentoControlador {
 
         } else {
             tipoAlimentoServicio.checkCantidad(aux).getTieneList()
-                                                                .stream()
-                                                                 .filter(tn -> tn.getTipoAlimento().equals(aux.get()))
-                                                                     .findFirst().get().setTipoAlimento(null);
+                    .stream()
+                    .filter(tn -> tn.getTipoAlimento().equals(aux.get()))
+                    .findFirst().get().setTipoAlimento(null);
             tipoAlimentoServicio.delete(aux.get());
         }
         return ResponseEntity.noContent().build();

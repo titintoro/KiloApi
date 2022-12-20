@@ -6,9 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TipoAlimentoRepository extends JpaRepository<TipoAlimento, Long> {
-/*
+
+
     @Query("""
             SELECT new com.salesianostriana.dam.kiloapi.tipoAlimento.dto.TipoAlimentoResponse (tp.nombre , tp.id)
             FROM TipoAlimento tp
@@ -16,5 +19,11 @@ public interface TipoAlimentoRepository extends JpaRepository<TipoAlimento, Long
            """
     )
     TipoAlimentoResponse consultarInfoUnTipoAlimento(@Param("idTipoAlimento") Long id);
-*/
+
+    @Query("""
+          SELECT new com.salesianostriana.dam.kiloapi.tipoAlimento.dto.TipoAlimentoResponse (tp.nombre , tp.id)    
+          FROM TipoAlimento tp
+           """
+    )
+    List<TipoAlimentoResponse> consultarTodosLosTiposDeAlimento();
 }

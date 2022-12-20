@@ -70,38 +70,42 @@ public class MainDeMentira{
         claseService.add(c4);
         claseService.add(c5);
 
-
         TipoAlimento tp = TipoAlimento.builder()
                 .nombre("Macarrones")
-                .kilosDisp(KilosDisp.builder()
-                        .cantidadDisponible(5.5)
-                        .build())
                 .build();
         TipoAlimento tp1 = TipoAlimento.builder()
                 .nombre("Garbanzos")
-                .kilosDisp(KilosDisp.builder()
-                        .cantidadDisponible(85.5)
-                        .build())
+
                 .build();
         TipoAlimento tp2 = TipoAlimento.builder()
                 .nombre("Patatas")
-                .kilosDisp(KilosDisp.builder()
-                        .cantidadDisponible(35.5)
-                        .build())
                 .build();
         TipoAlimento tp3 = TipoAlimento.builder()
                 .nombre("Lentejas")
-                .kilosDisp(KilosDisp.builder()
-                        .cantidadDisponible(8)
-                        .build())
                 .build();
 
+        KilosDisp k1 = KilosDisp.builder()
+                .cantidadDisponible(8)
+                .build();
+        KilosDisp k2 = KilosDisp.builder()
+                .cantidadDisponible(5)
+                .build();
+        KilosDisp k3 = KilosDisp.builder()
+                .cantidadDisponible(1.2)
+                .build();
+        KilosDisp k4 = KilosDisp.builder()
+                .cantidadDisponible(8.5)
+                .build();
+
+        tp1.addKiloToTipo(k1);
+        tp1.addKiloToTipo(k2);
+        tp1.addKiloToTipo(k3);
+        tp1.addKiloToTipo(k4);
 
         tipoAlimentoServicio.add(tp);
         tipoAlimentoServicio.add(tp1);
         tipoAlimentoServicio.add(tp2);
         tipoAlimentoServicio.add(tp3);
-
 
     }
 
