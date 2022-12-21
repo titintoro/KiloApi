@@ -60,6 +60,21 @@ public class CajaDtoConverter {
         return getCajaResponse;
     }
 
+
+    public CajaResponse cajaToCajaResponse(Caja c){
+        CajaResponse cajaResponse = new CajaResponse();
+        cajaResponse.setDestinatario(c.getDestinatario());
+        cajaResponse.setId(c.getId());
+        cajaResponse.setQr(c.getQr());
+        cajaResponse.setNumCaja(c.getNumCaja());
+        cajaResponse.setTieneList(c.getTieneList());
+        cajaResponse.setDestinatario(c.getDestinatario());
+
+        return cajaResponse;
+
+    }
+
+
     public PostCajaAlimentoResponse toPostCajaAlimentoResponse(Caja c){
 
         PostCajaAlimentoResponse postCajaAlimentoResponse = new PostCajaAlimentoResponse();

@@ -69,13 +69,15 @@ public class MainDeMentira{
         TipoAlimento tp = TipoAlimento.builder()
                 .nombre("Macarrones")
                 .build();
+
         TipoAlimento tp1 = TipoAlimento.builder()
                 .nombre("Garbanzos")
-
                 .build();
+
         TipoAlimento tp2 = TipoAlimento.builder()
                 .nombre("Patatas")
                 .build();
+
         TipoAlimento tp3 = TipoAlimento.builder()
                 .nombre("Lentejas")
                 .build();

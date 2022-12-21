@@ -20,7 +20,6 @@ public class Caja {
     @GeneratedValue
     private Long id;
 
-    @NaturalId
     private String qr;
 
     private int numCaja;

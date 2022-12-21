@@ -4,6 +4,8 @@ import com.salesianostriana.dam.kiloapi.caja.dtos.CajaDtoConverter;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDispRepository;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDispService;
 import com.salesianostriana.dam.kiloapi.tiene.Tiene;
+import com.salesianostriana.dam.kiloapi.tiene.TienePK;
+import com.salesianostriana.dam.kiloapi.tiene.TieneRepository;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimento;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoRepository;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoServicio;
@@ -23,6 +25,7 @@ public class CajaServicio {
     private final CajaDtoConverter cajaDtoConverter;
     private final KilosDispService kilosDispService;
     private final TipoAlimentoRepository tipoAlimentoRepository;
+    private final TieneRepository tieneRepository;
 
     public Caja add(Caja caja) { return cajaRepo.save(caja);}
 
@@ -108,22 +111,25 @@ public class CajaServicio {
 
         Optional<Caja> caja = cajaRepo.findById(id);
         Optional<TipoAlimento> tipoAlimento = tipoAlimentoServicio.findById(idTipoAlim);
+        Optional<Tiene> tiene = tieneRepository.findById(new TienePK(caja.get().getId(), tipoAlimento.get().getId())) ;
+
         double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idTipoAlim);
         double kilosTotales = cajaRepo.getKilosTotales(id);
 
         if (caja.isPresent() && tipoAlimento.isPresent() && cantidad>=kilosDisponibles){
 
             caja.get().setKilosTotales(kilosTotales+cantidad);
-            Tiene tiene = new Tiene();
-            tiene.setTipoAlimento(tipoAlimento.get());
-            tiene.setCaja(caja.get());
-            tiene.setCantidadKgs(cantidad);
+
+            tiene.get().setCantidadKgs(cantidad);
 
             tipoAlimento.get().getKilosDisp().setCantidadDisponible(kilosDisponibles - cantidad);
 
-            caja.get().getTieneList().add(tiene);
+            caja.get().getTieneList().add(tiene.get());
 
             tipoAlimentoServicio.edit(tipoAlimento.get());
+            caja.get().setKilosTotales(caja.get().getKilosTotales()+cantidad);
+
+            tieneRepository.save(tiene.get());
             cajaRepo.save(caja.get());
 
             return caja;
