@@ -2,10 +2,9 @@ package com.salesianostriana.dam.kiloapi.destinatario;
 
 import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.caja.CajaServicio;
-import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.CreateDestinatarioDto;
-import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.DestinatarioConverter;
-import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.GetDestinatarioDto;
-import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.GetDestinatarioDtoById;
+import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.*;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimento;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoServicio;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -29,6 +28,8 @@ import java.util.Optional;
 public class DestinatarioControlador {
 
     private final DestinatarioServicio servicio;
+
+    private final TipoAlimentoServicio servicioTipoAlimento;
 
     private final DestinatarioConverter dtoConverter;
     private final CajaServicio servicioCaja;
@@ -113,13 +114,14 @@ public class DestinatarioControlador {
                     content = @Content),
     })
     @GetMapping("destinatario/{id}/detalle")
-    public ResponseEntity<Destinatario> findByIdDestinatarioDetalle(@PathVariable Long id){
+    public ResponseEntity<GetDestinatarioDetalleDto> findByIdDestinatarioDetalle(@PathVariable Long id){
         Destinatario destinatario = servicio.findById(id).orElse(null);
+        TipoAlimento tipoAlimento = servicioTipoAlimento.findById(id).orElse(null);
 
-        if (servicio.existsById(id)){
+        if (destinatario == null && tipoAlimento == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }else {
-            return ResponseEntity.of(servicio.findById(id));
+            return ResponseEntity.of(Optional.of(dtoConverter.destinatarioDetalleToDestinatarioDetalleDto(destinatario,tipoAlimento)));
         }
     }
 
@@ -180,6 +182,7 @@ public class DestinatarioControlador {
                 })
                 .orElse(Optional.empty())
         );
+
     }
 
     @Operation(summary = "Este método elimina un destinario por su id de una lista de destinatario")
@@ -201,14 +204,13 @@ public class DestinatarioControlador {
                     content = @Content),
     })
     @DeleteMapping("/destinatario/{id}")
-    public ResponseEntity<Destinatario> deleteDestinatario(@RequestBody Destinatario destinatario, @PathVariable Long id){
+    public ResponseEntity<Destinatario> deleteDestinatario(@PathVariable Long id){
         List<Caja> listaCaja = servicioCaja.findAll();
         for (Caja caja: listaCaja){
             if (caja.getId() == id){
                 caja.setDestinatario(null);
             }
         }
-        servicio.delete(destinatario);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -2,6 +2,7 @@ package com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario;
 
 import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.destinatario.Destinatario;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimento;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -63,11 +64,21 @@ public class DestinatarioConverter {
                 .build();
     }
 
-    public GetDestinatarioDetalleDto destinatarioDetalleToDestinatarioDetalleDto (Destinatario d){
+    public GetDestinatarioDetalleDto destinatarioDetalleToDestinatarioDetalleDto (Destinatario d, TipoAlimento t){
         List<GetDestinatarioInfoDto> listaInfoDestinatario = new ArrayList<>();
         List<GetDestinatarioDetalleMoreInfoDto> listaMoreInfoDestinatario = new ArrayList<>();
 
         /**d.getListaDeCajas().get().getTieneList().get().getTipoAlimento().getDetalleAportacionList().forEach(ld ->);**/
+
+        t.getDetalleAportacionList().forEach(da -> {
+            listaMoreInfoDestinatario.add(
+                    GetDestinatarioDetalleMoreInfoDto.builder()
+                            .idTipoAlimento(da.getId())
+                            .KgsTipoAlimento(da.getCantidadKilos())
+                            .nombreTipoAlimento(da.getTipoAlimento().getNombre())
+                            .build()
+            );
+        });
 
         d.getListaDeCajas().forEach(ld -> {
             listaInfoDestinatario.add(
