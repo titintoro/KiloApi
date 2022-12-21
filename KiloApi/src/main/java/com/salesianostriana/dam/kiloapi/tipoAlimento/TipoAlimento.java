@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.kiloapi.tipoAlimento;
 
 
+import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDisp;
 import com.salesianostriana.dam.kiloapi.tiene.Tiene;
@@ -33,9 +34,11 @@ public class TipoAlimento {
     @OneToOne(mappedBy = "tipoAlimento", fetch = FetchType.EAGER, orphanRemoval = false, cascade = CascadeType.ALL)
     private KilosDisp kilosDisp;
 
-    @OneToMany(mappedBy = "tipoAlimento")
+    @OneToMany(mappedBy = "tipoAlimento" , fetch = FetchType.EAGER)
     @Builder.Default
-    private List<DetalleAportacion> detalleAportacionList = new ArrayList<>();
+    private List<DetalleAportacion> listaDetalleAportacion = new ArrayList<>();
+
+
 
     public void addKiloToTipo(KilosDisp kilos) {
         kilos.setId(this.getId());
