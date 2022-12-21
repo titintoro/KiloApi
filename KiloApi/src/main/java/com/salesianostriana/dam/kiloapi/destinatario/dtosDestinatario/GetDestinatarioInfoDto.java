@@ -1,23 +1,20 @@
 package com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 
 @Data
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-public class CreateDestinatarioDto {
+public class GetDestinatarioInfoDto {
 
-    private Long id;
+    private int numCaja;
 
-    private String nombre, direccion, personaContacto, telefono;
+    private double kgsTotales;
 
-
-
-
-
+    private List<GetDestinatarioDetalleMoreInfoDto> listaDetalle;
 }

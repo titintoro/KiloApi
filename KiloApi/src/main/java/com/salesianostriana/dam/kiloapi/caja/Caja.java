@@ -20,7 +20,6 @@ public class Caja {
     @GeneratedValue
     private Long id;
 
-    @NaturalId
     private String qr;
 
     private int numCaja;
@@ -51,7 +50,10 @@ public class Caja {
 
     @PreRemove
     public void setNullDestinatario() {
-        destinatario.getListaDeCajas().removeIf(caja -> caja.equals(this));
+
+        if (destinatario!=null)
+            destinatario.getListaDeCajas().removeIf(caja -> caja.equals(this));
+
     }
 
 }
