@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RankingController {
     private final ClaseService service;
-
+/*
 @GetMapping("/")
 public ResponseEntity<List<Ranking>> createRanking(){
 
@@ -27,6 +27,6 @@ public ResponseEntity<List<Ranking>> createRanking(){
     return ResponseEntity.ok(results);
 }
 
-
+*/
 
 }

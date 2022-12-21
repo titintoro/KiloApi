@@ -43,6 +43,14 @@ public class TipoAlimento {
         kilos.setTipoAlimento(null);
         this.kilosDisp = kilos;
     }
+
+    @PreRemove
+    public void borrarAlimentoAsignadoACaja(){
+        for(Tiene t : tieneList){
+            if(t.getTipoAlimento().equals(this))
+                    t = null;
+        }
+    }
 }
 
 
