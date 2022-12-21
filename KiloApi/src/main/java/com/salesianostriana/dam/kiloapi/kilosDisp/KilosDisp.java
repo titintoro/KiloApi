@@ -23,4 +23,10 @@ public class KilosDisp {
 
     private double cantidadDisponible;
 
+    public void addTipoToKilo(TipoAlimento tp){
+        this.tipoAlimento = tp;
+        tp.setId(this.getId());
+        tp.setKilosDisp(this);
+    }
+
 }
