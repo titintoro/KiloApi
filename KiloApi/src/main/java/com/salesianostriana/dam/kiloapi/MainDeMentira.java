@@ -2,9 +2,11 @@ package com.salesianostriana.dam.kiloapi;
 
 import com.salesianostriana.dam.kiloapi.aportacion.Aportacion;
 import com.salesianostriana.dam.kiloapi.aportacion.AportacionServicio;
+import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.caja.CajaServicio;
 import com.salesianostriana.dam.kiloapi.clase.Clase;
 import com.salesianostriana.dam.kiloapi.clase.ClaseService;
+import com.salesianostriana.dam.kiloapi.destinatario.Destinatario;
 import com.salesianostriana.dam.kiloapi.destinatario.DestinatarioServicio;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDisp;
@@ -111,12 +113,33 @@ public class MainDeMentira{
                 .aportacion(a1)
                 .build();
 
-        
-
         tipoAlimentoServicio.add(tp);
         tipoAlimentoServicio.add(tp1);
         tipoAlimentoServicio.add(tp2);
         tipoAlimentoServicio.add(tp3);
+
+        Destinatario d = Destinatario.builder()
+                .nombre("Valentín")
+                .direccion("Calle Condes de Bustillo")
+                .personaContacto("Antonio")
+                .telefono("654686962")
+                .build();
+
+        Destinatario d1 = Destinatario.builder()
+                .nombre("Jorge")
+                .direccion("Maria Auxiliadora")
+                .personaContacto("Mario")
+                .telefono("688524206")
+                .build();
+
+        Destinatario d2 = Destinatario.builder()
+                .nombre("David")
+                .direccion("Calle San Juan Bosco")
+                .personaContacto("Daniel")
+                .telefono("659623604")
+                .build();
+
+
 
     }}
 
