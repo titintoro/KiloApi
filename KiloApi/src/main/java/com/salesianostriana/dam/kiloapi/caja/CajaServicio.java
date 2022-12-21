@@ -12,6 +12,7 @@ import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,13 +96,56 @@ public class CajaServicio {
     }
 
 
-    public void deleteAlimFromCaja(Long id, Long idAlim){
+    public void deleteAlimFromCaja(Long id, Long idTipoAlim){
 
         Optional<Caja> caja = findById(id);
 
-        double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idAlim);
+        double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idTipoAlim);
 
         double kilosTotales = cajaRepo.getKilosTotales(id);
+
+
+        Tiene tiene = new Tiene();
+
+        for(Tiene t : caja.get().getTieneList()) {
+            if (t.getTipoAlimento().getId().equals(idTipoAlim)) tiene = t;
+        }
+
+        double cantidadEliminada = tiene.getCantidadKgs();
+
+        caja.get().setKilosTotales(kilosTotales-cantidadEliminada);
+
+        tiene.getTipoAlimento().getKilosDisp().setCantidadDisponible(kilosDisponibles+cantidadEliminada);
+
+        List<Tiene> tieneAuxList = new ArrayList<>();
+
+        for(Tiene t : caja.get().getTieneList()){
+            if (t.getTipoAlimento().getId()!=idTipoAlim){
+                tieneAuxList.add(t);
+
+            }
+        }
+        tieneRepository.delete(tiene);
+        caja.get().setTieneList(tieneAuxList);
+        cajaRepo.save(caja.get());
+
+
+        /*
+        tipoAlimento.get().getKilosDisp().setCantidadDisponible(kilosDisponibles + tiene.getCantidadKgs());
+
+        caja.get().setKilosTotales(caja.get().getKilosTotales()+cantidad-tiene.getCantidadKgs());
+
+        tiene.setCantidadKgs(cantidad);
+
+        tipoAlimentoServicio.edit(tipoAlimento.get());
+
+        tieneRepository.save(tiene);
+
+        cajaRepo.save(caja.get());
+
+        return caja;
+
+
 
         if (caja.isPresent()){
             for (Tiene t:caja.get().getTieneList()){
@@ -119,7 +163,7 @@ public class CajaServicio {
                     cajaRepo.save(caja.get());
                 }
             }
-        }
+        } */
     }
 
 

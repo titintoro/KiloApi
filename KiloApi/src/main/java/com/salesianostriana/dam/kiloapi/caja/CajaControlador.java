@@ -129,17 +129,17 @@ public class CajaControlador {
                     content = @Content),
     })
     @PostMapping("/caja/")
-    public ResponseEntity<CajaResponse> createCaja(@RequestBody CreateCajaRequest createCajaRequest) {
+    public ResponseEntity<GetCajaResponse> createCaja(@RequestBody CreateCajaRequest createCajaRequest) {
 
         Caja cajaResponse = cajaDtoConverter.createCajaRequestToCaja(createCajaRequest);
         cajaServicio.add(cajaResponse);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(cajaDtoConverter.cajaToCajaResponse(cajaResponse));
+                .body(cajaDtoConverter.toGetCajaResponse(cajaResponse, cajaResponse.getDestinatario()));
     }
 
 
-    @Operation(summary = "Add TipoAliemnto to Caja")
+    @Operation(summary = "Add TipoAlimento to Caja")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
                     description = "Caja Created Successfully",
@@ -201,7 +201,7 @@ public class CajaControlador {
                     content = @Content),
     })
     @PutMapping("/caja/{id}")
-    public ResponseEntity<CajaResponse> edit(
+    public ResponseEntity<GetCajaResponse> edit(
             @RequestBody CreateCajaRequest c,
             @PathVariable Long id) {
 
@@ -214,7 +214,8 @@ public class CajaControlador {
                     m.setQr(c.getQr());
                     m.setNumCaja(c.getNumCaja());
 
-                    return cajaDtoConverter.cajaToCajaResponse(cajaServicio.edit(cajaDtoConverter.createCajaRequestToCaja(c)));
+                    Caja caja = cajaServicio.edit(cajaDtoConverter.createCajaRequestToCaja(c));
+                    return cajaDtoConverter.toGetCajaResponse(caja, caja.getDestinatario());
                 }));
 
     }
