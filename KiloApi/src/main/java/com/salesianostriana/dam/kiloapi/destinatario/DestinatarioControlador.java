@@ -84,7 +84,7 @@ public class DestinatarioControlador {
     })
     @GetMapping("/destinatario/{id}")
     public ResponseEntity<GetDestinatarioDtoById> findByIdDestinatarios(@PathVariable Long id){
-        Optional<Destinatario> destinatario = servicio.findById(id);
+        Destinatario destinatario = servicio.findById(id).orElse(null);
 
         if (destinatario == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -114,6 +114,8 @@ public class DestinatarioControlador {
     })
     @GetMapping("destinatario/{id}/detalle")
     public ResponseEntity<Destinatario> findByIdDestinatarioDetalle(@PathVariable Long id){
+        Destinatario destinatario = servicio.findById(id).orElse(null);
+
         if (servicio.existsById(id)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }else {
