@@ -6,13 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class GetDestinatarioDto {
+public class GetDestinatarioDtoById {
 
     private Long id;
 
@@ -20,5 +20,5 @@ public class GetDestinatarioDto {
 
     private double kilosTotales;
 
-    private List<GetDestinatarioCajasIdDto> cajasAsiganadas;
+    private List<GetDestinatarioDtoByIdCajas> cajasAsiganadas;
 }

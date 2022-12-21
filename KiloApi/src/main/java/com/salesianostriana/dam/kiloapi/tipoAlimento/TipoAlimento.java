@@ -39,6 +39,7 @@ public class TipoAlimento {
     private List<DetalleAportacion> listaDetalleAportacion = new ArrayList<>();
 
 
+
     public void addKiloToTipo(KilosDisp kilos) {
         kilos.setId(this.getId());
         kilos.setTipoAlimento(this);
