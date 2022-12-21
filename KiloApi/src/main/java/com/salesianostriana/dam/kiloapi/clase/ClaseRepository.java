@@ -9,18 +9,23 @@ import java.util.List;
 
 public interface ClaseRepository extends JpaRepository<Clase, Long> {
 
- /*   @Query("""
+   @Query("""
             SELECT SUM(dt.cantidad)
-            FROM Clase c JOIN Aportacion a ON a.clase = c
-                    JOIN DetalleAportacion dt ON a.id = dt.aportacion.id
-            WHERE c.id=?1             """)
-    double calcularKilosTotales(@Param("idClase") Long id);
-*/
+            FROM Clase c 
+            JOIN Aportacion a ON a.clase = c
+            JOIN DetalleAportacion dt ON a.id = dt.aportacion.id
+            
+            WHERE c.id= :idClase
+            GROUP BY a
+            """)
+    Double calcularKilosTotales(@Param("idClase") Long id);
+
     @Query("""
             SELECT new com.salesianostriana.dam.kiloapi.ranking.Ranking (c1.nombre, ( SELECT SUM(dt.cantidad)
                                                                                      FROM Clase c JOIN Aportacion a ON a.clase = c
                                                                                                 JOIN DetalleAportacion dt ON a.id = dt.aportacion.id
-                                                                                     WHERE c1.id = c.id  ))
+                                                                                     WHERE c1.id = c.id
+                                                                                     ))
             FROM Clase c1 
             ORDER BY c1.nombre ASC
             """)
