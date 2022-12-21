@@ -27,11 +27,8 @@ public class DetalleAportacion {
     private Aportacion aportacion;
 
     @ManyToOne
-<<<<<<< HEAD
     @JoinColumn(name = "detalleAportacion", foreignKey = @ForeignKey(name = "FK_TIPOALIMENTO_DETALLEAPORTACION"))
-=======
-    @JoinColumn(name = "tipoAlimento_id", foreignKey = @ForeignKey(name = "FK_DETALLEAPORTACION_TIPOALIMENTO"))
->>>>>>> main
+
     private TipoAlimento tipoAlimento;
 
 

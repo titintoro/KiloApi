@@ -21,7 +21,7 @@ public class GetKilosDispDetalleAportacionDto {
         return GetKilosDispDetalleAportacionDto.builder()
                 .id(d.getAportacion().getId())
                 .lineaDetalle(d.getNumLinea())
-                .cantidadKgs(d.getCantidad())
+                .cantidadKgs(d.getCantidadKilos())
                 .build();
     }
 }
