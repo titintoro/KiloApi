@@ -1,13 +1,10 @@
 package com.salesianostriana.dam.kiloapi;
 
 import com.salesianostriana.dam.kiloapi.aportacion.AportacionServicio;
-import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.caja.CajaServicio;
 import com.salesianostriana.dam.kiloapi.clase.Clase;
-import com.salesianostriana.dam.kiloapi.clase.ClaseRepository;
 import com.salesianostriana.dam.kiloapi.clase.ClaseService;
 import com.salesianostriana.dam.kiloapi.destinatario.DestinatarioServicio;
-import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacionServicio;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDisp;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDispService;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimento;
@@ -35,7 +32,7 @@ public class MainDeMentira{
     private final TipoAlimentoServicio tipoAlimentoServicio;
 
     @PostConstruct
-    public void run(){
+    public void run() {
 
         Clase c = Clase.builder()
                 .nombre("1 DAM")
@@ -105,5 +102,7 @@ public class MainDeMentira{
         tipoAlimentoServicio.add(tp1);
         tipoAlimentoServicio.add(tp2);
         tipoAlimentoServicio.add(tp3);
+
+    }}
 
 
