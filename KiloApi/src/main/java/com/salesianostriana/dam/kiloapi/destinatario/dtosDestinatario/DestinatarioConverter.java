@@ -4,6 +4,9 @@ import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.destinatario.Destinatario;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class DestinatarioConverter {
 
@@ -17,6 +20,16 @@ public class DestinatarioConverter {
     }
 
     public GetDestinatarioDto destinatarioToGetDestinatarioDto(Destinatario d){
+        List<GetDestinatarioCajasIdDto> listaCajasId = new ArrayList<>();
+
+        d.getListaDeCajas().forEach(ld -> {
+            listaCajasId.add(
+                    GetDestinatarioCajasIdDto.builder()
+                            .numCaja(ld.getNumCaja())
+                            .build()
+            );
+        });
+
         return GetDestinatarioDto
                 .builder()
                 .id(d.getId())
@@ -24,18 +37,29 @@ public class DestinatarioConverter {
                 .nombre(d.getNombre())
                 .personaContacto(d.getPersonaContacto())
                 .telefono(d.getTelefono())
-                .cajasAsiganadas(d.listaIdDeCaja())
+                .cajasAsiganadas(listaCajasId)
                 .build();
     }
 
-    public GetDestinatarioDtoById destinadestinatarioToGetDestinatarioDtoById(Destinatario d){
+    public GetDestinatarioDtoById destinatarioToGetDestinatarioDtoById(Destinatario d){
+        List<GetDestinatarioDtoByIdCajas> listaCajasId = new ArrayList<>();
+
+        d.getListaDeCajas().forEach(ld -> {
+            listaCajasId.add(
+                    GetDestinatarioDtoByIdCajas.builder()
+                            .numCaja(ld.getNumCaja())
+                            .kgsAsignados(ld.getKilosTotales())
+                            .build()
+            );
+        });
+
         return GetDestinatarioDtoById.builder()
                 .id(d.getId())
                 .direccion(d.getDireccion())
                 .nombre(d.getNombre())
                 .personaContacto(d.getPersonaContacto())
                 .telefono(d.getTelefono())
-                .cajasAsiganadas(d.getListaDeCajas())
+                .cajasAsiganadas(listaCajasId)
                 .build();
     }
 }

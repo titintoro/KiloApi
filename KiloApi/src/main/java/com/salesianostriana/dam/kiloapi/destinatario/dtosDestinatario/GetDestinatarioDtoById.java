@@ -20,5 +20,5 @@ public class GetDestinatarioDtoById {
 
     private double kilosTotales;
 
-    private List<Caja> cajasAsiganadas;
+    private List<GetDestinatarioDtoByIdCajas> cajasAsiganadas;
 }

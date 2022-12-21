@@ -34,25 +34,6 @@ public class Destinatario {
         this.personaContacto = personaContacto;
     }
 
-    public List<Long> listaIdDeCaja(){
-        List<Caja> cajas = listaDeCajas;
-        List<Long> result = new ArrayList<>();
-        for (Caja caja : cajas){
-            result.add(caja.getId());
-        }
-        return result;
-
-    }
-
-    public List<Double> listaKilosTotales(){
-        List<Caja> cajas = listaDeCajas;
-        List<Double> result = new ArrayList<>();
-        for (Caja caja : cajas){
-            result.add(caja.getKilosTotales());
-        }
-        return result;
-    }
-
     @PreRemove
     public void setNullAlumnos() {
         listaDeCajas.forEach((caja -> caja.setDestinatario(null)));

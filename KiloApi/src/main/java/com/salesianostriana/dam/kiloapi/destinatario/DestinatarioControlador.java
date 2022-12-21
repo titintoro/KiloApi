@@ -5,6 +5,7 @@ import com.salesianostriana.dam.kiloapi.caja.CajaServicio;
 import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.CreateDestinatarioDto;
 import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.DestinatarioConverter;
 import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.GetDestinatarioDto;
+import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.GetDestinatarioDtoById;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -82,12 +83,13 @@ public class DestinatarioControlador {
                     content = @Content),
     })
     @GetMapping("/destinatario/{id}")
-    public ResponseEntity<Destinatario> findByIdDestinatarios(@PathVariable Long id){
-        List<Destinatario> d = new ArrayList<>();
-        if (servicio.existsById(id)){
+    public ResponseEntity<GetDestinatarioDtoById> findByIdDestinatarios(@PathVariable Long id){
+        Optional<Destinatario> destinatario = servicio.findById(id);
+
+        if (destinatario == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }else {
-            return ResponseEntity.of(servicio.findById(id));
+            return ResponseEntity.of(Optional.of(dtoConverter.destinatarioToGetDestinatarioDtoById(destinatario)));
         }
 
     }
