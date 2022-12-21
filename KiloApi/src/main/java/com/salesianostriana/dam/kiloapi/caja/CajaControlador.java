@@ -1,9 +1,6 @@
 package com.salesianostriana.dam.kiloapi.caja;
 
-import com.salesianostriana.dam.kiloapi.caja.dtos.CajaDtoConverter;
-import com.salesianostriana.dam.kiloapi.caja.dtos.CreateCajaRequest;
-import com.salesianostriana.dam.kiloapi.caja.dtos.GetCajaResponse;
-import com.salesianostriana.dam.kiloapi.caja.dtos.PostCajaAlimentoResponse;
+import com.salesianostriana.dam.kiloapi.caja.dtos.*;
 import com.salesianostriana.dam.kiloapi.destinatario.Destinatario;
 import com.salesianostriana.dam.kiloapi.destinatario.DestinatarioServicio;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,9 +64,15 @@ public class CajaControlador {
                     content = @Content),
     })
     @GetMapping("/caja/")
-    public ResponseEntity<List<Caja>> getListOfCajas() {
+    public ResponseEntity<List<GetCajaResponse>> getListOfCajas() {
 
-        return (cajaServicio.findAll().isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(cajaServicio.findAll()));
+        List<GetCajaResponse> cajaResponseList = new ArrayList<>();
+
+        for (Caja caja : cajaServicio.findAll()){
+            cajaResponseList.add(cajaDtoConverter.toGetCajaResponse(caja, caja.getDestinatario()));
+        }
+
+        return (cajaServicio.findAll().isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(cajaResponseList));
     }
 
 
@@ -125,17 +129,17 @@ public class CajaControlador {
                     content = @Content),
     })
     @PostMapping("/caja/")
-    public ResponseEntity<Caja> createCaja(@RequestBody CreateCajaRequest createCajaRequest) {
+    public ResponseEntity<GetCajaResponse> createCaja(@RequestBody CreateCajaRequest createCajaRequest) {
 
         Caja cajaResponse = cajaDtoConverter.createCajaRequestToCaja(createCajaRequest);
-
+        cajaServicio.add(cajaResponse);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(cajaServicio.add(cajaResponse));
+                .body(cajaDtoConverter.toGetCajaResponse(cajaResponse, cajaResponse.getDestinatario()));
     }
 
 
-    @Operation(summary = "Add TipoAliemnto to Caja")
+    @Operation(summary = "Add TipoAlimento to Caja")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
                     description = "Caja Created Successfully",
@@ -144,12 +148,14 @@ public class CajaControlador {
                             examples = {@ExampleObject(
                                     value = """
                                             {
-                                                "id": 12,
-                                                "qr": "bbbbbb",
-                                                "numCaja": 2,
-                                                "kilosTotales": 0.0,
-                                                "destinatario": null,
-                                                "tieneList": []
+                                                "numCaja": 12,
+                                                "qr": "qqqq",
+                                                "listaAlimentos": [],
+                                                "destinatario": {
+                                                    "id": 15,
+                                                    "nombre": "Ale"
+                                                },
+                                                "kilosTotales": 0.0
                                             }                                        \s
                                             """
                             )}
@@ -162,10 +168,13 @@ public class CajaControlador {
     public ResponseEntity<PostCajaAlimentoResponse> addTipoAlimToCaja(
             @PathVariable Long id , @PathVariable Long idTipoAlim, @PathVariable double cantidad) {
 
-        Optional<Caja> c = cajaServicio.addAlimToCaja(id,idTipoAlim,cantidad);
+        if (id!=null || idTipoAlim != null || cantidad >0){
+            Optional<Caja> c = cajaServicio.addAlimToCaja(id,idTipoAlim,cantidad);
 
-        return (c.map(caja -> ResponseEntity.status(HttpStatus.CREATED).body(cajaDtoConverter.toPostCajaAlimentoResponse(caja))).orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build()));
-    }
+            return (c.map(caja -> ResponseEntity.status(HttpStatus.CREATED).body(cajaDtoConverter.toPostCajaAlimentoResponse(caja))).orElseGet(() -> ResponseEntity.status(HttpStatus.BAD_REQUEST).build()));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+       }
 
 
     @Operation(summary = "Update a Caja")
@@ -192,7 +201,7 @@ public class CajaControlador {
                     content = @Content),
     })
     @PutMapping("/caja/{id}")
-    public ResponseEntity<Caja> edit(
+    public ResponseEntity<GetCajaResponse> edit(
             @RequestBody CreateCajaRequest c,
             @PathVariable Long id) {
 
@@ -202,16 +211,41 @@ public class CajaControlador {
 
         return ResponseEntity.of(
                 cajaServicio.findById(id).map(m -> {
-
                     m.setQr(c.getQr());
                     m.setNumCaja(c.getNumCaja());
 
-                    return cajaDtoConverter.createCajaRequestToCaja(c);
+                    Caja caja = cajaServicio.edit(cajaDtoConverter.createCajaRequestToCaja(c));
+                    return cajaDtoConverter.toGetCajaResponse(caja, caja.getDestinatario());
                 }));
 
     }
 
 
+    @Operation(summary = "Add Destinatario to Caja")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Destinatario added Successfully",
+                    content = {@Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Caja.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            {
+                                                "numCaja": 12,
+                                                "qr": "qqqq",
+                                                "listaAlimentos": [],
+                                                "destinatario": {
+                                                    "id": 15,
+                                                    "nombre": "Ale"
+                                                },
+                                                "kilosTotales": 0.0
+                                            }                                        \s
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "400",
+                    description = "Bad Destinatario add Request",
+                    content = @Content),
+    })
     @PostMapping("/caja/{idCaja}/destinatario/{idDestinatario}")
     public ResponseEntity<PostCajaAlimentoResponse> addDestinatarioToCaja(
             @PathVariable Long idCaja, @PathVariable Long idDestinatario) {
@@ -259,13 +293,12 @@ public class CajaControlador {
                     content = @Content),
     })
     @PutMapping("/caja/{id}/tipo/{idTipoAlim}/kg/{cantidad}")
-    public ResponseEntity<Optional<Caja>> editKgsOFTipoAlimFromCaja(
-            @RequestBody CreateCajaRequest c,
-            @PathVariable Long id, Long idTipoAlim, double cantidad) {
+    public ResponseEntity<GetCajaResponse> editKgsOFTipoAlimFromCaja(
+            @PathVariable Long id, @PathVariable Long idTipoAlim, @PathVariable double cantidad) {
 
         Optional<Caja> caja = cajaServicio.updateKgsOfTipoAlimentoFromCaja(id,idTipoAlim,cantidad);
 
-        return (caja.isPresent() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(caja) );
+        return (caja.map(value -> ResponseEntity.ok(cajaDtoConverter.toGetCajaResponse(value,value.getDestinatario()))).orElseGet(() -> ResponseEntity.badRequest().build()));
 
     }
 
@@ -299,7 +332,7 @@ public class CajaControlador {
                     )}),
     })
     @DeleteMapping("/caja/{id}/tipo/{idTipoAlim}")
-    public ResponseEntity<?> deleteAlimFromCaja(@PathVariable Long id, Long idTipoAlim) {
+    public ResponseEntity<?> deleteAlimFromCaja(@PathVariable Long id, @PathVariable Long idTipoAlim) {
 
         cajaServicio.deleteAlimFromCaja(id,idTipoAlim);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

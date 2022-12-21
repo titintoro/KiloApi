@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class Tiene {
 
     @EmbeddedId
-    private TienePK id = new TienePK();
+    private TienePK id;
 
     @ManyToOne
     @MapsId("tipoAlimento_id")
