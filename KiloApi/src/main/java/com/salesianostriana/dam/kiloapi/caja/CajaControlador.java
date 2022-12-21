@@ -294,7 +294,7 @@ public class CajaControlador {
     @PutMapping("/caja/{id}/tipo/{idTipoAlim}/kg/{cantidad}")
     public ResponseEntity<CajaResponse> editKgsOFTipoAlimFromCaja(
             @RequestBody CreateCajaRequest c,
-            @PathVariable Long id, Long idTipoAlim, double cantidad) {
+            @PathVariable Long id, @PathVariable Long idTipoAlim, @PathVariable double cantidad) {
 
         Optional<Caja> caja = cajaServicio.updateKgsOfTipoAlimentoFromCaja(id,idTipoAlim,cantidad);
 
@@ -332,7 +332,7 @@ public class CajaControlador {
                     )}),
     })
     @DeleteMapping("/caja/{id}/tipo/{idTipoAlim}")
-    public ResponseEntity<?> deleteAlimFromCaja(@PathVariable Long id, Long idTipoAlim) {
+    public ResponseEntity<?> deleteAlimFromCaja(@PathVariable Long id, @PathVariable Long idTipoAlim) {
 
         cajaServicio.deleteAlimFromCaja(id,idTipoAlim);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
