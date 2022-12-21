@@ -20,16 +20,15 @@ public interface ClaseRepository extends JpaRepository<Clase, Long> {
             """)
     Double calcularKilosTotales(@Param("idClase") Long id);
 
+
     @Query("""
-            SELECT new com.salesianostriana.dam.kiloapi.ranking.Ranking (c1.nombre, ( SELECT SUM(dt.cantidad)
-                                                                                     FROM Clase c JOIN Aportacion a ON a.clase = c
-                                                                                                JOIN DetalleAportacion dt ON a.id = dt.aportacion.id
-                                                                                     WHERE c1.id = c.id
-                                                                                     ))
+            SELECT new com.salesianostriana.dam.kiloapi.ranking.Ranking (c1.nombre, count(a),SUM(dt.cantidad,ROUND(AVG(dt.cantidad),2))
             FROM Clase c1 
-            ORDER BY c1.nombre ASC
+            LEFT JOIN c1.listaAportaciones a 
+            LEFT JOIN a.detalleAportacionList dt
+            GROUP BY c1.nombre
+            ORDER BY SUM(dt.cantidad) DESC
             """)
     List<Ranking> getRankingOrdenado();
-
 
 }
