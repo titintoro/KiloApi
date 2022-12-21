@@ -110,7 +110,7 @@ public class MainDeMentira{
                 .build();
 
         DetalleAportacion dt = DetalleAportacion.builder()
-                .cantidadKilos(5.2)
+                .cantidad(5.2)
                 .tipoAlimento(tp)
                 .aportacion(a1)
                 .build();

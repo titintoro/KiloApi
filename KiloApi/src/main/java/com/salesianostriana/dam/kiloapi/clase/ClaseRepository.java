@@ -10,7 +10,7 @@ import java.util.List;
 public interface ClaseRepository extends JpaRepository<Clase, Long> {
 
    @Query("""
-            SELECT SUM(dt.cantidadKilos)
+            SELECT SUM(dt.cantidad)
             FROM Clase c 
             JOIN Aportacion a ON a.clase = c
             JOIN DetalleAportacion dt ON a.id = dt.aportacion.id
@@ -21,7 +21,7 @@ public interface ClaseRepository extends JpaRepository<Clase, Long> {
     Double calcularKilosTotales(@Param("idClase") Long id);
 
     @Query("""
-            SELECT new com.salesianostriana.dam.kiloapi.ranking.Ranking (c1.nombre, ( SELECT SUM(dt.cantidadKilos)
+            SELECT new com.salesianostriana.dam.kiloapi.ranking.Ranking (c1.nombre, ( SELECT SUM(dt.cantidad)
                                                                                      FROM Clase c JOIN Aportacion a ON a.clase = c
                                                                                                 JOIN DetalleAportacion dt ON a.id = dt.aportacion.id
                                                                                      WHERE c1.id = c.id
