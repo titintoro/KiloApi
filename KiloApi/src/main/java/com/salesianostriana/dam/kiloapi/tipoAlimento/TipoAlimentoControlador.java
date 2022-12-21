@@ -28,11 +28,20 @@ public class TipoAlimentoControlador {
 
     @GetMapping("/")
     public ResponseEntity<List<TipoAlimentoResponse>> listAllTipoAlimento() {
-        List<TipoAlimentoResponse> data = tipoAlimentoServicio.getAllTipos();
+        List<TipoAlimento> data = tipoAlimentoServicio.findAll();
 
-        if (data.isEmpty())
+        if (data.isEmpty()) {
             return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(data);
+
+        } else {
+            List<TipoAlimentoResponse> results = data.stream()
+                    .map(TipoAlimentoResponse::convertTipoAlimentoToResponse)
+                    .toList();
+
+            return ResponseEntity.ok().body(results);
+        }
+
+
     }
 
     @GetMapping("/{id}")
@@ -48,28 +57,33 @@ public class TipoAlimentoControlador {
     }
 
     @PostMapping("/")
-    public ResponseEntity<TipoAlimento> addOneTipoAlimento(@RequestBody TipoAlimento tipoAlimento) {
+    public ResponseEntity<TipoAlimentoResponse> addOneTipoAlimento(@RequestBody TipoAlimento tipoAlimento) {
 
         if (tipoAlimento.getNombre().isEmpty())
             return ResponseEntity.badRequest().build();
 
         tipoAlimentoServicio.add(tipoAlimento);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(tipoAlimento);
+        TipoAlimentoResponse t = TipoAlimentoResponse.convertTipoAlimentoToResponse(tipoAlimento);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(t);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TipoAlimento> updateOneTipoAlimento(@RequestBody TipoAlimento tipoAlimentoPasado, @PathVariable Long id) {
+    public ResponseEntity<TipoAlimentoResponse> updateOneTipoAlimento(@RequestBody TipoAlimento tipoAlimentoPasado, @PathVariable Long id) {
         Optional<TipoAlimento> tipoAlimento = tipoAlimentoServicio.findById(id);
 
         if (tipoAlimento.isEmpty())
             return ResponseEntity.badRequest().build();
 
         tipoAlimento.get().setNombre(tipoAlimentoPasado.getNombre());
+
         tipoAlimentoServicio.edit(tipoAlimento.get());
 
+        TipoAlimentoResponse t = TipoAlimentoResponse.convertTipoAlimentoToResponse(tipoAlimento.get());
 
-        return ResponseEntity.ok(tipoAlimento.get());
+        return ResponseEntity.ok(t);
+
     }
 
     @DeleteMapping("/{id}")
