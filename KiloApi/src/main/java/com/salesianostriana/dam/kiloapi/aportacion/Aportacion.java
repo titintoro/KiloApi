@@ -2,6 +2,7 @@ package com.salesianostriana.dam.kiloapi.aportacion;
 
 import com.salesianostriana.dam.kiloapi.clase.Clase;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
+import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacionRepositorio;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -56,6 +57,12 @@ public class Aportacion {
     public Aportacion(LocalDate fecha,List<DetalleAportacion> detalleAportacionList ){
         this.fecha=fecha;
         this.detalleAportacionList=detalleAportacionList;
+    }
+
+    public Aportacion addDetalle(DetalleAportacion detalleAportacion){
+        this.getDetalleAportacionList().add(detalleAportacion);
+        detalleAportacion.setAportacion(this);
+        return this;
     }
 
 

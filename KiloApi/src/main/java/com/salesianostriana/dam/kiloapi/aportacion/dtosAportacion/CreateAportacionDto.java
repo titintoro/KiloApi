@@ -2,6 +2,7 @@ package com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion;
 
 import com.salesianostriana.dam.kiloapi.aportacion.Aportacion;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
+import com.salesianostriana.dam.kiloapi.detalleAportacion.dtoDetalleAportacion.DetalleAportacionDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,7 @@ import java.util.List;
 @Builder
 public class CreateAportacionDto{
 
-    private List<DetalleAportacion> detalleAportacionList;
+    private List<DetalleAportacionDto> detalleAportacionList;
     private Long idClase;
 
     //fecha de ahora, y en el tema de la lista de aportaciones: tipo alimento, kgs

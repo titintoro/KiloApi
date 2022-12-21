@@ -30,5 +30,14 @@ public class DetalleAportacion {
     @JoinColumn(name = "tipoAlimento_id", foreignKey = @ForeignKey(name = "FK_DETALLEAPORTACION_TIPOALIMENTO"))
     private TipoAlimento tipoAlimento;
 
+    public DetalleAportacion addToAportacion(Aportacion a){
+        this.aportacion = a;
+        a.getDetalleAportacionList().add(this);
+        return this;
+    }
+    public void removeFromAportacion(Aportacion a){
+        this.aportacion= null;
+        a.getDetalleAportacionList().remove(this);
+    }
 
 }

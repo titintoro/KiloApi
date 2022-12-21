@@ -55,10 +55,12 @@ public class AportacionServicio {
                 .fecha(LocalDate.now()).build();
         Optional<Clase> clase = claseRepository.findById(dto.getIdClase());
         aportacion.addToClase(clase.get());
+        this.add(aportacion);
 
         List<DetalleAportacion> dList = new ArrayList<>();
         Aportacion aportaciondb = repositorio.save(aportacion);
         dto.getDetalles().forEach(((detalleAportacionDto) -> {
+            //Hacer un if else donde comprobar si existen kilos disponibles de ese tipo de alimento
             DetalleAportacion detalleAportacion = DetalleAportacion.builder()
                     .numLinea(aportacion.getId())
                     .cantidadKilos(detalleAportacionDto.getKilosAlimento())
@@ -67,10 +69,10 @@ public class AportacionServicio {
             //aportacion.addDetalleAportacion(detalleAportacion);
             detalleAportacion.setNumLinea(Long.valueOf(dList.size()+1));
             detalleAportacion.setAportacion(aportaciondb);
-            dList.add(detallesRepo.save(detalleAportacion));
+            dList.add(detalleAportacion.addToAportacion(aportaciondb));
         }));
         aportacion.setDetalleAportacionList(dList);
-        return aportaciondb;
+        return aportacion;
     }
 
 
