@@ -59,10 +59,10 @@ public class Aportacion {
         this.detalleAportacionList=detalleAportacionList;
     }
 
-    public Aportacion addDetalle(DetalleAportacion detalleAportacion){
+    public DetalleAportacion addDetalle(DetalleAportacion detalleAportacion){
         this.getDetalleAportacionList().add(detalleAportacion);
         detalleAportacion.setAportacion(this);
-        return this;
+        return detalleAportacion;
     }
 
 

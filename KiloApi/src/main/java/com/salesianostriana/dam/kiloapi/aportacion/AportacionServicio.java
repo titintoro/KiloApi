@@ -6,6 +6,7 @@ import com.salesianostriana.dam.kiloapi.clase.ClaseRepository;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacionRepositorio;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.dtoDetalleAportacion.DetalleAportacionResponseDto;
+import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDisp;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -56,20 +57,21 @@ public class AportacionServicio {
         Optional<Clase> clase = claseRepository.findById(dto.getIdClase());
         aportacion.addToClase(clase.get());
         this.add(aportacion);
-
         List<DetalleAportacion> dList = new ArrayList<>();
         Aportacion aportaciondb = repositorio.save(aportacion);
         dto.getDetalles().forEach(((detalleAportacionDto) -> {
-            //Hacer un if else donde comprobar si existen kilos disponibles de ese tipo de alimento
             DetalleAportacion detalleAportacion = DetalleAportacion.builder()
                     .numLinea(aportacion.getId())
                     .cantidadKilos(detalleAportacionDto.getKilosAlimento())
                     .tipoAlimento(tipoAlimentoRepository.findById(detalleAportacionDto.getIdTipoAlimento()).get())
                     .build();
-            //aportacion.addDetalleAportacion(detalleAportacion);
+
+            aportaciondb.addDetalle(detalleAportacion);
             detalleAportacion.setNumLinea(Long.valueOf(dList.size()+1));
             detalleAportacion.setAportacion(aportaciondb);
-            dList.add(detalleAportacion.addToAportacion(aportaciondb));
+            dList.add(aportacion.addDetalle(detalleAportacion));
+            repositorio.save(aportaciondb);
+
         }));
         aportacion.setDetalleAportacionList(dList);
         return aportacion;
