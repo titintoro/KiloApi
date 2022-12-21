@@ -39,7 +39,9 @@ public class AportacionControlador {
 
     private final AportacionDtoConverter aportacionDtoConverter;
 
-    private final DetalleAportacionRepositorio detalleRepo;
+    private final DetalleAportacionRepositorio detallesRepo;
+
+
 
 
 
@@ -109,9 +111,7 @@ public class AportacionControlador {
                     description = "Se ha borrado la Aportación",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Aportacion.class))}),
-            @ApiResponse(responseCode = "404",
-                    description = "No se ha encontrado la Aportación específica",
-                    content = @Content),
+
     })
     @DeleteMapping("/aportacion/{id}")
     public ResponseEntity<?> deleteAportacion (@PathVariable Long id){
@@ -130,21 +130,20 @@ public class AportacionControlador {
         List<Aportacion>ListaAportaciones=claseSeleccionada.getListaAportaciones();
 
         for(Aportacion aportacion:ListaAportaciones){
-            int i=0;
+
             LocalDate fecha=aportacion.getFecha();
             List<DetalleAportacion>ListaDetallesAportacion=aportacion.getDetalleAportacionList();
 
-            res=res+"Aportacion"+i+": fecha="+((LocalDate) fecha).toString()+",Aportaciones=[";
+            res=res+"Clase= "+idClase.toString()+" Fecha= "+((LocalDate) fecha).toString()+",Aportaciones=[";
             for(DetalleAportacion detalles:ListaDetallesAportacion){
                 String nombre=detalles.getTipoAlimento().getNombre();
                 Double kilos=detalles.getCantidad();
                 res=res+"["+nombre+","+kilos+"],";
             }
+
             res=res+"]";
-            i++;
+            ;
         }
-        //Aportacion 1: fecha=2022-2-12 , Aportaciones= [ [patata,22] , [zanahoria,11] ] 1 vuelta
-        //Aportacion 1: fecha=2022-2-12 , Aportaciones= [ [patata,22] , [zanahoria,11] ] Aportacion 2: fecha=2022-2-12 , Aportaciones= [ [patata,22] , [zanahoria,11] ]
 
 
         if(res!=""){
@@ -156,31 +155,49 @@ public class AportacionControlador {
 
     }
 
-    //Preguntar por qué tiene solamente un 200 OK y no un 204 No content
+    @Operation(summary = "Petición que borra los Detalles de una Aportación")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha borrado el Detalle de la Aportación",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Aportacion.class))}),
+
+    })
     @DeleteMapping("/aportacion/{id}/linea/{num}")
-    public ResponseEntity<Aportacion> deleteAportacion (@PathVariable Long id,@PathVariable Long num,AportacionServicio aportacionServicio){
-        /**Integer sizeAntes=null;
-        Integer sizeDespues=null;**/
+    public ResponseEntity<AportacionResponseDto> deleteDetalleAportacion (@PathVariable("id") Long id,@PathVariable("num") Long numLinea){
+            aportacionServicio.findById(id).get().getDetalleAportacionList().removeAll(detallesRepo.findById(numLinea).stream().toList());
+            aportacionServicio.add(aportacionServicio.findById(id).get());
 
-        Aportacion aportacionAeditar=aportacionServicio.findById(id).get();
-        List<DetalleAportacion>listaAportaciones=aportacionAeditar.getDetalleAportacionList();
-        //sizeAntes=listaAportaciones.size();
-        listaAportaciones.remove(num);
-        aportacionAeditar.setDetalleAportacionList(listaAportaciones);
-        aportacionRepo.save(aportacionAeditar);
-
-        //sizeDespues=aportacionServicio.findById(id).get().getDetalleAportacionList().size();
-        return ResponseEntity.ok().body(aportacionAeditar);
-
-        /**if(sizeAntes!=sizeDespues) {
-            return ResponseEntity.ok().body(aportacionAeditar);
-        }else{
-            return ResponseEntity.notFound().build();
-         }**/
+            return ResponseEntity.ok().build();
 
     }
 
-
+    @Operation(summary = "Petición que agrega una nueva Aportación")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Se ha agregado la nueva Aportación",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = GetNuevaAportacionDto.class),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            {
+                                                "id": 11,
+                                                "nombreClase": "1 DAM",
+                                                "fecha": "2022-12-21",
+                                                "listaDetalles": [
+                                                    {
+                                                        "numLinea": 1,
+                                                        "nombreTipoAlimento": "Macarrones",
+                                                        "numeroKilos": 10.0
+                                                    }
+                                                ]
+                                            }                                      
+                                            """
+                            )})}),
+            @ApiResponse(responseCode = "400",
+                    description = "No se ha agregado la nueva Aportación",
+                    content = @Content),
+    })
     @PostMapping("/aportacion/")
     public ResponseEntity<GetNuevaAportacionDto> createAportacion(@RequestBody AportacionResponseDto dto){
         if (dto.getFecha() == null || dto.getDetalles() == null || dto.getDetalles().size() == 0 || dto.getIdClase() == null)
@@ -189,7 +206,9 @@ public class AportacionControlador {
         Aportacion nuevaAportacion = aportacionServicio.createAportacion(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(aportacionDtoConverter.nuevaAportacionDto(nuevaAportacion));
 
-
     }
+
+
+
 
 }

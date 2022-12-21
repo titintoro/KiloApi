@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 public class GetAportacionDto {
 
-
+    private Long id;
     private LocalDate fecha;
     private String nombreClase;
     private double numKilos;
@@ -20,6 +20,7 @@ public class GetAportacionDto {
 
     public static GetAportacionDto of (Aportacion aportacion){
         return new GetAportacionDto(
+                aportacion.getId(),
                 aportacion.getFecha(),
                 aportacion.getClase().getNombre(),
                 aportacion.getKilos()

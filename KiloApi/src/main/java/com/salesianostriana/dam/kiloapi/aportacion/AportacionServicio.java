@@ -6,6 +6,7 @@ import com.salesianostriana.dam.kiloapi.clase.ClaseRepository;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacionRepositorio;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.dtoDetalleAportacion.DetalleAportacionResponseDto;
+import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDisp;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,7 @@ public class AportacionServicio {
                 .fecha(LocalDate.now()).build();
         Optional<Clase> clase = claseRepository.findById(dto.getIdClase());
         aportacion.addToClase(clase.get());
-
+        this.add(aportacion);
         List<DetalleAportacion> dList = new ArrayList<>();
         Aportacion aportaciondb = repositorio.save(aportacion);
         dto.getDetalles().forEach(((detalleAportacionDto) -> {
@@ -64,13 +65,16 @@ public class AportacionServicio {
                     .cantidad(detalleAportacionDto.getKilosAlimento())
                     .tipoAlimento(tipoAlimentoRepository.findById(detalleAportacionDto.getIdTipoAlimento()).get())
                     .build();
-            //aportacion.addDetalleAportacion(detalleAportacion);
+
+            aportaciondb.addDetalle(detalleAportacion);
             detalleAportacion.setNumLinea(Long.valueOf(dList.size()+1));
             detalleAportacion.setAportacion(aportaciondb);
-            dList.add(detallesRepo.save(detalleAportacion));
+            dList.add(aportacion.addDetalle(detalleAportacion));
+            repositorio.save(aportaciondb);
+
         }));
         aportacion.setDetalleAportacionList(dList);
-        return aportaciondb;
+        return aportacion;
     }
 
 
