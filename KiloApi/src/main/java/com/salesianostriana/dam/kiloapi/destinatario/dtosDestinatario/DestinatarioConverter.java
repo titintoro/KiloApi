@@ -10,7 +10,7 @@ import java.util.List;
 @Component
 public class DestinatarioConverter {
 
-    public Destinatario createDestinatarioToDestinatario(CreateDestinatarioDto c){
+    public Destinatario of(CreateDestinatarioDto c){
         return new Destinatario(
                 c.getDireccion(),
                 c.getNombre(),
@@ -19,7 +19,7 @@ public class DestinatarioConverter {
         );
     }
 
-    public GetDestinatarioDto destinatarioToGetDestinatarioDto(Destinatario d){
+    public static GetDestinatarioDto of(Destinatario d){
         List<GetDestinatarioCajasIdDto> listaCajasId = new ArrayList<>();
 
         d.getListaDeCajas().forEach(ld -> {
@@ -61,5 +61,22 @@ public class DestinatarioConverter {
                 .telefono(d.getTelefono())
                 .cajasAsiganadas(listaCajasId)
                 .build();
+    }
+
+    public GetDestinatarioDetalleDto destinatarioDetalleToDestinatarioDetalleDto (Destinatario d){
+        List<GetDestinatarioInfoDto> listaInfoDestinatario = new ArrayList<>();
+        List<GetDestinatarioDetalleMoreInfoDto> listaMoreInfoDestinatario = new ArrayList<>();
+
+
+
+        d.getListaDeCajas().forEach(ld -> {
+            listaInfoDestinatario.add(
+                    GetDestinatarioInfoDto.builder()
+                            .numCaja(ld.getNumCaja())
+                            .kgsTotales(ld.getKilosTotales())
+                            .listaDetalle(listaMoreInfoDestinatario)
+                            .build()
+            );
+        });
     }
 }

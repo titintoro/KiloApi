@@ -55,7 +55,7 @@ public class DestinatarioControlador {
     public ResponseEntity<List<GetDestinatarioDto>> findAllDestinatarios(){
         List<GetDestinatarioDto> result = new ArrayList<>();
         for (Destinatario destinatario : servicio.findAll()){
-            result.add(dtoConverter.destinatarioToGetDestinatarioDto(destinatario));
+            result.add(dtoConverter.of(destinatario));
         }
         if (result.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -143,7 +143,7 @@ public class DestinatarioControlador {
     })
     @PostMapping("/destinatario/")
     public ResponseEntity<CreateDestinatarioDto> createDestinatario(@RequestBody CreateDestinatarioDto cd){
-        Destinatario d = dtoConverter.createDestinatarioToDestinatario(cd);
+        Destinatario d = dtoConverter.of(cd);
         servicio.add(d);
 
 

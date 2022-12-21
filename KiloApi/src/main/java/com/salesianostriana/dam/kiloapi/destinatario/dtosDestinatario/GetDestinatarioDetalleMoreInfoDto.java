@@ -5,16 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-public class GetDestinatarioInfoDto {
+public class GetDestinatarioDetalleMoreInfoDto {
 
-    private int numCaja;
-
-    private double kgsTotales;
-
-    private List<GetDestinatarioDetalleMoreInfoDto> listaDetalle;
+    private Long idTipoAlimento;
+    private String nombreTipoAlimento;
+    private double KgsTipoAlimento;
 }
