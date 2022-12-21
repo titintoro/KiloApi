@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class KilosDispConverter {
 
-    public GetKilosDispDto of (KilosDisp kd){
+    public static GetKilosDispDto of (KilosDisp kd){
         return GetKilosDispDto.builder()
                 .idTipoAlimento(kd.getTipoAlimento().getId())
                 .nombre(kd.getTipoAlimento().getNombre())
@@ -20,7 +20,7 @@ public class KilosDispConverter {
                 .build();
     }
 
-    public GetKilosDispDtoById findByIdKilosDisp (KilosDisp kd){
+    public static GetKilosDispDtoById findByIdKilosDisp (KilosDisp kd){
         List<GetKilosDispDetalleAportacionDto> dtoList = new ArrayList<>();
 
         kd.getTipoAlimento().getListaDetalleAportacion().forEach(ld -> {
