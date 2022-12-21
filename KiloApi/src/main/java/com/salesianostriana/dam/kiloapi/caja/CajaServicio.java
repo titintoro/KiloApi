@@ -118,7 +118,7 @@ public class CajaServicio {
             double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idTipoAlim);
             double kilosTotales = cajaRepo.getKilosTotales(id);
 
-            if (caja.isPresent() && tipoAlimento.isPresent() && cantidad>=kilosDisponibles){
+            if (caja.isPresent() && tipoAlimento.isPresent() && cantidad<=kilosDisponibles){
 
                 Optional<Tiene> tiene = tieneRepository.findById(new TienePK(caja.get().getId(), tipoAlimento.get().getId())) ;
 
@@ -148,27 +148,26 @@ public class CajaServicio {
                     return caja;
 
                 } else {
-                    caja.get().setKilosTotales(kilosTotales+cantidad);
 
-                    tiene.get().setCantidadKgs(cantidad);
+                    for(Tiene t : caja.get().getTieneList()){
+                        if (t.getTipoAlimento().getId()==idTipoAlim){
+                            tiene.get().setCantidadKgs(cantidad+t.getCantidadKgs());
 
-                    tipoAlimento.get().getKilosDisp().setCantidadDisponible(kilosDisponibles - cantidad);
+                            caja.get().setKilosTotales(kilosTotales+cantidad);
 
-                    caja.get().getTieneList().add(tiene.get());
+                            tipoAlimento.get().getKilosDisp().setCantidadDisponible(kilosDisponibles - cantidad);
 
-                    tipoAlimentoServicio.edit(tipoAlimento.get());
-                    caja.get().setKilosTotales(caja.get().getKilosTotales()+cantidad);
+                            tipoAlimentoServicio.edit(tipoAlimento.get());
+                            caja.get().setKilosTotales(caja.get().getKilosTotales()+cantidad);
 
-                    tieneRepository.save(tiene.get());
-                    cajaRepo.save(caja.get());
+                            tieneRepository.save(tiene.get());
+                            cajaRepo.save(caja.get());
 
-                    return caja;
+                            return caja;
+                        }
+                    }
                 }
-
-
-
             }
-
         }
 
         return Optional.empty();
