@@ -33,9 +33,9 @@ public class TipoAlimento {
     @OneToOne(mappedBy = "tipoAlimento", fetch = FetchType.EAGER, orphanRemoval = false, cascade = CascadeType.ALL)
     private KilosDisp kilosDisp;
 
-    @OneToMany(mappedBy = "")
+    @OneToMany(mappedBy = "tipoAlimento", fetch = FetchType.EAGER, orphanRemoval = false, cascade = CascadeType.ALL)
     @Builder.Default
-    private List<DetalleAportacion>
+    private List<DetalleAportacion> detalleAportacionList = new ArrayList<>();
 
     public void addKiloToTipo(KilosDisp kilos) {
         kilos.setId(this.getId());

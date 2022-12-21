@@ -67,7 +67,7 @@ public class DestinatarioConverter {
         List<GetDestinatarioInfoDto> listaInfoDestinatario = new ArrayList<>();
         List<GetDestinatarioDetalleMoreInfoDto> listaMoreInfoDestinatario = new ArrayList<>();
 
-
+        /**d.getListaDeCajas().get().getTieneList().get().getTipoAlimento().getDetalleAportacionList().forEach(ld ->);**/
 
         d.getListaDeCajas().forEach(ld -> {
             listaInfoDestinatario.add(
@@ -78,5 +78,14 @@ public class DestinatarioConverter {
                             .build()
             );
         });
+
+        return GetDestinatarioDetalleDto.builder()
+                .id(d.getId())
+                .direccion(d.getDireccion())
+                .listaInfo(listaInfoDestinatario)
+                .nombre(d.getNombre())
+                .personaContacto(d.getPersonaContacto())
+                .telefono(d.getTelefono())
+                .build();
     }
 }
