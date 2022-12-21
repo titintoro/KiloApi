@@ -23,9 +23,6 @@ public class CajaServicio {
     private final CajaRepositorio cajaRepo;
     private final KilosDispRepository kilosDispRepo;
     private final TipoAlimentoServicio tipoAlimentoServicio;
-    private final CajaDtoConverter cajaDtoConverter;
-    private final KilosDispService kilosDispService;
-    private final TipoAlimentoRepository tipoAlimentoRepository;
     private final TieneRepository tieneRepository;
 
     public Caja add(Caja caja) { return cajaRepo.save(caja);}
@@ -104,66 +101,37 @@ public class CajaServicio {
 
         double kilosTotales = cajaRepo.getKilosTotales(id);
 
+        Optional<Tiene> tiene1 = tieneRepository.findById(new TienePK(caja.get().getId(), tipoAlimentoServicio.findById(idTipoAlim).get().getId())) ;
 
-        Tiene tiene = new Tiene();
+        if (tiene1.isPresent()){
+            Tiene tiene = new Tiene();
 
-        for(Tiene t : caja.get().getTieneList()) {
-            if (t.getTipoAlimento().getId().equals(idTipoAlim)) tiene = t;
-        }
-
-        double cantidadEliminada = tiene.getCantidadKgs();
-
-        caja.get().setKilosTotales(kilosTotales-cantidadEliminada);
-
-        tiene.getTipoAlimento().getKilosDisp().setCantidadDisponible(kilosDisponibles+cantidadEliminada);
-
-        List<Tiene> tieneAuxList = new ArrayList<>();
-
-        for(Tiene t : caja.get().getTieneList()){
-            if (t.getTipoAlimento().getId()!=idTipoAlim){
-                tieneAuxList.add(t);
-
+            for(Tiene t : caja.get().getTieneList()) {
+                if (t.getTipoAlimento().getId().equals(idTipoAlim)) tiene = t;
             }
-        }
-        tieneRepository.delete(tiene);
-        caja.get().setTieneList(tieneAuxList);
-        cajaRepo.save(caja.get());
 
+            double cantidadEliminada = tiene.getCantidadKgs();
 
-        /*
-        tipoAlimento.get().getKilosDisp().setCantidadDisponible(kilosDisponibles + tiene.getCantidadKgs());
+            caja.get().setKilosTotales(kilosTotales-cantidadEliminada);
 
-        caja.get().setKilosTotales(caja.get().getKilosTotales()+cantidad-tiene.getCantidadKgs());
+            tiene.getTipoAlimento().getKilosDisp().setCantidadDisponible(kilosDisponibles+cantidadEliminada);
 
-        tiene.setCantidadKgs(cantidad);
+            List<Tiene> tieneAuxList = new ArrayList<>();
 
-        tipoAlimentoServicio.edit(tipoAlimento.get());
+            for(Tiene t : caja.get().getTieneList()){
+                if (t.getTipoAlimento().getId()!=idTipoAlim){
+                    tieneAuxList.add(t);
 
-        tieneRepository.save(tiene);
-
-        cajaRepo.save(caja.get());
-
-        return caja;
-
-
-
-        if (caja.isPresent()){
-            for (Tiene t:caja.get().getTieneList()){
-
-                if (t.getTipoAlimento().getId().equals(idAlim)) {
-
-                    double cantidadEliminada = t.getCantidadKgs();
-
-                    caja.get().setKilosTotales(kilosTotales-cantidadEliminada);
-
-                    t.getTipoAlimento().getKilosDisp().setCantidadDisponible(kilosDisponibles+cantidadEliminada);
-
-                    caja.get().getTieneList().remove(t);
-
-                    cajaRepo.save(caja.get());
                 }
             }
-        } */
+            tieneRepository.delete(tiene);
+            caja.get().setTieneList(tieneAuxList);
+            cajaRepo.save(caja.get());
+        }
+
+
+
+
     }
 
 
