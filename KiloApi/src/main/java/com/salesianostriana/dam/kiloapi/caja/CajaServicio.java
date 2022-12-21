@@ -1,7 +1,6 @@
 package com.salesianostriana.dam.kiloapi.caja;
 
 import com.salesianostriana.dam.kiloapi.caja.dtos.CajaDtoConverter;
-import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDisp;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDispRepository;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDispService;
 import com.salesianostriana.dam.kiloapi.tiene.Tiene;
@@ -23,6 +22,7 @@ public class CajaServicio {
     private final TipoAlimentoServicio tipoAlimentoServicio;
     private final CajaDtoConverter cajaDtoConverter;
     private final KilosDispService kilosDispService;
+    private final TipoAlimentoRepository tipoAlimentoRepository;
 
     public Caja add(Caja caja) { return cajaRepo.save(caja);}
 
@@ -59,6 +59,7 @@ public class CajaServicio {
 
         Optional<Caja> caja = findById(idCaja);
         double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idTipoAlim);
+
         if (caja.isPresent()){
             for (Tiene t:caja.get().getTieneList()){
 
@@ -68,6 +69,8 @@ public class CajaServicio {
                         t.setCantidadKgs(cantidadKgs + kilosDisponibles);
                         t.getTipoAlimento().getKilosDisp().setCantidadDisponible(kilosDisponibles-cantidadKgs);
 
+
+                        kilosDispRepo.save(t.getTipoAlimento().getKilosDisp());
                         cajaRepo.save(caja.get());
                         tipoAlimentoServicio.add(t.getTipoAlimento());
                         return caja;
@@ -82,12 +85,17 @@ public class CajaServicio {
     public void deleteAlimFromCaja(Long id, Long idAlim){
 
         Optional<Caja> caja = findById(id);
+        double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idAlim);
+        double kilosTotales = cajaRepo.getKilosTotales(id);
 
         if (caja.isPresent()){
             for (Tiene t:caja.get().getTieneList()){
 
                 if (t.getTipoAlimento().getId().equals(idAlim)) {
 
+                    double cantidadEliminada = t.getCantidadKgs();
+                    caja.get().setKilosTotales(kilosTotales-cantidadEliminada);
+                    t.getTipoAlimento().getKilosDisp().setCantidadDisponible(kilosDisponibles+cantidadEliminada);
                     caja.get().getTieneList().remove(t);
                     cajaRepo.save(caja.get());
                 }
@@ -101,22 +109,24 @@ public class CajaServicio {
         Optional<Caja> caja = cajaRepo.findById(id);
         Optional<TipoAlimento> tipoAlimento = tipoAlimentoServicio.findById(idTipoAlim);
         double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idTipoAlim);
+        double kilosTotales = cajaRepo.getKilosTotales(id);
 
-        if (caja.isPresent() && tipoAlimento.isPresent()){
+        if (caja.isPresent() && tipoAlimento.isPresent() && cantidad>=kilosDisponibles){
 
+            caja.get().setKilosTotales(kilosTotales+cantidad);
             Tiene tiene = new Tiene();
             tiene.setTipoAlimento(tipoAlimento.get());
             tiene.setCaja(caja.get());
             tiene.setCantidadKgs(cantidad);
 
-            tipoAlimento.get().getKilosDisp().setCantidadDisponible( kilosDisponibles-cantidad);
+            tipoAlimento.get().getKilosDisp().setCantidadDisponible(kilosDisponibles - cantidad);
 
             caja.get().getTieneList().add(tiene);
 
             tipoAlimentoServicio.edit(tipoAlimento.get());
             cajaRepo.save(caja.get());
 
-             return caja;
+            return caja;
 
         }
 

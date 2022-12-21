@@ -73,10 +73,18 @@ public class CajaDtoConverter {
         postCajaAlimentoResponse.setNumCaja(c.getNumCaja());
         postCajaAlimentoResponse.setQr(c.getQr());
         postCajaAlimentoResponse.setKilosTotales(c.getKilosTotales());
-        postCajaAlimentoResponse.setDestinatario(c.getDestinatario());
+        postCajaAlimentoResponse.setDestinatario(destinatarioToDestinatarioGetCajaResponse(c.getDestinatario()));
         postCajaAlimentoResponse.setListaAlimentos(alimentoGetCajaResponseList);
 
         return postCajaAlimentoResponse;
 
+    }
+
+    public DestinatarioGetCajaResponse destinatarioToDestinatarioGetCajaResponse(Destinatario destinatario){
+        DestinatarioGetCajaResponse destinatarioGetCajaResponse = new DestinatarioGetCajaResponse();
+        destinatarioGetCajaResponse.setId(destinatario.getId());
+        destinatarioGetCajaResponse.setNombre(destinatario.getNombre());
+
+        return destinatarioGetCajaResponse;
     }
 }
