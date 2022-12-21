@@ -26,7 +26,7 @@ public class KilosDispConverter {
         kd.getTipoAlimento().getListaDetalleAportacion().forEach(ld -> {
             dtoList.add(
                     GetKilosDispDetalleAportacionDto.builder()
-                            .cantidadKgs(ld.getCantidadKilos())
+                            .cantidadKgs(ld.getCantidad())
                             .lineaDetalle(ld.getNumLinea())
                             .id(ld.getAportacion().getId())
                             .build()

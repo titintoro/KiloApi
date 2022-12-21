@@ -137,7 +137,7 @@ public class AportacionControlador {
             res=res+"Aportacion"+i+": fecha="+((LocalDate) fecha).toString()+",Aportaciones=[";
             for(DetalleAportacion detalles:ListaDetallesAportacion){
                 String nombre=detalles.getTipoAlimento().getNombre();
-                Double kilos=detalles.getCantidadKilos();
+                Double kilos=detalles.getCantidad();
                 res=res+"["+nombre+","+kilos+"],";
             }
             res=res+"]";
