@@ -47,8 +47,6 @@ public class TipoAlimentoServicio {
         return repository.existsById(id);
     }
 
-    public List<TipoAlimentoResponse> getAllTipos(){return repository.consultarTodosLosTiposDeAlimento();}
-
     public TipoAlimentoResponse getOneTipo(Long id){return repository.consultarInfoUnTipoAlimento(id);}
 
 
