@@ -2,9 +2,9 @@ package com.salesianostriana.dam.kiloapi.destinatario;
 
 import com.salesianostriana.dam.kiloapi.caja.Caja;
 import com.salesianostriana.dam.kiloapi.caja.CajaServicio;
-import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.CreateDestinatarioDto;
-import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.DestinatarioConverter;
-import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.GetDestinatarioDto;
+import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.*;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimento;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoServicio;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,6 +28,8 @@ import java.util.Optional;
 public class DestinatarioControlador {
 
     private final DestinatarioServicio servicio;
+
+    private final TipoAlimentoServicio servicioTipoAlimento;
 
     private final DestinatarioConverter dtoConverter;
     private final CajaServicio servicioCaja;
@@ -54,9 +56,13 @@ public class DestinatarioControlador {
     public ResponseEntity<List<GetDestinatarioDto>> findAllDestinatarios(){
         List<GetDestinatarioDto> result = new ArrayList<>();
         for (Destinatario destinatario : servicio.findAll()){
-            result.add(dtoConverter.destinatarioToGetDestinatarioDto(destinatario));
+            result.add(dtoConverter.of(destinatario));
         }
-        return ResponseEntity.ok(result);
+        if (result.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }else {
+            return ResponseEntity.ok().body(result);
+        }
     }
 
     @Operation(summary = "Este método devuelve una lista de destinatarios por su id")
@@ -78,8 +84,15 @@ public class DestinatarioControlador {
                     content = @Content),
     })
     @GetMapping("/destinatario/{id}")
-    public ResponseEntity<Destinatario> findByIdDestinatarios(@PathVariable Long id){
-        return ResponseEntity.of(servicio.findById(id));
+    public ResponseEntity<GetDestinatarioDtoById> findByIdDestinatarios(@PathVariable Long id){
+        Destinatario destinatario = servicio.findById(id).orElse(null);
+
+        if (destinatario == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }else {
+            return ResponseEntity.of(Optional.of(dtoConverter.destinatarioToGetDestinatarioDtoById(destinatario)));
+        }
+
     }
 
     @Operation(summary = "Este método devuelve los detalles una lista de destinatarios por su id")
@@ -101,8 +114,15 @@ public class DestinatarioControlador {
                     content = @Content),
     })
     @GetMapping("destinatario/{id}/detalle")
-    public ResponseEntity<Destinatario> findByIdDestinatarioDetalle(@PathVariable Long id){
-        return ResponseEntity.of(servicio.findById(id));
+    public ResponseEntity<GetDestinatarioDetalleDto> findByIdDestinatarioDetalle(@PathVariable Long id){
+        Destinatario destinatario = servicio.findById(id).orElse(null);
+        TipoAlimento tipoAlimento = servicioTipoAlimento.findById(id).orElse(null);
+
+        if (destinatario == null && tipoAlimento == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }else {
+            return ResponseEntity.of(Optional.of(dtoConverter.destinatarioDetalleToDestinatarioDetalleDto(destinatario,tipoAlimento)));
+        }
     }
 
     @Operation(summary = "Este método agrega un destinatario a una lista de destinatarios")
@@ -125,10 +145,10 @@ public class DestinatarioControlador {
     })
     @PostMapping("/destinatario/")
     public ResponseEntity<CreateDestinatarioDto> createDestinatario(@RequestBody CreateDestinatarioDto cd){
-
-
-        Destinatario d = dtoConverter.createDestinatarioToDestinatario(cd);
+        Destinatario d = dtoConverter.of(cd);
         servicio.add(d);
+
+
         return ResponseEntity.status(HttpStatus.CREATED).body(cd);
     }
 
@@ -162,6 +182,7 @@ public class DestinatarioControlador {
                 })
                 .orElse(Optional.empty())
         );
+
     }
 
     @Operation(summary = "Este método elimina un destinario por su id de una lista de destinatario")
@@ -183,14 +204,13 @@ public class DestinatarioControlador {
                     content = @Content),
     })
     @DeleteMapping("/destinatario/{id}")
-    public ResponseEntity<Destinatario> deleteDestinatario(@RequestBody Destinatario destinatario, @PathVariable Long id){
+    public ResponseEntity<Destinatario> deleteDestinatario(@PathVariable Long id){
         List<Caja> listaCaja = servicioCaja.findAll();
         for (Caja caja: listaCaja){
             if (caja.getId() == id){
                 caja.setDestinatario(null);
             }
         }
-        servicio.delete(destinatario);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
