@@ -43,11 +43,11 @@ public class ClaseService {
 
     public List<Ranking>getRanking(){return repo.getRankingOrdenado();}
 
-/*
-    public double calcularKg(Clase c){
+
+    public Double calcularKg(Clase c){
        return repo.calcularKilosTotales(c.getIdClase());
     }
-*/
+
 /*      List<Double> cantidad = c.getListaAportaciones().forEach(l -> {
             l.getDetalleAportacion().forEach(detalleAportacion -> {
                         detalleAportacion.getCantidad()
