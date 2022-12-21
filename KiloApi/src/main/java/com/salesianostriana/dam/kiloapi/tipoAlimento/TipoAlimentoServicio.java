@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.kiloapi.tipoAlimento;
 
 import com.salesianostriana.dam.kiloapi.destinatario.Destinatario;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.dto.TipoAlimentoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,9 @@ public class TipoAlimentoServicio {
 
     private final TipoAlimentoRepository repository;
 
-    public TipoAlimento add(TipoAlimento tipoAlimento){ return repository.save(tipoAlimento);}
+    public TipoAlimento add(TipoAlimento tipoAlimento) {
+        return repository.save(tipoAlimento);
+    }
 
     public Optional<TipoAlimento> findById(Long id) {
         return repository.findById(id);
@@ -40,5 +43,21 @@ public class TipoAlimentoServicio {
     }
 
 
-    public boolean existsById(Long id) { return repository.existsById(id);}
+    public boolean existsById(Long id) {
+        return repository.existsById(id);
+    }
+
+    public TipoAlimentoResponse getOneTipo(Long id){return repository.consultarInfoUnTipoAlimento(id);}
+
+
+    public TipoAlimento checkCantidad(Optional<TipoAlimento> aux) {
+
+        if (aux.isPresent() && aux.get().getKilosDisp().getCantidadDisponible() > 0) {
+            aux.get().getKilosDisp().setCantidadDisponible(0);
+            return aux.get();
+        }
+
+        return aux.get();
+    }
+
 }

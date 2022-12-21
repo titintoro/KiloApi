@@ -2,6 +2,7 @@ package com.salesianostriana.dam.kiloapi.clase;
 
 
 import com.salesianostriana.dam.kiloapi.clase.dto.ClaseResponse;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.dto.TipoAlimentoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,12 +37,21 @@ public class ClaseControlador {
                     content = @Content),
     })
     @GetMapping("/")
-    public ResponseEntity<List<Clase>> showAllClases() {
+    public ResponseEntity<List<ClaseResponse>> showAllClases() {
 
         List<Clase> data = claseService.findAll();
-        if (data.isEmpty())
+        if (data.isEmpty()) {
             return ResponseEntity.notFound().build();
-        return ResponseEntity.ok().body(data);
+        } else {
+
+            List<ClaseResponse> results = data.stream()
+                                                .map(ClaseResponse::convertClaseToClaseResponse)
+                                                    .toList();
+
+            return ResponseEntity.ok().body(results);
+        }
+
+
     }
 
     @Operation(summary = "Muestra la información de una clase buscada por id")
@@ -56,14 +68,14 @@ public class ClaseControlador {
     @GetMapping("/{id}")
     public ResponseEntity<ClaseResponse> getOneClaseInfo(@PathVariable Long id) {
 
-            Clase c = claseService.findById(id).orElse(null);
+        Optional<Clase> c = claseService.findById(id);
 
-            if(c == null)
-                return ResponseEntity.notFound().build();
+        if (c.isPresent())
+            return ResponseEntity.notFound().build();
 
-            ClaseResponse result = ClaseResponse.convertClaseToClaseResponse(c);
+        ClaseResponse result = ClaseResponse.convertClaseToClaseResponse(c.get());
 
-            return ResponseEntity.ok(result);
+        return ResponseEntity.ok(result);
     }
 
     @Operation(summary = "Crea una clase con los atributos proporcionados en el cuerpo de la petición")
@@ -78,9 +90,10 @@ public class ClaseControlador {
 
     })
     @PostMapping("/")
-    public ResponseEntity<Clase> addOneClase(@RequestBody Clase clase) {
+    public ResponseEntity<ClaseResponse> addOneClase(@RequestBody Clase clase) {
         claseService.add(clase);
-        return ResponseEntity.status(HttpStatus.CREATED).body(clase);
+        ClaseResponse result = ClaseResponse.convertClaseToClaseResponse(clase);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @Operation(summary = "Actualiza una clase con los atributos proporcionados por el cuerpo de la petición")
@@ -94,17 +107,24 @@ public class ClaseControlador {
                     content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Clase> updateClase(@PathVariable Long id, @RequestBody Clase clase) {
+    public ResponseEntity<ClaseResponse> updateClase(@PathVariable Long id, @RequestBody Clase clase) {
 
-        if (clase == null) {
+
+        Optional<Clase> c = claseService.findById(id);
+
+        if (!c.isPresent() || clase == null)
             return ResponseEntity.badRequest().build();
-        }
-        Clase c = claseService.findById(id).get();
-        c.setNombre(clase.getNombre());
-        c.setTutor(clase.getTutor());
-        c.setListaAportaciones(clase.getListaAportaciones());
 
-        return ResponseEntity.ok().body(c);
+        c.get().setNombre(clase.getNombre());
+        c.get().setTutor(clase.getTutor());
+        c.get().setListaAportaciones(clase.getListaAportaciones());
+
+        claseService.edit(c.get());
+
+        ClaseResponse result = ClaseResponse.convertClaseToClaseResponse(clase);
+
+
+        return ResponseEntity.ok().body(result);
     }
 
     @Operation(summary = "Borra una clase buscada por el id, pasado por un query param")
@@ -116,7 +136,7 @@ public class ClaseControlador {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteClase(@PathVariable Long id) {
         Clase c = claseService.findById(id).orElse(null);
-        if(c  == null)
+        if (c == null)
             return ResponseEntity.notFound().build();
         claseService.delete(c);
         return ResponseEntity.noContent().build();

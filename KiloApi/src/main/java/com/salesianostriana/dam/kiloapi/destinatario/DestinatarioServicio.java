@@ -1,5 +1,6 @@
 package com.salesianostriana.dam.kiloapi.destinatario;
 
+import com.salesianostriana.dam.kiloapi.destinatario.dtosDestinatario.GetDestinatarioDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ public class DestinatarioServicio {
     private final DestinatarioRepositorio repo;
 
     public Destinatario add(Destinatario destinatario) { return repo.save(destinatario);}
+
 
 
     public Optional<Destinatario> findById(Long id) {

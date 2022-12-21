@@ -1,8 +1,17 @@
 package com.salesianostriana.dam.kiloapi.aportacion;
 
+import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.AportacionResponseDto;
+import com.salesianostriana.dam.kiloapi.clase.Clase;
+import com.salesianostriana.dam.kiloapi.clase.ClaseRepository;
+import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
+import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacionRepositorio;
+import com.salesianostriana.dam.kiloapi.detalleAportacion.dtoDetalleAportacion.DetalleAportacionResponseDto;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +20,12 @@ import java.util.Optional;
 public class AportacionServicio {
 
     private final AportacionRepositorio repositorio;
+
+    private final ClaseRepository claseRepository;
+
+    private final TipoAlimentoRepository tipoAlimentoRepository;
+
+    private final DetalleAportacionRepositorio detallesRepo;
 
     public Aportacion add(Aportacion aportacion){return repositorio.save(aportacion);}
 
@@ -33,4 +48,30 @@ public class AportacionServicio {
     public void deleteById(Long id) {
         repositorio.deleteById(id);
     }
+
+    public Aportacion createAportacion (AportacionResponseDto dto){
+
+        Aportacion aportacion = Aportacion.builder()
+                .fecha(LocalDate.now()).build();
+        Optional<Clase> clase = claseRepository.findById(dto.getIdClase());
+        aportacion.addToClase(clase.get());
+
+        List<DetalleAportacion> dList = new ArrayList<>();
+        Aportacion aportaciondb = repositorio.save(aportacion);
+        dto.getDetalles().forEach(((detalleAportacionDto) -> {
+            DetalleAportacion detalleAportacion = DetalleAportacion.builder()
+                    .numLinea(aportacion.getId())
+                    .cantidadKilos(detalleAportacionDto.getKilosAlimento())
+                    .tipoAlimento(tipoAlimentoRepository.findById(detalleAportacionDto.getIdTipoAlimento()).get())
+                    .build();
+            //aportacion.addDetalleAportacion(detalleAportacion);
+            detalleAportacion.setNumLinea(Long.valueOf(dList.size()+1));
+            detalleAportacion.setAportacion(aportaciondb);
+            dList.add(detallesRepo.save(detalleAportacion));
+        }));
+        aportacion.setDetalleAportacionList(dList);
+        return aportaciondb;
+    }
+
+
 }
