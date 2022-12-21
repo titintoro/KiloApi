@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,9 +64,15 @@ public class CajaControlador {
                     content = @Content),
     })
     @GetMapping("/caja/")
-    public ResponseEntity<List<Caja>> getListOfCajas() {
+    public ResponseEntity<List<GetCajaResponse>> getListOfCajas() {
 
-        return (cajaServicio.findAll().isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(cajaServicio.findAll()));
+        List<GetCajaResponse> cajaResponseList = new ArrayList<>();
+
+        for (Caja caja : cajaServicio.findAll()){
+            cajaResponseList.add(cajaDtoConverter.toGetCajaResponse(caja, caja.getDestinatario()));
+        }
+
+        return (cajaServicio.findAll().isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(cajaResponseList));
     }
 
 
@@ -213,6 +220,31 @@ public class CajaControlador {
     }
 
 
+    @Operation(summary = "Add Destinatario to Caja")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Destinatario added Successfully",
+                    content = {@Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Caja.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            {
+                                                "numCaja": 12,
+                                                "qr": "qqqq",
+                                                "listaAlimentos": [],
+                                                "destinatario": {
+                                                    "id": 15,
+                                                    "nombre": "Ale"
+                                                },
+                                                "kilosTotales": 0.0
+                                            }                                        \s
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "400",
+                    description = "Bad Destinatario add Request",
+                    content = @Content),
+    })
     @PostMapping("/caja/{idCaja}/destinatario/{idDestinatario}")
     public ResponseEntity<PostCajaAlimentoResponse> addDestinatarioToCaja(
             @PathVariable Long idCaja, @PathVariable Long idDestinatario) {

@@ -68,7 +68,6 @@ public class CajaDtoConverter {
         cajaResponse.setQr(c.getQr());
         cajaResponse.setNumCaja(c.getNumCaja());
         cajaResponse.setTieneList(c.getTieneList());
-        cajaResponse.setDestinatario(c.getDestinatario());
 
         return cajaResponse;
 
