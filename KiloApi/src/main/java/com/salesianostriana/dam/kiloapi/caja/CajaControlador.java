@@ -292,13 +292,12 @@ public class CajaControlador {
                     content = @Content),
     })
     @PutMapping("/caja/{id}/tipo/{idTipoAlim}/kg/{cantidad}")
-    public ResponseEntity<CajaResponse> editKgsOFTipoAlimFromCaja(
-            @RequestBody CreateCajaRequest c,
+    public ResponseEntity<GetCajaResponse> editKgsOFTipoAlimFromCaja(
             @PathVariable Long id, @PathVariable Long idTipoAlim, @PathVariable double cantidad) {
 
         Optional<Caja> caja = cajaServicio.updateKgsOfTipoAlimentoFromCaja(id,idTipoAlim,cantidad);
 
-        return (caja.isPresent() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(cajaDtoConverter.cajaToCajaResponse(caja.get())) );
+        return (caja.map(value -> ResponseEntity.ok(cajaDtoConverter.toGetCajaResponse(value,value.getDestinatario()))).orElseGet(() -> ResponseEntity.badRequest().build()));
 
     }
 

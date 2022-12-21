@@ -58,37 +58,49 @@ public class CajaServicio {
     public boolean existsById(Long id) { return cajaRepo.existsById(id);}
 
 
-    public Optional<Caja> updateKgsOfTipoAlimentoFromCaja(Long idCaja, Long idTipoAlim, double cantidadKgs) {
+    public Optional<Caja> updateKgsOfTipoAlimentoFromCaja(Long idCaja, Long idTipoAlim, double cantidad) {
 
         Optional<Caja> caja = findById(idCaja);
+
         double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idTipoAlim);
 
-        if (caja.isPresent()){
-            for (Tiene t:caja.get().getTieneList()){
-
-                if(kilosDisponibles>=cantidadKgs){
-
-                    if (t.getTipoAlimento().getId().equals(idTipoAlim)  ) {
-                        t.setCantidadKgs(cantidadKgs + t.getCantidadKgs());
-                        t.getTipoAlimento().getKilosDisp().setCantidadDisponible(kilosDisponibles-cantidadKgs);
+        Optional<TipoAlimento> tipoAlimento = tipoAlimentoServicio.findById(idTipoAlim);
 
 
-                        kilosDispRepo.save(t.getTipoAlimento().getKilosDisp());
-                        cajaRepo.save(caja.get());
-                        tipoAlimentoServicio.add(t.getTipoAlimento());
-                        return caja;
-                    }
-                }
+        if (caja.isPresent() && tipoAlimento.isPresent() && cantidad<=kilosDisponibles){
+
+            Tiene tiene = new Tiene();
+
+            for(Tiene t : caja.get().getTieneList()) {
+                if (t.getTipoAlimento().getId().equals(idTipoAlim)) tiene = t;
             }
+
+            tipoAlimento.get().getKilosDisp().setCantidadDisponible(kilosDisponibles + tiene.getCantidadKgs());
+
+            caja.get().setKilosTotales(caja.get().getKilosTotales()+cantidad-tiene.getCantidadKgs());
+
+            tiene.setCantidadKgs(cantidad);
+
+            tipoAlimentoServicio.edit(tipoAlimento.get());
+
+            tieneRepository.save(tiene);
+
+            cajaRepo.save(caja.get());
+
+            return caja;
         }
-        return caja;
+        return Optional.empty();
+
+
     }
 
 
     public void deleteAlimFromCaja(Long id, Long idAlim){
 
         Optional<Caja> caja = findById(id);
+
         double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idAlim);
+
         double kilosTotales = cajaRepo.getKilosTotales(id);
 
         if (caja.isPresent()){
@@ -97,9 +109,13 @@ public class CajaServicio {
                 if (t.getTipoAlimento().getId().equals(idAlim)) {
 
                     double cantidadEliminada = t.getCantidadKgs();
+
                     caja.get().setKilosTotales(kilosTotales-cantidadEliminada);
+
                     t.getTipoAlimento().getKilosDisp().setCantidadDisponible(kilosDisponibles+cantidadEliminada);
+
                     caja.get().getTieneList().remove(t);
+
                     cajaRepo.save(caja.get());
                 }
             }
@@ -114,7 +130,6 @@ public class CajaServicio {
             Optional<Caja> caja = cajaRepo.findById(id);
             Optional<TipoAlimento> tipoAlimento = tipoAlimentoServicio.findById(idTipoAlim);
 
-
             double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idTipoAlim);
             double kilosTotales = cajaRepo.getKilosTotales(id);
 
@@ -125,6 +140,7 @@ public class CajaServicio {
                 if (tiene.isEmpty()){
 
                     Tiene tieneAniadido = new Tiene();
+
                     tieneAniadido.setCaja(caja.get());
                     tieneAniadido.setId(new TienePK(caja.get().getId(), tipoAlimento.get().getId()));
                     tieneAniadido.setTipoAlimento(tipoAlimentoServicio.findById(idTipoAlim).get());
@@ -139,8 +155,6 @@ public class CajaServicio {
 
                     tipoAlimentoServicio.edit(tipoAlimento.get());
 
-
-
                     tieneRepository.save(tieneAniadido);
 
                     cajaRepo.save(caja.get());
@@ -150,7 +164,8 @@ public class CajaServicio {
                 } else {
 
                     for(Tiene t : caja.get().getTieneList()){
-                        if (t.getTipoAlimento().getId()==idTipoAlim){
+
+                        if (t.getTipoAlimento().getId().equals(idTipoAlim)){
                             tiene.get().setCantidadKgs(cantidad+t.getCantidadKgs());
 
                             caja.get().setKilosTotales(caja.get().getKilosTotales()+cantidad);
