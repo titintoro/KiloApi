@@ -20,7 +20,7 @@ public class GetByIdDetallesAportacionDto {
         return new GetByIdDetallesAportacionDto(
                 detalleAportacion.getNumLinea(),
                 detalleAportacion.getTipoAlimento().getNombre(),
-                detalleAportacion.getCantidadKilos()
+                detalleAportacion.getCantidad()
         );
 
     }

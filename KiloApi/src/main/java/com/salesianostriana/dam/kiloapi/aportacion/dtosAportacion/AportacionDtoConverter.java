@@ -44,7 +44,7 @@ public class AportacionDtoConverter {
                     GetDetalleAportacionDto.builder()
                             .numLinea(d.getNumLinea())
                             .nombreTipoAlimento(d.getTipoAlimento().getNombre())
-                            .numeroKilos(d.getCantidadKilos())
+                            .numeroKilos(d.getCantidad())
                             .build()
             );
         });
