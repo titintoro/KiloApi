@@ -50,7 +50,10 @@ public class Caja {
 
     @PreRemove
     public void setNullDestinatario() {
-        destinatario.getListaDeCajas().removeIf(caja -> caja.equals(this));
+
+        if (destinatario!=null)
+            destinatario.getListaDeCajas().removeIf(caja -> caja.equals(this));
+
     }
 
 }
