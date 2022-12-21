@@ -16,5 +16,5 @@ public class GetDestinatarioDetalleDto {
 
     private String nombre, direccion, personaContacto, telefono;
 
-    private List<>
+    private List<GetDestinatarioInfoDto> listaInfo;
 }
