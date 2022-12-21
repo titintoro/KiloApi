@@ -34,7 +34,7 @@ public class TipoAlimento {
     @OneToOne(mappedBy = "tipoAlimento", fetch = FetchType.EAGER, orphanRemoval = false, cascade = CascadeType.ALL)
     private KilosDisp kilosDisp;
 
-    @OneToMany(mappedBy = "tipoAlimento" , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "tipoAlimento")
     @Builder.Default
     private List<DetalleAportacion> listaDetalleAportacion = new ArrayList<>();
 

@@ -21,7 +21,7 @@ public class GetDetalleAportacionDto {
                 .builder()
                 .numLinea(detalleAportacion.getNumLinea())
                 .nombreTipoAlimento(detalleAportacion.getTipoAlimento().getNombre())
-                .numeroKilos(detalleAportacion.getCantidadKilos())
+                .numeroKilos(detalleAportacion.getCantidad())
                 .build();
     }
 }

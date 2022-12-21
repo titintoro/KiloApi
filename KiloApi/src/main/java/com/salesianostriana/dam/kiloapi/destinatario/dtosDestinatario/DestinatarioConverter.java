@@ -70,11 +70,11 @@ public class DestinatarioConverter {
 
         /**d.getListaDeCajas().get().getTieneList().get().getTipoAlimento().getDetalleAportacionList().forEach(ld ->);**/
 
-        t.getDetalleAportacionList().forEach(da -> {
+        t.getListaDetalleAportacion().forEach(da -> {
             listaMoreInfoDestinatario.add(
                     GetDestinatarioDetalleMoreInfoDto.builder()
                             .idTipoAlimento(da.getId())
-                            .KgsTipoAlimento(da.getCantidadKilos())
+                            .KgsTipoAlimento(da.getCantidad())
                             .nombreTipoAlimento(da.getTipoAlimento().getNombre())
                             .build()
             );

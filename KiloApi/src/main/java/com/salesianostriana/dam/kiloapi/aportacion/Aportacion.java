@@ -47,7 +47,7 @@ public class Aportacion {
     public double getKilos(){
         double CantidadKilos = 0;
         for (DetalleAportacion detalleAportacion:detalleAportacionList) {
-            CantidadKilos = CantidadKilos + detalleAportacion.getCantidadKilos();
+            CantidadKilos = CantidadKilos + detalleAportacion.getCantidad();
         }
         return CantidadKilos;
 

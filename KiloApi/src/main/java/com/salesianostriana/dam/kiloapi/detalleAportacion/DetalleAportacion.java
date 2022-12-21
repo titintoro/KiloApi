@@ -20,7 +20,7 @@ public class DetalleAportacion {
 
     private Long numLinea;
 
-    private double cantidadKilos;
+    private double cantidad;
 
     @ManyToOne
     @JoinColumn(name = "aportacion_id", foreignKey = @ForeignKey(name = "FK_DETALLEAPORTACION_APORTACION"))

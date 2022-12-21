@@ -61,7 +61,7 @@ public class AportacionServicio {
         dto.getDetalles().forEach(((detalleAportacionDto) -> {
             DetalleAportacion detalleAportacion = DetalleAportacion.builder()
                     .numLinea(aportacion.getId())
-                    .cantidadKilos(detalleAportacionDto.getKilosAlimento())
+                    .cantidad(detalleAportacionDto.getKilosAlimento())
                     .tipoAlimento(tipoAlimentoRepository.findById(detalleAportacionDto.getIdTipoAlimento()).get())
                     .build();
             //aportacion.addDetalleAportacion(detalleAportacion);
