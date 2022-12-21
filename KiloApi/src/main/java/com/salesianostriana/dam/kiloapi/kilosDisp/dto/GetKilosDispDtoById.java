@@ -12,15 +12,11 @@ import java.util.List;
 @Builder
 public class GetKilosDispDtoById {
 
-    private List<Long> idAportacion;
-
-    private List<Long> lineaDetalle;
-
     private Double kgDisponibles;
 
     private Long idTipoAlimento;
 
-    private List<Double> kgAportacion;
+    private List<GetKilosDispDetalleAportacionDto> aportacion;
 
 
 }

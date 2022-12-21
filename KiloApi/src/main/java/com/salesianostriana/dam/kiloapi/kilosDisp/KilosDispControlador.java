@@ -1,7 +1,10 @@
 package com.salesianostriana.dam.kiloapi.kilosDisp;
 
+import com.salesianostriana.dam.kiloapi.kilosDisp.dto.GetKilosDispDetalleAportacionDto;
 import com.salesianostriana.dam.kiloapi.kilosDisp.dto.GetKilosDispDto;
+import com.salesianostriana.dam.kiloapi.kilosDisp.dto.GetKilosDispDtoById;
 import com.salesianostriana.dam.kiloapi.kilosDisp.dto.KilosDispConverter;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimento;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,7 +53,7 @@ public class KilosDispControlador {
     public ResponseEntity<List<GetKilosDispDto>> findAllKilosDisp(){
         List<GetKilosDispDto> result = new ArrayList<>();
         for (KilosDisp kilosDisp : service.findAll()){
-            result.add(dtoConverter.kilosDispToGetKilosDispDto(kilosDisp));
+            result.add(dtoConverter.of(kilosDisp));
         }
         if(result.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -77,7 +81,13 @@ public class KilosDispControlador {
                     content = @Content),
     })
     @GetMapping("/kilosDisponibles/{idTipoAlimento}")
-    public ResponseEntity<KilosDisp> findByIdKilosDisp(@PathVariable Long idTipoAlimento){
-        return ResponseEntity.of(service.findById(idTipoAlimento));
+    public ResponseEntity<GetKilosDispDtoById> findByIdKilosDisp(@PathVariable Long idTipoAlimento){
+       KilosDisp kilosDisp = service.findById(idTipoAlimento).orElse(null);
+
+        if (kilosDisp==null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }else {
+            return ResponseEntity.of(Optional.of(dtoConverter.findByIdKilosDisp(kilosDisp)));
+        }
     }
 }

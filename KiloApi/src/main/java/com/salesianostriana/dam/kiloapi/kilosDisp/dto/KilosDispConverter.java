@@ -1,13 +1,18 @@
 package com.salesianostriana.dam.kiloapi.kilosDisp.dto;
 
+import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDisp;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDispService;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimento;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class KilosDispConverter {
 
-    public GetKilosDispDto kilosDispToGetKilosDispDto(KilosDisp kd){
+    public GetKilosDispDto of (KilosDisp kd){
         return GetKilosDispDto.builder()
                 .idTipoAlimento(kd.getTipoAlimento().getId())
                 .nombre(kd.getTipoAlimento().getNombre())
@@ -15,13 +20,23 @@ public class KilosDispConverter {
                 .build();
     }
 
-    public GetKilosDispDtoById kilosDispToGetKilosDispDtoById(KilosDisp kd){
+    public GetKilosDispDtoById findByIdKilosDisp (KilosDisp kd){
+        List<GetKilosDispDetalleAportacionDto> dtoList = new ArrayList<>();
+
+        kd.getTipoAlimento().getListaDetalleAportacion().forEach(ld -> {
+            dtoList.add(
+                    GetKilosDispDetalleAportacionDto.builder()
+                            .cantidadKgs(ld.getCantidad())
+                            .lineaDetalle(ld.getNumLinea())
+                            .id(ld.getAportacion().getId())
+                            .build()
+            );
+        });
+
         return GetKilosDispDtoById.builder()
                 .idTipoAlimento(kd.getTipoAlimento().getId())
                 .kgDisponibles(kd.getCantidadDisponible())
-                .idAportacion(kd.getTipoAlimento().listaIdDeDetalleAportacion())
-                .kgAportacion(kd.getTipoAlimento().listaCantidadKgsDetalleAportacion())
-                .lineaDetalle(kd.getTipoAlimento().listaNumLineaDetalleAportacion())
+                .aportacion(dtoList)
                 .build();
     }
 }
