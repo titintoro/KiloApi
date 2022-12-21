@@ -11,5 +11,5 @@ public interface KilosDispRepository extends JpaRepository<KilosDisp , Long > {
                 FROM KilosDisp k JOIN TipoAlimento ta ON k.tipoAlimento.id = ta.id
                 WHERE ta.id = ?1
             """)
-    Double getKilosDispOfAlimById(Long id);
+    double getKilosDispOfAlimById(Long id);
 }

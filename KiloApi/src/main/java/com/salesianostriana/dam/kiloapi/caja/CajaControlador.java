@@ -160,7 +160,7 @@ public class CajaControlador {
     })
     @PostMapping("/caja/{id}/tipo/{idTipoAlim}/kg/{cantidad}")
     public ResponseEntity<PostCajaAlimentoResponse> addTipoAlimToCaja(
-            @PathVariable Long id, Long idTipoAlim, double cantidad) {
+            @PathVariable Long id , @PathVariable Long idTipoAlim, @PathVariable double cantidad) {
 
         Optional<Caja> c = cajaServicio.addAlimToCaja(id,idTipoAlim,cantidad);
 
