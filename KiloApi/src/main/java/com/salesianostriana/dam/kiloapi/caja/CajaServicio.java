@@ -139,7 +139,7 @@ public class CajaServicio {
 
                     tipoAlimentoServicio.edit(tipoAlimento.get());
 
-                    caja.get().setKilosTotales(caja.get().getKilosTotales()+cantidad);
+
 
                     tieneRepository.save(tieneAniadido);
 
@@ -153,12 +153,11 @@ public class CajaServicio {
                         if (t.getTipoAlimento().getId()==idTipoAlim){
                             tiene.get().setCantidadKgs(cantidad+t.getCantidadKgs());
 
-                            caja.get().setKilosTotales(kilosTotales+cantidad);
+                            caja.get().setKilosTotales(caja.get().getKilosTotales()+cantidad);
 
                             tipoAlimento.get().getKilosDisp().setCantidadDisponible(kilosDisponibles - cantidad);
 
                             tipoAlimentoServicio.edit(tipoAlimento.get());
-                            caja.get().setKilosTotales(caja.get().getKilosTotales()+cantidad);
 
                             tieneRepository.save(tiene.get());
                             cajaRepo.save(caja.get());
