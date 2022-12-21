@@ -16,16 +16,19 @@ public class DetalleAportacion {
 
     @Id
     @GeneratedValue
+    private Long id;
+
     private Long numLinea;
 
+    private double cantidadKilos;
+
     @ManyToOne
-    @JoinColumn(name = "Aportacion", foreignKey = @ForeignKey(name = "FK_DETALLEAPORTACION_APORTACION"))
+    @JoinColumn(name = "aportacion_id", foreignKey = @ForeignKey(name = "FK_DETALLEAPORTACION_APORTACION"))
     private Aportacion aportacion;
 
-    private double cantidad;
-
     @ManyToOne
-    @JoinColumn(name = "tipoAlimento_id", foreignKey = @ForeignKey(name = "FK_TIPOALIMENTO_DETALLEAPORTACION"))
+    @JoinColumn(name = "tipoAlimento_id", foreignKey = @ForeignKey(name = "FK_DETALLEAPORTACION_TIPOALIMENTO"))
     private TipoAlimento tipoAlimento;
+
 
 }

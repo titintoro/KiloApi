@@ -29,7 +29,6 @@ public class MainDeMentira{
 
     private final DestinatarioServicio destinatarioServicio;
 
-    private final DetalleAportacionServicio detalleAportacionServicio;
 
     private final KilosDispService kilosDispService;
 
@@ -107,8 +106,4 @@ public class MainDeMentira{
         tipoAlimentoServicio.add(tp2);
         tipoAlimentoServicio.add(tp3);
 
-    }
 
-
-
-}
