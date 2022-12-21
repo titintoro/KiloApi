@@ -69,7 +69,7 @@ public class CajaServicio {
                 if(kilosDisponibles>=cantidadKgs){
 
                     if (t.getTipoAlimento().getId().equals(idTipoAlim)  ) {
-                        t.setCantidadKgs(cantidadKgs + kilosDisponibles);
+                        t.setCantidadKgs(cantidadKgs + t.getCantidadKgs());
                         t.getTipoAlimento().getKilosDisp().setCantidadDisponible(kilosDisponibles-cantidadKgs);
 
 
@@ -109,34 +109,69 @@ public class CajaServicio {
 
     public Optional<Caja> addAlimToCaja(Long id, Long idTipoAlim, double cantidad){
 
-        Optional<Caja> caja = cajaRepo.findById(id);
-        Optional<TipoAlimento> tipoAlimento = tipoAlimentoServicio.findById(idTipoAlim);
-        Optional<Tiene> tiene = tieneRepository.findById(new TienePK(caja.get().getId(), tipoAlimento.get().getId())) ;
+        if (cajaRepo.findById(id).get().getDestinatario()!=null) {
 
-        double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idTipoAlim);
-        double kilosTotales = cajaRepo.getKilosTotales(id);
+            Optional<Caja> caja = cajaRepo.findById(id);
+            Optional<TipoAlimento> tipoAlimento = tipoAlimentoServicio.findById(idTipoAlim);
 
-        if (caja.isPresent() && tipoAlimento.isPresent() && cantidad>=kilosDisponibles){
 
-            caja.get().setKilosTotales(kilosTotales+cantidad);
+            double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idTipoAlim);
+            double kilosTotales = cajaRepo.getKilosTotales(id);
 
-            tiene.get().setCantidadKgs(cantidad);
+            if (caja.isPresent() && tipoAlimento.isPresent() && cantidad>=kilosDisponibles){
 
-            tipoAlimento.get().getKilosDisp().setCantidadDisponible(kilosDisponibles - cantidad);
+                Optional<Tiene> tiene = tieneRepository.findById(new TienePK(caja.get().getId(), tipoAlimento.get().getId())) ;
 
-            caja.get().getTieneList().add(tiene.get());
+                if (tiene.isEmpty()){
 
-            tipoAlimentoServicio.edit(tipoAlimento.get());
-            caja.get().setKilosTotales(caja.get().getKilosTotales()+cantidad);
+                    Tiene tieneAniadido = new Tiene();
+                    tieneAniadido.setCaja(caja.get());
+                    tieneAniadido.setId(new TienePK(caja.get().getId(), tipoAlimento.get().getId()));
+                    tieneAniadido.setTipoAlimento(tipoAlimentoServicio.findById(idTipoAlim).get());
+                    tieneAniadido.setCantidadKgs(cantidad);
 
-            tieneRepository.save(tiene.get());
-            cajaRepo.save(caja.get());
 
-            return caja;
+                    caja.get().setKilosTotales(kilosTotales+cantidad);
+
+                    tipoAlimento.get().getKilosDisp().setCantidadDisponible(kilosDisponibles - cantidad);
+
+                    caja.get().getTieneList().add(tieneAniadido);
+
+                    tipoAlimentoServicio.edit(tipoAlimento.get());
+
+                    caja.get().setKilosTotales(caja.get().getKilosTotales()+cantidad);
+
+                    tieneRepository.save(tieneAniadido);
+
+                    cajaRepo.save(caja.get());
+
+                    return caja;
+
+                } else {
+                    caja.get().setKilosTotales(kilosTotales+cantidad);
+
+                    tiene.get().setCantidadKgs(cantidad);
+
+                    tipoAlimento.get().getKilosDisp().setCantidadDisponible(kilosDisponibles - cantidad);
+
+                    caja.get().getTieneList().add(tiene.get());
+
+                    tipoAlimentoServicio.edit(tipoAlimento.get());
+                    caja.get().setKilosTotales(caja.get().getKilosTotales()+cantidad);
+
+                    tieneRepository.save(tiene.get());
+                    cajaRepo.save(caja.get());
+
+                    return caja;
+                }
+
+
+
+            }
 
         }
 
-        return caja;
+        return Optional.empty();
 
 
 
