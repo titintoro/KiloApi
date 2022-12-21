@@ -7,6 +7,8 @@ import com.salesianostriana.dam.kiloapi.clase.ClaseService;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacionRepositorio;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.dtoDetalleAportacion.DetalleAportacionResponseDto;
+import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDispService;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoServicio;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,6 +42,10 @@ public class AportacionControlador {
     private final AportacionDtoConverter aportacionDtoConverter;
 
     private final DetalleAportacionRepositorio detallesRepo;
+
+    private final KilosDispService kilosDispService;
+
+    private final TipoAlimentoServicio tipoAlimentoServicio;
 
 
 
@@ -207,8 +213,24 @@ public class AportacionControlador {
         return ResponseEntity.status(HttpStatus.CREATED).body(aportacionDtoConverter.nuevaAportacionDto(nuevaAportacion));
 
     }
-
-
+    /**
+    @PutMapping("/aportacion/{id}/linea/{num}/kg/{numKg}")
+    public ResponseEntity<AportacionResponseDto> modificarAportacion(@PathVariable Long id, @PathVariable("num") Long numLinea, @PathVariable double numKg){
+        if(aportacionServicio.findById(id).isPresent()){
+            aportacionServicio.findById(id).get().getDetalleAportacionList().forEach(detalleAportacion -> {
+                if(detalleAportacion.getId()==numLinea){
+                    if(numKg<detalleAportacion.getCantidadKilos()){
+                        if((kilosDispService.findById(detalleAportacion.getTipoAlimento().getId()).get().getCantidadDisponible()+
+                                (numKg-detalleAportacion.getCantidadKilos())>=0)){
+                            tipoAlimentoServicio.findById(detalleAportacion.getTipoAlimento().getId()).get().addKiloToTipo(kilosDispService
+                                    .findById(detalleAportacion.getTipoAlimento().getId()).get(), (numKg-detalleAportacion.getCantidadKilos()));
+                            detalleAportacion.setCantidadKilos(numKg);
+                        }
+                    }
+                }
+            });
+        }
+**/
 
 
 }
