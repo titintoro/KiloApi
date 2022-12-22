@@ -142,7 +142,7 @@ public class CajaControlador {
     @Operation(summary = "Add TipoAlimento to Caja")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201",
-                    description = "Caja Created Successfully",
+                    description = "TipoAlimento added Successfully",
                     content = {@Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = Caja.class)),
                             examples = {@ExampleObject(
@@ -150,18 +150,24 @@ public class CajaControlador {
                                             {
                                                 "numCaja": 12,
                                                 "qr": "qqqq",
-                                                "listaAlimentos": [],
+                                                "listaAlimentos": [
+                                                    {
+                                                        "id": 8,
+                                                        "nombre": "Garbanzos",
+                                                        "cantidadKgs": 3.0
+                                                    }
+                                                ],
                                                 "destinatario": {
                                                     "id": 15,
                                                     "nombre": "Ale"
                                                 },
-                                                "kilosTotales": 0.0
+                                                "kilosTotales": 3.0
                                             }                                        \s
                                             """
                             )}
                     )}),
             @ApiResponse(responseCode = "400",
-                    description = "Bad Caja Creation Request",
+                    description = "Bad Caja TipoAlimento add Request",
                     content = @Content),
     })
     @PostMapping("/caja/{id}/tipo/{idTipoAlim}/kg/{cantidad}")
@@ -179,25 +185,26 @@ public class CajaControlador {
 
     @Operation(summary = "Update a Caja")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201",
-                    description = "Caja Created Successfully",
+            @ApiResponse(responseCode = "200",
+                    description = "Caja updated Successfully",
                     content = {@Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = Caja.class)),
                             examples = {@ExampleObject(
                                     value = """
                                             [
                                                     {
-                                                        "id": 12,
-                                                        "name": "Random",
-                                                        "description": "Una lista muy loca",
-                                                        "songs": 4
+                                                        "numCaja": 12,
+                                                        "qr": "qqqaa",
+                                                        "listaAlimentos": [],
+                                                        "destinatario": null,
+                                                        "kilosTotales": 0.0
                                                     }
                                             ]                                          
                                             """
                             )}
                     )}),
             @ApiResponse(responseCode = "400",
-                    description = "Bad Caja Creation Request",
+                    description = "Bad Caja update Request",
                     content = @Content),
     })
     @PutMapping("/caja/{id}")
@@ -269,27 +276,37 @@ public class CajaControlador {
 
 
 
-    @Operation(summary = "Update a Caja")
+    @Operation(summary = "Update a TipoAlimento of Caja")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201",
-                    description = "Caja Created Successfully",
+            @ApiResponse(responseCode = "200",
+                    description = "TipoAlimento updated Successfully",
                     content = {@Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = Caja.class)),
                             examples = {@ExampleObject(
                                     value = """
                                             [
                                                     {
-                                                        "id": 12,
-                                                        "name": "Random",
-                                                        "description": "Una lista muy loca",
-                                                        "songs": 4
+                                                        "numCaja": 12,
+                                                        "qr": "qqqaa",
+                                                        "listaAlimentos": [
+                                                            {
+                                                                "id": 8,
+                                                                "nombre": "Garbanzos",
+                                                                "cantidadKgs": 2.0
+                                                            }
+                                                        ],
+                                                        "destinatario": {
+                                                            "id": 15,
+                                                            "nombre": "Ale"
+                                                        },
+                                                        "kilosTotales": 2.0
                                                     }
                                             ]                                          
                                             """
                             )}
                     )}),
             @ApiResponse(responseCode = "400",
-                    description = "Bad Caja Creation Request",
+                    description = "Bad TipoAlimento of Caja update Request",
                     content = @Content),
     })
     @PutMapping("/caja/{id}/tipo/{idTipoAlim}/kg/{cantidad}")
@@ -303,13 +320,11 @@ public class CajaControlador {
     }
 
 
-    @Operation(summary = "Delete an Caja")
+    @Operation(summary = "Delete a Caja")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
-                    description = "Caja Deleted Successfully",
-                    content = {@Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Caja.class))
-                    )}),
+                    description = "Caja Deleted Successfully"
+                    ),
     })
     @DeleteMapping("/caja/{id}")
     public ResponseEntity<?> deleteCaja(@PathVariable Long id) {
@@ -323,19 +338,33 @@ public class CajaControlador {
     }
 
 
-    @Operation(summary = "Delete an Caja")
+    @Operation(summary = "Delete a TipoAlimento of Caja")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204",
-                    description = "Caja Deleted Successfully",
+            @ApiResponse(responseCode = "200",
+                    description = "TipoAlimento Deleted Successfully of Caja",
                     content = {@Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Caja.class))
+                            array = @ArraySchema(schema = @Schema(implementation = Caja.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            {
+                                                 "numCaja": 12,
+                                                 "qr": "qqqaa",
+                                                 "listaAlimentos": [],
+                                                 "destinatario": {
+                                                     "id": 15,
+                                                     "nombre": "Ale"
+                                                 },
+                                                 "kilosTotales": 0.0
+                                             }                                          
+                                            """
+                            )}
                     )}),
     })
     @DeleteMapping("/caja/{id}/tipo/{idTipoAlim}")
-    public ResponseEntity<?> deleteAlimFromCaja(@PathVariable Long id, @PathVariable Long idTipoAlim) {
+    public ResponseEntity<GetCajaResponse> deleteAlimFromCaja(@PathVariable Long id, @PathVariable Long idTipoAlim) {
 
-        cajaServicio.deleteAlimFromCaja(id,idTipoAlim);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        Caja c = cajaServicio.deleteAlimFromCaja(id,idTipoAlim);
+        return ResponseEntity.ok(cajaDtoConverter.toGetCajaResponse(c,c.getDestinatario()));
 
     }
 

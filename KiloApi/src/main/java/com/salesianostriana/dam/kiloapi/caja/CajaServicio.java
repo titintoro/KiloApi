@@ -65,7 +65,7 @@ public class CajaServicio {
         Optional<TipoAlimento> tipoAlimento = tipoAlimentoServicio.findById(idTipoAlim);
 
 
-        if (caja.isPresent() && tipoAlimento.isPresent() && cantidad<=kilosDisponibles){
+        if (caja.isPresent() && tipoAlimento.isPresent() && cantidad<=kilosDisponibles && tipoAlimento.get().getKilosDisp()!=null){
 
             Tiene tiene = new Tiene();
 
@@ -87,13 +87,11 @@ public class CajaServicio {
 
             return caja;
         }
-        return Optional.empty();
-
-
+        return caja;
     }
 
 
-    public void deleteAlimFromCaja(Long id, Long idTipoAlim){
+    public Caja deleteAlimFromCaja(Long id, Long idTipoAlim){
 
         Optional<Caja> caja = findById(id);
 
@@ -126,12 +124,9 @@ public class CajaServicio {
             }
             tieneRepository.delete(tiene);
             caja.get().setTieneList(tieneAuxList);
-            cajaRepo.save(caja.get());
+
         }
-
-
-
-
+        return cajaRepo.save(caja.get());
     }
 
 
@@ -145,7 +140,7 @@ public class CajaServicio {
             double kilosDisponibles = kilosDispRepo.getKilosDispOfAlimById(idTipoAlim);
             double kilosTotales = cajaRepo.getKilosTotales(id);
 
-            if (caja.isPresent() && tipoAlimento.isPresent() && cantidad<=kilosDisponibles){
+            if (caja.isPresent() && tipoAlimento.isPresent() && cantidad<=kilosDisponibles && tipoAlimento.get().getKilosDisp()!=null){
 
                 Optional<Tiene> tiene = tieneRepository.findById(new TienePK(caja.get().getId(), tipoAlimento.get().getId())) ;
 
