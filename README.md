@@ -6,7 +6,7 @@
 
 ## **Introducción**
 
-Este es un ejercicio práctico para el manejo de APIs con **SpringBootApp**.
+Este es un ejercicio práctico para la creacion de API Rest con **SpringBootApp**.
 
 Se ha trabajado sobre la siguiente **documentación:**
 
@@ -219,6 +219,53 @@ Modificar kgs de un alimento en una caja:
     `/destinatario/{id}`
     * Borra un destinatario
 
+* `Aportacion`
+
+  * Endpoint `Get`:
+    `/aportacion/`
+    * Muestra todas las aportaciones
+
+  * Endpoint `Get`:
+    `/aportacion/{id}`
+    * Devuelve los datos de una aportación.
+
+  * Endpoint `Get`:
+    `/aportacion/clase/{idClase}`
+    * Devuelve los datos de las aportaciones de una clase
+ 
+  * Endpoint `Post`: 
+    `/destinatario/`
+    * Crea una aportación
+  
+  * Endpoint `Delete`:
+    `//aportacion/{id}/linea/{num}`
+    * Borra una línea de la aportación 
+
+  * Endpoint `Delete`:
+    `/aportacion/{id}`
+    * Borra una aportacion
+
+* `Tipo de Alimento`
+
+  * Endpoint `Get`:
+    `/tipoAlimento/`
+    * Muestra todos los alimentos disponibles.
+
+  * Endpoint `Get`:
+    `/tipoAlimento/{id}`
+    * Devuelve los datos de un tipo de alimento específico.
+
+  * Endpoint `Post`: 
+    `/tipoAlimentoio/`
+    * Crea un nuevo tipo alimento
+  
+  * Endpoint `Put`:
+    `/tipoAlimento/`
+    * Actualiza la información de un tipo de alimento.
+    
+  * Endpoint `Delete`:
+    `/tipoAlimento/{id}`
+    * Borra un tipo de alimento.
 ---
 ## **Autores**
 
