@@ -4,7 +4,6 @@ import com.salesianostriana.dam.kiloapi.aportacion.dtosAportacion.AportacionResp
 import com.salesianostriana.dam.kiloapi.clase.Clase;
 import com.salesianostriana.dam.kiloapi.clase.ClaseRepository;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
-import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacionRepositorio;
 import com.salesianostriana.dam.kiloapi.detalleAportacion.dtoDetalleAportacion.DetalleAportacionResponseDto;
 import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDisp;
 import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoRepository;
@@ -26,7 +25,7 @@ public class AportacionServicio {
 
     private final TipoAlimentoRepository tipoAlimentoRepository;
 
-    private final DetalleAportacionRepositorio detallesRepo;
+
 
     public Aportacion add(Aportacion aportacion){return repositorio.save(aportacion);}
 
@@ -75,6 +74,19 @@ public class AportacionServicio {
         }));
         aportacion.setDetalleAportacionList(dList);
         return aportacion;
+    }
+
+    public void removeDetalle(Long idAportacion, Long numLinea){
+        Optional<Aportacion> aportacion = repositorio.findById(idAportacion);
+        if(aportacion.isPresent()) {
+            Aportacion editada = aportacion.get();
+            List<DetalleAportacion> borrada = editada.getDetalleAportacionList()
+                    .stream()
+                    .filter(d -> d.getNumLinea() == numLinea).toList();
+            borrada.stream().findFirst().get().setAportacion(null);
+            repositorio.save(editada);
+        }
+
     }
 
 
