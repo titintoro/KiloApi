@@ -24,7 +24,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Artist",description = "Este es el controlador de los artistas")
+@Tag(name = "Destinatario",description = "Este es el controlador de los destinatarios")
 public class DestinatarioControlador {
 
     private final DestinatarioServicio servicio;
