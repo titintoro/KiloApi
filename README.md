@@ -6,7 +6,7 @@
 
 ## **Introducción**
 
-Este es un ejercicio práctico para el manejo de APIs con **SpringBootApp**.
+Este es un ejercicio práctico para la creacion de API Rest con **SpringBootApp**.
 
 Se ha trabajado sobre la siguiente **documentación:**
 
