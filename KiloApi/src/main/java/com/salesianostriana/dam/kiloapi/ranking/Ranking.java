@@ -4,7 +4,7 @@ import lombok.*;
 
 
 @Getter @Setter
-@RequiredArgsConstructor @AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @Builder
 public class Ranking {
 
@@ -12,14 +12,10 @@ public class Ranking {
 
     private double kgTotalesAportados;
 
-
-
-    /*
     private int posicion;
 
-    private int numAportacionesTotales;
+    private Long numAportacionesTotales;
 
     private double mediaKgPorAportacion;
-     */
 
 }

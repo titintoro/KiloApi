@@ -41,7 +41,7 @@ public class ClaseService {
         repo.deleteById(id);
     }
 
-    public List<Ranking>getRanking(){return repo.getRankingOrdenado();}
+    //public List<Ranking>getRanking(){return repo.getRankingOrdenado();}
 
 
     public Double calcularKg(Clase c){
