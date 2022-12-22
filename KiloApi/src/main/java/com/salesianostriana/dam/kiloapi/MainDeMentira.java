@@ -39,6 +39,36 @@ public class MainDeMentira{
     @PostConstruct
     public void run() {
 
+        Caja caja = Caja.builder()
+                .numCaja(201)
+                .qr("hhhhhhh")
+                .kilosTotales(0)
+                .build();
+
+        Caja caja3 = Caja.builder()
+                .numCaja(204)
+                .qr("mmmmm")
+                .kilosTotales(0)
+                .build();
+
+        Caja caja4 = Caja.builder()
+                .numCaja(202)
+                .qr("iiiiii")
+                .kilosTotales(0)
+                .build();
+
+        Caja caja5 = Caja.builder()
+                .numCaja(203)
+                .qr("lllllll")
+                .kilosTotales(0)
+                .build();
+
+        cajaServicio.add(caja);
+        cajaServicio.add(caja3);
+        cajaServicio.add(caja4);
+        cajaServicio.add(caja5);
+
+
         Clase c = Clase.builder()
                 .nombre("1 DAM")
                 .tutor("Mr Bean")
@@ -142,6 +172,10 @@ public class MainDeMentira{
                 .build();
 
 
+
+        destinatarioServicio.add(d);
+        destinatarioServicio.add(d1);
+        destinatarioServicio.add(d2);
 
     }}
 

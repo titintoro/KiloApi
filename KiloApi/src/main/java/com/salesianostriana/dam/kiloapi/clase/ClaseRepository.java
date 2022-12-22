@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface ClaseRepository extends JpaRepository<Clase, Long> {
 
+    /*
    @Query("""
             SELECT SUM(dt.cantidad)
             FROM Clase c 
@@ -31,4 +32,5 @@ public interface ClaseRepository extends JpaRepository<Clase, Long> {
             """)
     List<Ranking> getRankingOrdenado();
 
+    */
 }
