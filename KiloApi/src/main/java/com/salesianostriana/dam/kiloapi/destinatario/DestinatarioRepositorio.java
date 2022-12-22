@@ -14,9 +14,9 @@ public interface DestinatarioRepositorio extends JpaRepository<Destinatario, Lon
 
     @Query("select dt.nombre,dt.direccion,dt.personaContacto,dt.telefono, SUM(c.kilosTotales), COUNT(c.numCaja) from Destinatario dt JOIN Caja c ON" +
             "(dt.id = c.destinatario ) WHERE dt.id  = : idDestinatario GROUP BY dt.nombre,dt.direccion,dt.personaContacto,dt.telefono")
-    public Optional<GetDestinatarioDto> getDestinatarioById(@Param("idDestinatario") Long id);
+    Optional<GetDestinatarioDto> getDestinatarioById(@Param("idDestinatario") Long id);
 
     @Query("select dt.nombre,dt.direccion,dt.personaContacto,dt.telefono, SUM(c.kilosTotales), COUNT(c.numCaja) from Destinatario dt JOIN Caja c ON " +
             "(dt.id = c.destinatario ) GROUP BY dt.nombre,dt.direccion,dt.personaContacto,dt.telefono")
-    public List<GetDestinatarioDto> getDestinatarios();
+    List<GetDestinatarioDto> getDestinatarios();
 }

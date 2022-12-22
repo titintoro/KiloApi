@@ -36,14 +36,7 @@ public class KilosDispControlador {
             @ApiResponse(responseCode = "200",
                     description = "Se ha encontrado la lista de kilos disponibles",
                     content = { @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = KilosDisp.class)),
-                            examples = {@ExampleObject(
-                                    value = """
-                                            [                                            
-                                            
-                                            ]                                                                                     
-                                            """
-                            )}
+                            array = @ArraySchema(schema = @Schema(implementation = KilosDisp.class))
                     )}),
             @ApiResponse(responseCode = "404",
                     description = "No se ha podido encontrar ninguna lista de kilos disponibles",
@@ -67,14 +60,7 @@ public class KilosDispControlador {
             @ApiResponse(responseCode = "200",
                     description = "Se ha encontrado el tipo de alimento en la lista de kilos disponibles",
                     content = { @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = KilosDisp.class)),
-                            examples = {@ExampleObject(
-                                    value = """
-                                            [                                            
-                                            
-                                            ]                                                                                     
-                                            """
-                            )}
+                            array = @ArraySchema(schema = @Schema(implementation = KilosDisp.class))
                     )}),
             @ApiResponse(responseCode = "404",
                     description = "No se ha podido encontrar el listado de un tipo alimento en una lista de kilos disponibles",
