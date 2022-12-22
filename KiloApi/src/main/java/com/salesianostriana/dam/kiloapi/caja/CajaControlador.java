@@ -209,7 +209,7 @@ public class CajaControlador {
     })
     @PutMapping("/caja/{id}")
     public ResponseEntity<GetCajaResponse> edit(
-            @RequestBody CreateCajaRequest c,
+            @RequestBody EditCajaRequest c,
             @PathVariable Long id) {
 
         if (cajaServicio.findById(id).isEmpty())
@@ -220,8 +220,8 @@ public class CajaControlador {
                 cajaServicio.findById(id).map(m -> {
                     m.setQr(c.getQr());
                     m.setNumCaja(c.getNumCaja());
-
-                    Caja caja = cajaServicio.edit(cajaDtoConverter.createCajaRequestToCaja(c));
+                    m.setDestinatario(destinatarioServicio.findById(c.getIdDestinatario()).get());
+                    Caja caja = cajaServicio.edit(cajaDtoConverter.editCajaRequestToCaja(c, destinatarioServicio.findById(c.getIdDestinatario()).get()));
                     return cajaDtoConverter.toGetCajaResponse(caja, caja.getDestinatario());
                 }));
 

@@ -23,6 +23,18 @@ public class CajaDtoConverter {
         return cajaResponse;
     }
 
+
+    public Caja editCajaRequestToCaja(EditCajaRequest editCajaRequest, Destinatario d) {
+        Caja cajaResponse = new Caja();
+
+        cajaResponse.setQr(editCajaRequest.getQr());
+        cajaResponse.setNumCaja(editCajaRequest.getNumCaja());
+        cajaResponse.setDestinatario(d);
+
+        return cajaResponse;
+    }
+
+
     public AlimentoGetCajaResponse toAlimentoGetCajaResponse(TipoAlimento tipoAlimento, Caja caja){
 
         AlimentoGetCajaResponse alimentoGetCajaResponse = new AlimentoGetCajaResponse();
@@ -88,4 +100,7 @@ public class CajaDtoConverter {
 
         return destinatarioGetCajaResponse;
     }
+
+
+
 }
