@@ -5,8 +5,8 @@ import com.salesianostriana.dam.kiloapi.clase.Clase;
 import com.salesianostriana.dam.kiloapi.clase.ClaseService;
 
 import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacion;
-import com.salesianostriana.dam.kiloapi.detalleAportacion.DetalleAportacionRepositorio;
-import com.salesianostriana.dam.kiloapi.detalleAportacion.dtoDetalleAportacion.DetalleAportacionResponseDto;
+import com.salesianostriana.dam.kiloapi.kilosDisp.KilosDispService;
+import com.salesianostriana.dam.kiloapi.tipoAlimento.TipoAlimentoServicio;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,7 +16,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +38,11 @@ public class AportacionControlador {
 
     private final AportacionDtoConverter aportacionDtoConverter;
 
-    private final DetalleAportacionRepositorio detallesRepo;
+
+
+    private final KilosDispService kilosDispService;
+
+    private final TipoAlimentoServicio tipoAlimentoServicio;
 
 
 
@@ -165,9 +168,7 @@ public class AportacionControlador {
     })
     @DeleteMapping("/aportacion/{id}/linea/{num}")
     public ResponseEntity<AportacionResponseDto> deleteDetalleAportacion (@PathVariable("id") Long id,@PathVariable("num") Long numLinea){
-            aportacionServicio.findById(id).get().getDetalleAportacionList().removeAll(detallesRepo.findById(numLinea).stream().toList());
-            aportacionServicio.add(aportacionServicio.findById(id).get());
-
+            aportacionServicio.removeDetalle(id, numLinea);
             return ResponseEntity.ok().build();
 
     }
@@ -207,7 +208,6 @@ public class AportacionControlador {
         return ResponseEntity.status(HttpStatus.CREATED).body(aportacionDtoConverter.nuevaAportacionDto(nuevaAportacion));
 
     }
-
 
 
 
