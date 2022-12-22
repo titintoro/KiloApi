@@ -43,7 +43,15 @@ public class DestinatarioControlador {
                             examples = {@ExampleObject(
                                     value = """
                                             [
-                                            
+                                                {
+                                                    "id": 11,
+                                                    "nombre": "Ale",
+                                                    "direccion": "C/ Sierpes",
+                                                    "personaContacto": "Titin",
+                                                    "telefono": "612345728",
+                                                    "kilosTotales": 0.0,
+                                                    "cajasAsiganadas": []
+                                                }
                                             ]                                          
                                             """
                             )}
@@ -74,7 +82,15 @@ public class DestinatarioControlador {
                             examples = {@ExampleObject(
                                     value = """
                                             [
-                                            
+                                                {
+                                                    "id": 11,
+                                                    "nombre": "Ale",
+                                                    "direccion": "C/ Sierpes",
+                                                    "personaContacto": "Titin",
+                                                    "telefono": "612345728",
+                                                    "kilosTotales": 0.0,
+                                                    "cajasAsiganadas": []
+                                                }
                                             ]                                          
                                             """
                             )}
@@ -100,14 +116,7 @@ public class DestinatarioControlador {
             @ApiResponse(responseCode = "200",
                     description = "Se han encontrado la lista de reproducción por su id",
                     content = { @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Destinatario.class)),
-                            examples = {@ExampleObject(
-                                    value = """
-                                            [
-                                            
-                                            ]                                          
-                                            """
-                            )}
+                            array = @ArraySchema(schema = @Schema(implementation = Destinatario.class))
                     )}),
             @ApiResponse(responseCode = "404",
                     description = "No se han encontrado los detalles de ninguna lista de destinatarios por su id",
@@ -134,7 +143,12 @@ public class DestinatarioControlador {
                             examples = {@ExampleObject(
                                     value = """
                                             [
-                                            
+                                                {
+                                                    "nombre": "Ale",
+                                                    "direccion": "C/ Sierpes",
+                                                    "personaContacto": "Titin",
+                                                    "telefono": "612345728"
+                                                }
                                             ]                                          
                                             """
                             )}
@@ -161,7 +175,14 @@ public class DestinatarioControlador {
                             examples = {@ExampleObject(
                                     value = """
                                             [
-                                            
+                                                {
+                                                    "id": 11,
+                                                    "nombre": "Jorge",
+                                                    "direccion": "C/ Arjona",
+                                                    "personaContacto": "Titin",
+                                                    "telefono": "612534976",
+                                                    "listaDeCajas": []
+                                                }
                                             ]                                          
                                             """
                             )}
@@ -190,18 +211,8 @@ public class DestinatarioControlador {
             @ApiResponse(responseCode = "200",
                     description = "Se han encontrado la lista de reproducción por su id",
                     content = { @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Destinatario.class)),
-                            examples = {@ExampleObject(
-                                    value = """
-                                            [
-                                            
-                                            ]                                          
-                                            """
-                            )}
-                    )}),
-            @ApiResponse(responseCode = "404",
-                    description = "No se ha eliminado un destinatario por su id",
-                    content = @Content),
+                            array = @ArraySchema(schema = @Schema(implementation = Destinatario.class))
+                    )})
     })
     @DeleteMapping("/destinatario/{id}")
     public ResponseEntity<Destinatario> deleteDestinatario(@PathVariable Long id){

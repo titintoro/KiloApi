@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CreateDestinatarioDto {
 
-    private Long id;
 
     private String nombre, direccion, personaContacto, telefono;
 
