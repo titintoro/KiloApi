@@ -24,7 +24,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Artist",description = "Este es el controlador de los artistas")
+@Tag(name = "Destinatario",description = "Este es el controlador de los destinatarios")
 public class DestinatarioControlador {
 
     private final DestinatarioServicio servicio;
@@ -73,7 +73,7 @@ public class DestinatarioControlador {
         }
     }
 
-    @Operation(summary = "Este método devuelve una lista de destinatarios por su id")
+    @Operation(summary = "Este método devuelve la información de un destinatario por su id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Se han encontrado la lista de destinatarios por su id",
@@ -111,7 +111,7 @@ public class DestinatarioControlador {
 
     }
 
-    @Operation(summary = "Este método devuelve los detalles una lista de destinatarios por su id")
+    @Operation(summary = "Este método devuelve los detalles que tiene un destinatario por su id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Se han encontrado la lista de reproducción por su id",
@@ -134,7 +134,7 @@ public class DestinatarioControlador {
         }
     }
 
-    @Operation(summary = "Este método agrega un destinatario a una lista de destinatarios")
+    @Operation(summary = "Este método agrega un destinatario")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Se han agregado un destinatario a la lista de destinatarios",
@@ -166,7 +166,7 @@ public class DestinatarioControlador {
         return ResponseEntity.status(HttpStatus.CREATED).body(cd);
     }
 
-    @Operation(summary = "Este método modifica de una lista de destinatarios un destinatario por su id")
+    @Operation(summary = "Este método modifica un destinatario por su id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Se ha modificado un destinatario por su id",
@@ -206,7 +206,7 @@ public class DestinatarioControlador {
 
     }
 
-    @Operation(summary = "Este método elimina un destinario por su id de una lista de destinatario")
+    @Operation(summary = "Este método elimina un destinario por su id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Se han encontrado la lista de reproducción por su id",
