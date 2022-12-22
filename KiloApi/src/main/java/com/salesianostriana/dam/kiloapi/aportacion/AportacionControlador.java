@@ -59,7 +59,14 @@ public class AportacionControlador {
                             array = @ArraySchema(schema = @Schema(implementation = GetAportacionDto.class)),
                             examples = {@ExampleObject(
                                     value = """
-                                                                                  
+                                            [
+                                                {
+                                                    "id": 11,
+                                                    "fecha": "2022-12-22",
+                                                    "nombreClase": "1 DAM",
+                                                    "numKilos": 10.0
+                                                }
+                                            ]                                    
                                             """
                             )}
                     )}),
@@ -88,7 +95,15 @@ public class AportacionControlador {
                             schema = @Schema(implementation = Aportacion.class),
                             examples = {@ExampleObject(
                                     value = """
-                                            
+                                            {
+                                                "details": [
+                                                    {
+                                                        "numLinea": 1,
+                                                        "nombreTipoAlimento": "Macarrones",
+                                                        "numKilos": 10.0
+                                                    }
+                                                ]
+                                            }
                                             """
                             )}
                     )}),
@@ -124,7 +139,26 @@ public class AportacionControlador {
     }
 
 
-
+    @Operation(summary = "Petición que obtiene los Detalles de una Aportación de una Clase")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha encontrado la Aportación",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Aportacion.class),
+                            examples = {@ExampleObject(
+                                    value = """
+                                            Clase= 1 Fecha= 2022-12-22,Aportaciones=[
+                                                [Macarrones,
+                                                    10.0
+                                                ],
+                                            ]
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se ha encontrado los Detalles de Aportacion de la Clase",
+                    content = @Content),
+    })
     @GetMapping("/aportacion/clase/{idClase}")
     public ResponseEntity<String> detallesAportacionPorClase(@PathVariable Long idClase){
         String res="";
