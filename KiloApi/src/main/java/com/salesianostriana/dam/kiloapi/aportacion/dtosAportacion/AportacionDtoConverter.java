@@ -17,13 +17,14 @@ public class AportacionDtoConverter {
 
     private ClaseService claseService;
 
+    /**
     public Aportacion createAportacionDtotoAportacion(CreateAportacionDto c) {
         return Aportacion
                 .builder()
                 .id(c.getIdClase())
                 .detalleAportacionList(c.getDetalleAportacionList())
                 .build();
-    }
+    }**/
 
     public GetAportacionDto aportacionToGetAportacionDto(Aportacion a) {
 
